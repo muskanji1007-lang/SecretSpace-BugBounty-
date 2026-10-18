@@ -282,6 +282,8 @@ export const AppProvider = ({ children }) => {
     }
 
     setPosts((prev) => [savedPost, ...prev]);
+    setActiveCategory('all');
+    setSearchQuery('');
     setUser((prev) => ({
       ...prev,
       stats: { ...prev.stats, confessionsCount: (prev.stats?.confessionsCount || 0) + 1 },

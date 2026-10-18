@@ -16,7 +16,7 @@ export default function RightSidebar() {
   const activePoll = polls.find((p) => p.status === 'active') || polls[0];
 
   return (
-    <aside className="w-80 shrink-0 hidden lg:block space-y-5 p-4 sticky top-0 h-screen overflow-y-auto">
+    <aside className="w-80 shrink-0 hidden xl:block space-y-5 p-4 sticky top-0 h-screen overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       {/* Active Campus Poll Widget */}
       {activePoll && (
         <div className="bg-card border border-border rounded-2xl p-4 shadow-2xs">
