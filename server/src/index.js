@@ -17,16 +17,51 @@ import adminRoutes from './routes/adminRoutes.js';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security and utility middleware
+// Dynamic CORS configuration allowing localhost, Vercel frontend, and preview deployments
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'https://secret-space-psi.vercel.app',
+  ...(process.env.CLIENT_URL
+    ? process.env.CLIENT_URL.split(',').map((s) => s.trim().replace(/\/$/, ''))
+    : []),
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const normalized = origin.replace(/\/$/, '');
+      if (
+        allowedOrigins.includes(normalized) ||
+        normalized.endsWith('.vercel.app')
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, false);
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   })
 );
+
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/', generalLimiter);
+
+// Ensure MongoDB is connected for incoming API requests in serverless environments
+app.use('/api', async (req, res, next) => {
+  if (!isDBConnected()) {
+    try {
+      await connectDB();
+    } catch {
+      // Continue and let endpoint-level guards handle DB unavailability
+    }
+  }
+  next();
+});
 
 // Health check endpoint with database status reporting
 app.get('/api/health', (req, res) => {

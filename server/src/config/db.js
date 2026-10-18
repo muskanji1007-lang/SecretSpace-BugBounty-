@@ -1,34 +1,55 @@
 import mongoose from 'mongoose';
 
-let isConnected = false;
+// Global cache for serverless environments (prevents connection leaks across hot reloads)
+let cached = global.mongoose;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
 export const connectDB = async () => {
-  try {
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/secretspace';
-    
-    // Connect with a reasonable timeout so requests fail fast if MongoDB is down
-    const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 4000,
-      autoIndex: true,
-    });
-    
-    isConnected = true;
-    console.log(`[Database] MongoDB Connected: ${conn.connection.host}`);
-    return conn;
-  } catch (error) {
-    isConnected = false;
-    console.error(`[Database] MongoDB Connection Error: ${error.message}`);
-    console.warn('[Database] Backend running without active MongoDB connection. Configure MONGODB_URI in .env');
-    return null;
+  if (cached.conn && mongoose.connection.readyState === 1) {
+    return cached.conn;
   }
+
+  const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/secretspace';
+
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+      autoIndex: true,
+    };
+
+    cached.promise = mongoose.connect(mongoUri, opts).then((m) => {
+      console.log(`[Database] MongoDB Connected: ${m.connection.host}`);
+      return m;
+    }).catch((err) => {
+      cached.promise = null;
+      console.error(`[Database] MongoDB Connection Error: ${err.message}`);
+      return null;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (error) {
+    cached.promise = null;
+    console.error(`[Database] Awaiting connection failed: ${error.message}`);
+  }
+
+  return cached.conn;
 };
 
 export const isDBConnected = () => {
   return mongoose.connection.readyState === 1;
 };
 
-// Middleware to guard database-dependent endpoints
-export const requireDB = (req, res, next) => {
+// Middleware to guard database-dependent endpoints with lazy connection retry
+export const requireDB = async (req, res, next) => {
+  if (mongoose.connection.readyState !== 1) {
+    await connectDB();
+  }
+
   if (!isDBConnected()) {
     return res.status(503).json({
       success: false,

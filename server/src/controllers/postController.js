@@ -37,7 +37,6 @@ export const getPosts = async (req, res, next) => {
 
     const [posts, totalPosts] = await Promise.all([
       Post.find(query)
-        .select('-author') // Strictly exclude author user ID for anonymity
         .sort(sortOptions)
         .skip(skip)
         .limit(parseInt(limit, 10))
@@ -72,12 +71,23 @@ export const getPosts = async (req, res, next) => {
       });
     }
 
-    const enrichedPosts = posts.map((post) => ({
-      ...post,
-      id: post._id.toString(),
-      userVote: userVotesMap[post._id.toString()] || null,
-      isBookmarked: userBookmarksSet.has(post._id.toString()),
-    }));
+    const currentUserId = req.user?._id ? req.user._id.toString() : null;
+
+    const enrichedPosts = posts.map((post) => {
+      const isAuthor = Boolean(currentUserId && post.author && post.author.toString() === currentUserId);
+      const cleanPost = { ...post };
+      // Anonymity guarantee: Never send author ID to client
+      delete cleanPost.author;
+
+      return {
+        ...cleanPost,
+        id: post._id.toString(),
+        authorPseudonym: isAuthor ? `${post.authorPseudonym} (You)` : post.authorPseudonym,
+        isMyPost: isAuthor,
+        userVote: userVotesMap[post._id.toString()] || null,
+        isBookmarked: userBookmarksSet.has(post._id.toString()),
+      };
+    });
 
     res.json({
       success: true,
@@ -120,7 +130,7 @@ export const createPost = async (req, res, next) => {
       collegeTag: collegeTag || req.user.collegeTag || 'Campus North',
       tags: Array.isArray(tags) ? tags : [],
       author: req.user._id,
-      authorPseudonym: `${req.user.pseudonym} (You)`,
+      authorPseudonym: req.user.pseudonym,
       authorAvatar: authorAvatar || req.user.avatar,
       upvotes: 1, // Author starts with 1 upvote
       downvotes: 0,
@@ -147,6 +157,8 @@ export const createPost = async (req, res, next) => {
       data: {
         ...responsePost,
         id: responsePost._id.toString(),
+        authorPseudonym: `${req.user.pseudonym} (You)`,
+        isMyPost: true,
         userVote: 'up',
         isBookmarked: false,
       },
@@ -162,7 +174,7 @@ export const getPostById = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const post = await Post.findById(id).select('-author').lean();
+    const post = await Post.findById(id).lean();
     if (!post || post.isRemoved) {
       return res.status(404).json({
         success: false,
@@ -189,11 +201,18 @@ export const getPostById = async (req, res, next) => {
       if (existingBookmark) isBookmarked = true;
     }
 
+    const currentUserId = req.user?._id ? req.user._id.toString() : null;
+    const isAuthor = Boolean(currentUserId && post.author && post.author.toString() === currentUserId);
+    const cleanPost = { ...post };
+    delete cleanPost.author;
+
     res.json({
       success: true,
       data: {
-        ...post,
-        id: post._id.toString(),
+        ...cleanPost,
+        id: cleanPost._id.toString(),
+        authorPseudonym: isAuthor ? `${cleanPost.authorPseudonym} (You)` : cleanPost.authorPseudonym,
+        isMyPost: isAuthor,
         userVote,
         isBookmarked,
         comments: comments.map((c) => ({

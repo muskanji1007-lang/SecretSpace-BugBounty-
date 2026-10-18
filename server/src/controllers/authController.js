@@ -120,15 +120,16 @@ export const getMe = async (req, res, next) => {
   }
 };
 
-// Update profile (pseudonym, avatar, collegeTag)
+// Update profile (pseudonym, avatar, collegeTag, settings)
 export const updateProfile = async (req, res, next) => {
   try {
-    const { pseudonym, avatar, collegeTag } = req.body;
+    const { pseudonym, avatar, collegeTag, settings } = req.body;
 
     const updates = {};
     if (pseudonym) updates.pseudonym = pseudonym.trim();
     if (avatar) updates.avatar = avatar;
     if (collegeTag) updates.collegeTag = collegeTag.trim();
+    if (settings) updates.settings = settings;
 
     const updatedUser = await User.findByIdAndUpdate(req.user._id, updates, {
       new: true,

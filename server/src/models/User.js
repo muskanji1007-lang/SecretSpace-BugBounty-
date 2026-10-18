@@ -48,6 +48,19 @@ const userSchema = new mongoose.Schema(
       commentsCount: { type: Number, default: 0 },
       upvotesReceived: { type: Number, default: 0 },
     },
+    settings: {
+      notifications: {
+        upvotes: { type: Boolean, default: true },
+        comments: { type: Boolean, default: true },
+        polls: { type: Boolean, default: true },
+        trendingAlerts: { type: Boolean, default: false },
+      },
+      privacy: {
+        scrambleWeekly: { type: Boolean, default: true },
+        hideHostelWing: { type: Boolean, default: false },
+        blurSensitive: { type: Boolean, default: true },
+      },
+    },
     isActive: {
       type: Boolean,
       default: true,
