@@ -54,10 +54,14 @@ app.use('/api/admin', adminRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// Start server and initialize database connection
-app.listen(PORT, async () => {
-  console.log(`[Server] SecretSpace backend running on http://localhost:${PORT}`);
-  await connectDB();
-});
+// Start server locally or initialize database connection on serverless
+if (!process.env.VERCEL) {
+  app.listen(PORT, async () => {
+    console.log(`[Server] SecretSpace backend running on http://localhost:${PORT}`);
+    await connectDB();
+  });
+} else {
+  connectDB();
+}
 
 export default app;

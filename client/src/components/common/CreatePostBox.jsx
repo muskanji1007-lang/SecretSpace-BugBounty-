@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext.jsx';
 import { CATEGORIES, AVATAR_OPTIONS } from '../../data/mockData.js';
 import { Send, MapPin, Shield, Check } from './icons.jsx';
 
-const MAX_CHARS = 400;
+const MAX_CHARS = 500;
 
 export default function CreatePostBox({ onPostCreated }) {
   const { addPost, user } = useApp();
@@ -14,31 +14,37 @@ export default function CreatePostBox({ onPostCreated }) {
   const [customTag, setCustomTag] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPersonaPicker, setShowPersonaPicker] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const charCount = content.length;
   const charsRemaining = MAX_CHARS - charCount;
-  const isValid = charCount >= 5 && charCount <= MAX_CHARS;
+  const isValid = content.trim().length >= 1 && charCount <= MAX_CHARS;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isValid) return;
+    if (!isValid || isSubmitting) return;
 
-    const tags = customTag.trim()
-      ? customTag.split(' ').map((t) => (t.startsWith('#') ? t : `#${t}`))
-      : [`#${category}`, '#SecretSpace'];
+    setIsSubmitting(true);
+    try {
+      const tags = customTag.trim()
+        ? customTag.split(' ').map((t) => (t.startsWith('#') ? t : `#${t}`))
+        : [`#${category}`, '#SecretSpace'];
 
-    addPost({
-      content: content.trim(),
-      category,
-      collegeTag,
-      tags,
-      authorAvatar: selectedAvatar,
-    });
+      await addPost({
+        content: content.trim(),
+        category,
+        collegeTag,
+        tags,
+        authorAvatar: selectedAvatar,
+      });
 
-    setContent('');
-    setCustomTag('');
-    setIsExpanded(false);
-    if (onPostCreated) onPostCreated();
+      setContent('');
+      setCustomTag('');
+      setIsExpanded(false);
+      if (onPostCreated) onPostCreated();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const activeAvatarObj =
@@ -67,7 +73,7 @@ export default function CreatePostBox({ onPostCreated }) {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               onFocus={() => setIsExpanded(true)}
-              placeholder="What's happening on campus? Share a secret, confession, or question..."
+              placeholder="What's on your mind? Share a secret, confession, or question..."
               rows={isExpanded ? 3 : 2}
               className="w-full text-sm text-main placeholder:text-muted bg-canvas rounded-xl p-3 border border-border focus:bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none transition"
             />
@@ -178,11 +184,6 @@ export default function CreatePostBox({ onPostCreated }) {
             >
               {charCount}/{MAX_CHARS}
             </span>
-            {charCount > 0 && charCount < 5 && (
-              <span className="text-[11px] text-warning font-medium hidden sm:inline">
-                (Min 5 characters)
-              </span>
-            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -201,15 +202,15 @@ export default function CreatePostBox({ onPostCreated }) {
 
             <button
               type="submit"
-              disabled={!isValid}
+              disabled={!isValid || isSubmitting}
               className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
-                isValid
+                isValid && !isSubmitting
                   ? 'bg-primary hover:bg-deep text-white shadow-primary/20'
                   : 'bg-surface text-muted/60 cursor-not-allowed'
               }`}
             >
               <Send className="w-3.5 h-3.5" />
-              <span>Post Secretly</span>
+              <span>{isSubmitting ? 'Posting...' : 'Post Secretly'}</span>
             </button>
           </div>
         </div>

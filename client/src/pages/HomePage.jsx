@@ -5,6 +5,8 @@ import PostCard from '../components/common/PostCard.jsx';
 import CreatePostBox from '../components/common/CreatePostBox.jsx';
 import EmptyState from '../components/common/EmptyState.jsx';
 import LoadingSkeleton from '../components/common/LoadingSkeleton.jsx';
+import HeroBanner from '../components/common/HeroBanner.jsx';
+import CreatePostModal from '../components/common/CreatePostModal.jsx';
 import { Flame, Clock, Trophy, MessageSquareDashed } from '../components/common/icons.jsx';
 
 export default function HomePage() {
@@ -17,6 +19,7 @@ export default function HomePage() {
   } = useApp();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCategoryChange = (catId) => {
     setIsLoading(true);
@@ -26,6 +29,9 @@ export default function HomePage() {
 
   return (
     <div className="space-y-4">
+      {/* Visual Hero Banner (Matching Screenshot Color Palette & Mascot) */}
+      <HeroBanner onOpenCreateModal={() => setIsModalOpen(true)} />
+
       {/* Category Pills Slider */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none">
         {CATEGORIES.map((cat) => (
@@ -108,6 +114,9 @@ export default function HomePage() {
           onAction={() => setActiveCategory('all')}
         />
       )}
+
+      {/* Modal Triggered from Hero */}
+      <CreatePostModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

@@ -180,7 +180,7 @@ export default function SignupPage() {
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary hover:bg-deep text-white font-semibold text-sm shadow-md shadow-primary/20 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-accent to-primary hover:opacity-95 text-white font-semibold text-sm shadow-md shadow-primary/25 transition cursor-pointer"
           >
             <span>Create Anonymous Profile</span>
             <ArrowRight className="w-4 h-4" />
