@@ -34,6 +34,18 @@ function PublicOnlyRoute({ children }) {
   return children;
 }
 
+// Guard: User must be an administrator to access the moderation desk
+function AdminRoute() {
+  const { user, isLoggedIn } = useApp();
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  if (user?.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+  return <Outlet />;
+}
+
 export default function App() {
   return (
     <AppProvider>
@@ -68,7 +80,9 @@ export default function App() {
               <Route path="my-activity" element={<MyActivityPage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="settings" element={<SettingsPage />} />
-              <Route path="admin" element={<AdminDashboardPage />} />
+              <Route element={<AdminRoute />}>
+                <Route path="admin" element={<AdminDashboardPage />} />
+              </Route>
             </Route>
           </Route>
 

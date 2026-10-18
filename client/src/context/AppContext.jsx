@@ -5,7 +5,7 @@ import { INITIAL_POSTS, INITIAL_POLLS, MOCK_REPORTS, MOCK_USER } from '../data/m
 const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
-  // Theme State (Supports Light & Dark Modes from screenshot)
+  // Theme State (Supports Light & Dark Modes)
   const [theme, setTheme] = useState('light');
 
   const toggleTheme = useCallback(() => {
@@ -26,9 +26,43 @@ export const AppProvider = ({ children }) => {
   const [polls, setPolls] = useState([]);
   const [reports, setReports] = useState([]);
 
-  // Authentication State (In-Memory Session)
-  const [user, setUser] = useState(MOCK_USER);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Session Rehydration from sessionStorage (tab session lifespan)
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = sessionStorage.getItem('secretspace_user');
+      if (savedUser) return JSON.parse(savedUser);
+    } catch {}
+    return MOCK_USER;
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    try {
+      return Boolean(sessionStorage.getItem('secretspace_token'));
+    } catch {
+      return false;
+    }
+  });
+
+  // User Settings State (Persistent across navigation and refreshes)
+  const [settings, setSettings] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('secretspace_settings');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {
+      notifications: {
+        upvotes: true,
+        comments: true,
+        polls: true,
+        trendingAlerts: false,
+      },
+      privacy: {
+        scrambleWeekly: true,
+        hideHostelWing: false,
+        blurSensitive: true,
+      },
+    };
+  });
 
   // Backend & Connection State
   const [backendStatus, setBackendStatus] = useState({
@@ -52,7 +86,7 @@ export const AppProvider = ({ children }) => {
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 4000);
+    }, 4500);
   }, []);
 
   const removeToast = useCallback((id) => {
@@ -60,26 +94,24 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   // Fetch real posts from backend
-  const fetchPosts = useCallback(async () => {
+  const fetchPosts = useCallback(async (params = {}) => {
     setIsLoadingPosts(true);
     try {
       const res = await api.posts.getAll({
-        category: activeCategory,
-        sort: sortBy,
-        search: searchQuery,
+        category: params.category || activeCategory,
+        sort: params.sort || sortBy,
+        search: params.search !== undefined ? params.search : searchQuery,
       });
       if (res && res.success && Array.isArray(res.data)) {
         setPosts(res.data);
       }
     } catch (error) {
       console.warn('[AppContext] Could not fetch real posts:', error.message);
-      if (posts.length === 0) {
-        setPosts(INITIAL_POSTS);
-      }
+      setPosts((prev) => (prev.length === 0 ? INITIAL_POSTS : prev));
     } finally {
       setIsLoadingPosts(false);
     }
-  }, [activeCategory, sortBy, searchQuery, posts.length]);
+  }, [activeCategory, sortBy, searchQuery]);
 
   // Fetch real polls from backend
   const fetchPolls = useCallback(async () => {
@@ -91,13 +123,11 @@ export const AppProvider = ({ children }) => {
       }
     } catch (error) {
       console.warn('[AppContext] Could not fetch real polls:', error.message);
-      if (polls.length === 0) {
-        setPolls(INITIAL_POLLS);
-      }
+      setPolls((prev) => (prev.length === 0 ? INITIAL_POLLS : prev));
     } finally {
       setIsLoadingPolls(false);
     }
-  }, [polls.length]);
+  }, []);
 
   // Fetch moderation reports (Admin)
   const fetchReports = useCallback(async () => {
@@ -108,13 +138,11 @@ export const AppProvider = ({ children }) => {
       }
     } catch (error) {
       console.warn('[AppContext] Could not fetch real reports:', error.message);
-      if (reports.length === 0) {
-        setReports(MOCK_REPORTS);
-      }
+      setReports((prev) => (prev.length === 0 ? MOCK_REPORTS : prev));
     }
-  }, [reports.length]);
+  }, []);
 
-  // Initial Health & Connectivity Check on mount
+  // Initial Health & Connectivity Check on mount (Runs ONLY ONCE on app boot)
   useEffect(() => {
     let isMounted = true;
 
@@ -122,19 +150,22 @@ export const AppProvider = ({ children }) => {
       try {
         const health = await api.health.check();
         if (isMounted) {
+          const isConnected = health.database === 'connected';
           setBackendStatus({
             online: true,
             database: health.database,
             checked: true,
           });
 
-          if (health.database === 'connected') {
+          if (isConnected) {
             fetchPosts();
             fetchPolls();
+            fetchReports();
           } else {
-            setPosts(INITIAL_POSTS);
-            setPolls(INITIAL_POLLS);
-            setReports(MOCK_REPORTS);
+            // Backend reached, but database disconnected
+            setPosts((prev) => (prev.length === 0 ? INITIAL_POSTS : prev));
+            setPolls((prev) => (prev.length === 0 ? INITIAL_POLLS : prev));
+            setReports((prev) => (prev.length === 0 ? MOCK_REPORTS : prev));
             setIsLoadingPosts(false);
             setIsLoadingPolls(false);
           }
@@ -146,9 +177,9 @@ export const AppProvider = ({ children }) => {
             database: 'disconnected',
             checked: true,
           });
-          setPosts(INITIAL_POSTS);
-          setPolls(INITIAL_POLLS);
-          setReports(MOCK_REPORTS);
+          setPosts((prev) => (prev.length === 0 ? INITIAL_POSTS : prev));
+          setPolls((prev) => (prev.length === 0 ? INITIAL_POLLS : prev));
+          setReports((prev) => (prev.length === 0 ? MOCK_REPORTS : prev));
           setIsLoadingPosts(false);
           setIsLoadingPolls(false);
         }
@@ -159,7 +190,14 @@ export const AppProvider = ({ children }) => {
     return () => {
       isMounted = false;
     };
-  }, [fetchPolls, fetchPosts]);
+  }, []); // Run strictly once on mount
+
+  // Sync feed when filter parameters change (only if backend is online and DB connected)
+  useEffect(() => {
+    if (backendStatus.online && backendStatus.database === 'connected') {
+      fetchPosts();
+    }
+  }, [activeCategory, sortBy, searchQuery, backendStatus.online, backendStatus.database, fetchPosts]);
 
   // Upvote / Downvote Post
   const votePost = async (postId, direction) => {
@@ -232,7 +270,7 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // Add New Post (Guaranteed to succeed and display on screen)
+  // Add New Post (Guaranteed to save and display immediately in feed and My Activity)
   const addPost = async ({ content, category, collegeTag, tags, authorAvatar }) => {
     if (!content || !content.trim()) {
       addToast('Please write your confession first', 'warning');
@@ -247,49 +285,70 @@ export const AppProvider = ({ children }) => {
       authorAvatar: authorAvatar || user?.avatar || 'ghost',
     };
 
-    let savedPost = null;
-
-    // Attempt backend creation if online and connected
+    // If backend is online and database is connected, persist to MongoDB
     if (backendStatus.online && backendStatus.database === 'connected') {
       try {
         const res = await api.posts.create(postPayload);
-        if (res?.data) {
-          savedPost = res.data;
+        if (res && res.success && res.data) {
+          const savedPost = res.data;
+          setPosts((prev) => [savedPost, ...prev]);
+          setActiveCategory('all');
+          setSearchQuery('');
+          setUser((prev) => {
+            const updated = {
+              ...prev,
+              stats: { ...prev.stats, confessionsCount: (prev.stats?.confessionsCount || 0) + 1 },
+            };
+            try {
+              sessionStorage.setItem('secretspace_user', JSON.stringify(updated));
+            } catch {}
+            return updated;
+          });
+          addToast('Secret confession published anonymously!', 'success');
+          return savedPost;
+        } else {
+          throw new Error(res?.message || 'Failed to create post');
         }
       } catch (error) {
-        console.warn('[AppContext] Backend create post failed, falling back to local state:', error.message);
+        addToast(`Could not publish post: ${error.message}`, 'error');
+        return null;
       }
     }
 
-    // Bulletproof fallback: Always add post locally so the user's confession is NEVER lost!
-    if (!savedPost) {
-      savedPost = {
-        id: `post-${Date.now()}`,
-        authorPseudonym: `${user?.pseudonym || 'Freshman Ghost #101'} (You)`,
-        authorAvatar: authorAvatar || user?.avatar || 'ghost',
-        collegeTag: postPayload.collegeTag,
-        timestamp: 'Just now',
-        category: postPayload.category,
-        content: postPayload.content,
-        upvotes: 1,
-        downvotes: 0,
-        userVote: 'up',
-        isBookmarked: false,
-        commentCount: 0,
-        tags: postPayload.tags,
-        comments: [],
-      };
-    }
+    // Offline / Fallback mode: Guaranteed local state save
+    const fallbackPost = {
+      id: `post-${Date.now()}`,
+      authorPseudonym: `${user?.pseudonym || 'Freshman Ghost #101'} (You)`,
+      authorAvatar: authorAvatar || user?.avatar || 'ghost',
+      collegeTag: postPayload.collegeTag,
+      timestamp: 'Just now',
+      category: postPayload.category,
+      content: postPayload.content,
+      upvotes: 1,
+      downvotes: 0,
+      userVote: 'up',
+      isBookmarked: false,
+      isMyPost: true,
+      commentCount: 0,
+      tags: postPayload.tags,
+      comments: [],
+    };
 
-    setPosts((prev) => [savedPost, ...prev]);
+    setPosts((prev) => [fallbackPost, ...prev]);
     setActiveCategory('all');
     setSearchQuery('');
-    setUser((prev) => ({
-      ...prev,
-      stats: { ...prev.stats, confessionsCount: (prev.stats?.confessionsCount || 0) + 1 },
-    }));
+    setUser((prev) => {
+      const updated = {
+        ...prev,
+        stats: { ...prev.stats, confessionsCount: (prev.stats?.confessionsCount || 0) + 1 },
+      };
+      try {
+        sessionStorage.setItem('secretspace_user', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
     addToast('Secret confession published anonymously!', 'success');
-    return savedPost;
+    return fallbackPost;
   };
 
   // Add Comment to Post
@@ -310,11 +369,16 @@ export const AppProvider = ({ children }) => {
               };
             })
           );
+          setUser((prev) => ({
+            ...prev,
+            stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
+          }));
           addToast('Anonymous comment posted', 'success');
           return;
         }
       } catch (error) {
-        console.warn('[AppContext] Backend comment failed, fallback to local:', error.message);
+        addToast(`Could not post comment: ${error.message}`, 'error');
+        return;
       }
     }
 
@@ -339,6 +403,10 @@ export const AppProvider = ({ children }) => {
         };
       })
     );
+    setUser((prev) => ({
+      ...prev,
+      stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
+    }));
     addToast('Anonymous comment posted', 'success');
   };
 
@@ -360,11 +428,16 @@ export const AppProvider = ({ children }) => {
               return { ...post, commentCount: (post.commentCount || 0) + 1, comments: updated };
             })
           );
+          setUser((prev) => ({
+            ...prev,
+            stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
+          }));
           addToast('Reply sent anonymously', 'success');
           return;
         }
       } catch (error) {
-        console.warn('[AppContext] Backend reply failed, fallback to local:', error.message);
+        addToast(`Could not send reply: ${error.message}`, 'error');
+        return;
       }
     }
 
@@ -387,6 +460,10 @@ export const AppProvider = ({ children }) => {
         return { ...post, commentCount: (post.commentCount || 0) + 1, comments: updated };
       })
     );
+    setUser((prev) => ({
+      ...prev,
+      stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
+    }));
     addToast('Reply sent anonymously', 'success');
   };
 
@@ -403,7 +480,8 @@ export const AppProvider = ({ children }) => {
           return;
         }
       } catch (error) {
-        console.warn('[AppContext] Backend vote failed:', error.message);
+        addToast(`Voting failed: ${error.message}`, 'error');
+        return;
       }
     }
 
@@ -451,7 +529,8 @@ export const AppProvider = ({ children }) => {
           return res.data;
         }
       } catch (error) {
-        console.warn('[AppContext] Backend create poll failed:', error.message);
+        addToast(`Could not create poll: ${error.message}`, 'error');
+        return null;
       }
     }
 
@@ -488,7 +567,8 @@ export const AppProvider = ({ children }) => {
         addToast(res.message || 'Report submitted to SecretSpace moderators.', 'success');
         return;
       } catch (error) {
-        console.warn('[AppContext] Backend report failed:', error.message);
+        addToast(`Report submission failed: ${error.message}`, 'error');
+        return;
       }
     }
 
@@ -498,6 +578,7 @@ export const AppProvider = ({ children }) => {
       reason,
       reportedItemType,
       snippet: snippet || 'Flagged for community review',
+      details: details || '',
       flaggedBy: user?.pseudonym || 'Anonymous Student',
       timestamp: 'Just now',
       status: 'pending',
@@ -508,25 +589,43 @@ export const AppProvider = ({ children }) => {
     addToast('Report submitted to SecretSpace moderators. Thank you for keeping campus safe.', 'success');
   };
 
-  // Admin Actions
+  // Admin Actions (Strict authorization and verification)
   const resolveReport = async (reportId, action) => {
+    if (user?.role !== 'admin') {
+      addToast('Access denied: Administrator privileges required.', 'error');
+      return false;
+    }
+
     if (backendStatus.online && backendStatus.database === 'connected') {
       try {
-        await api.admin.resolveReport(reportId, action);
-        fetchReports();
-        if (action === 'remove') {
-          fetchPosts();
+        const res = await api.admin.resolveReport(reportId, action);
+        if (res && res.success) {
+          setReports((prev) =>
+            prev.map((r) =>
+              r.id === reportId ? { ...r, status: action === 'remove' ? 'content_removed' : 'dismissed' } : r
+            )
+          );
+          if (action === 'remove') {
+            const rep = reports.find((r) => r.id === reportId);
+            if (rep && rep.postId) {
+              setPosts((prev) => prev.filter((p) => p.id !== rep.postId));
+            }
+          }
+          addToast(
+            action === 'remove' ? 'Content removed & report resolved' : 'Report dismissed',
+            'success'
+          );
+          return true;
+        } else {
+          throw new Error(res?.message || 'Could not resolve report');
         }
-        addToast(
-          action === 'remove' ? 'Content removed & report resolved' : 'Report dismissed',
-          'success'
-        );
-        return;
       } catch (error) {
-        console.warn('[AppContext] Backend resolve report failed:', error.message);
+        addToast(`Moderation action failed: ${error.message}`, 'error');
+        return false;
       }
     }
 
+    // Local state resolution for demo preview
     setReports((prev) =>
       prev.map((r) => {
         if (r.id !== reportId) return r;
@@ -543,26 +642,64 @@ export const AppProvider = ({ children }) => {
     } else {
       addToast('Report action: Flag dismissed', 'info');
     }
+    return true;
   };
 
-  // User Profile & Authentication
+  // User Profile & Preferences
   const updateProfile = async (updates) => {
     if (backendStatus.online && backendStatus.database === 'connected') {
       try {
         const res = await api.auth.updateProfile(updates);
         if (res?.user) {
-          setUser((prev) => ({ ...prev, ...res.user }));
-          addToast('Disguise updated successfully.', 'success');
+          setUser((prev) => {
+            const merged = { ...prev, ...res.user };
+            try {
+              sessionStorage.setItem('secretspace_user', JSON.stringify(merged));
+            } catch {}
+            return merged;
+          });
+          addToast('Disguise and preferences updated successfully.', 'success');
           return;
         }
       } catch (error) {
-        console.warn('[AppContext] Backend updateProfile failed:', error.message);
+        addToast(`Could not update profile: ${error.message}`, 'error');
+        return;
       }
     }
 
-    setUser((prev) => ({ ...prev, ...updates }));
+    setUser((prev) => {
+      const merged = { ...prev, ...updates };
+      try {
+        sessionStorage.setItem('secretspace_user', JSON.stringify(merged));
+      } catch {}
+      return merged;
+    });
     addToast('Profile updated for this session', 'success');
   };
+
+  // Persistent Settings Update
+  const updateSettings = useCallback(async (newSettings) => {
+    setSettings((prev) => {
+      const merged = {
+        ...prev,
+        ...newSettings,
+        notifications: { ...(prev?.notifications || {}), ...(newSettings?.notifications || {}) },
+        privacy: { ...(prev?.privacy || {}), ...(newSettings?.privacy || {}) },
+      };
+      try {
+        sessionStorage.setItem('secretspace_settings', JSON.stringify(merged));
+      } catch {}
+      return merged;
+    });
+
+    if (backendStatus.online && backendStatus.database === 'connected' && isLoggedIn) {
+      try {
+        await api.auth.updateProfile({ settings: newSettings });
+      } catch (err) {
+        console.warn('[AppContext] Failed to sync settings with backend:', err.message);
+      }
+    }
+  }, [backendStatus, isLoggedIn]);
 
   const login = async ({ emailOrCode, password }) => {
     if (backendStatus.online && backendStatus.database === 'connected') {
@@ -573,55 +710,84 @@ export const AppProvider = ({ children }) => {
           setAuthToken(res.token);
           setUser(res.user);
           setIsLoggedIn(true);
+          try {
+            sessionStorage.setItem('secretspace_user', JSON.stringify(res.user));
+          } catch {}
           addToast(`Welcome back, ${res.user.pseudonym}!`, 'success');
           fetchPosts();
           fetchPolls();
           return true;
+        } else {
+          throw new Error(res?.message || 'Login failed');
         }
       } catch (error) {
-        console.warn('[AppContext] Live login error:', error.message);
+        addToast(`Login failed: ${error.message}`, 'error');
+        return false;
       }
     }
 
-    // Smooth fallback: session login for testing and preview
-    setIsLoggedIn(true);
-    setUser((prev) => ({
-      ...prev,
+    // Demo/Offline login
+    const isAdmin = emailOrCode.trim().toLowerCase() === 'admin@campus.edu';
+    const fallbackUser = {
+      ...user,
       email: emailOrCode.includes('@') ? emailOrCode : `${emailOrCode.toLowerCase()}@campus.edu`,
-      pseudonym: emailOrCode.includes('admin') ? 'Campus Guardian (Mod)' : prev.pseudonym || 'Freshman Ghost #101',
-      role: emailOrCode.includes('admin') ? 'admin' : 'user',
-    }));
-    addToast(`Welcome back to SecretSpace! Your session is active.`, 'success');
+      pseudonym: isAdmin ? 'Campus Guardian (Mod)' : user.pseudonym || 'Freshman Ghost #101',
+      role: isAdmin ? 'admin' : 'user',
+    };
+
+    setAuthToken(`demo-token-${Date.now()}`);
+    setUser(fallbackUser);
+    setIsLoggedIn(true);
+    try {
+      sessionStorage.setItem('secretspace_user', JSON.stringify(fallbackUser));
+    } catch {}
+    addToast(`Welcome back! Session is active.`, 'success');
     return true;
   };
 
-  // Quick 1-click test login for user and senior to test instantly on Vercel
   const quickDemoLogin = async (role = 'student') => {
     if (role === 'admin') {
-      await login({ emailOrCode: 'admin@campus.edu', password: 'adminpassword123' });
-      setUser((prev) => ({
-        ...prev,
-        email: 'admin@campus.edu',
-        pseudonym: 'Campus Guardian #01',
-        role: 'admin',
-        avatar: 'fox',
-      }));
+      const ok = await login({ emailOrCode: 'admin@campus.edu', password: 'adminpassword123' });
+      if (ok) {
+        setUser((prev) => {
+          const u = {
+            ...prev,
+            email: 'admin@campus.edu',
+            pseudonym: 'Campus Guardian #01',
+            role: 'admin',
+            avatar: 'fox',
+          };
+          try {
+            sessionStorage.setItem('secretspace_user', JSON.stringify(u));
+          } catch {}
+          return u;
+        });
+      }
     } else {
-      await login({ emailOrCode: 'student@campus.edu', password: 'studentpassword123' });
-      setUser((prev) => ({
-        ...prev,
-        email: 'student@campus.edu',
-        pseudonym: 'Silent Scholar #42',
-        role: 'user',
-        avatar: 'owl',
-      }));
+      const ok = await login({ emailOrCode: 'student@campus.edu', password: 'studentpassword123' });
+      if (ok) {
+        setUser((prev) => {
+          const u = {
+            ...prev,
+            email: 'student@campus.edu',
+            pseudonym: 'Silent Scholar #42',
+            role: 'user',
+            avatar: 'owl',
+          };
+          try {
+            sessionStorage.setItem('secretspace_user', JSON.stringify(u));
+          } catch {}
+          return u;
+        });
+      }
     }
   };
 
   const signup = async ({ email, pseudonym, campusCode, password, avatar }) => {
     if (backendStatus.online && backendStatus.database === 'connected') {
       try {
-        const generatedEmail = email || `${pseudonym.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || 'student'}@campus.edu`;
+        const generatedEmail =
+          email || `${pseudonym.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || 'student'}@campus.edu`;
         const res = await api.auth.register({
           email: generatedEmail,
           password: password || 'studentpassword123',
@@ -633,24 +799,36 @@ export const AppProvider = ({ children }) => {
           setAuthToken(res.token);
           setUser(res.user);
           setIsLoggedIn(true);
+          try {
+            sessionStorage.setItem('secretspace_user', JSON.stringify(res.user));
+          } catch {}
           addToast('Anonymous account created! Your identity is hidden.', 'success');
           fetchPosts();
           return true;
+        } else {
+          throw new Error(res?.message || 'Registration failed');
         }
       } catch (error) {
-        console.warn('[AppContext] Live signup error:', error.message);
+        addToast(`Signup failed: ${error.message}`, 'error');
+        return false;
       }
     }
 
-    // Smooth fallback signup
-    setIsLoggedIn(true);
-    setUser((prev) => ({
-      ...prev,
+    const newUser = {
+      ...user,
       pseudonym: pseudonym || 'Freshman Ghost #101',
       collegeTag: campusCode || 'Campus North',
       college: campusCode || 'Campus North',
       avatar: avatar || 'ghost',
-    }));
+      role: 'user',
+    };
+
+    setAuthToken(`demo-token-${Date.now()}`);
+    setUser(newUser);
+    setIsLoggedIn(true);
+    try {
+      sessionStorage.setItem('secretspace_user', JSON.stringify(newUser));
+    } catch {}
     addToast('Anonymous account created! Your identity is hidden.', 'success');
     return true;
   };
@@ -658,8 +836,31 @@ export const AppProvider = ({ children }) => {
   const logout = () => {
     setAuthToken(null);
     setIsLoggedIn(false);
+    setUser(MOCK_USER);
+    try {
+      sessionStorage.removeItem('secretspace_token');
+      sessionStorage.removeItem('secretspace_user');
+    } catch {}
     addToast('Logged out of session', 'info');
   };
+
+  // Reset in-memory state cleanly
+  const resetInMemoryState = useCallback(() => {
+    setPosts(INITIAL_POSTS);
+    setPolls(INITIAL_POLLS);
+    setReports(MOCK_REPORTS);
+    setActiveCategory('all');
+    setSearchQuery('');
+    setSortBy('hot');
+    try {
+      sessionStorage.removeItem('secretspace_settings');
+    } catch {}
+    setSettings({
+      notifications: { upvotes: true, comments: true, polls: true, trendingAlerts: false },
+      privacy: { scrambleWeekly: true, hideHostelWing: false, blurSensitive: true },
+    });
+    addToast('Session memory cleared. All temporary interactions refreshed.', 'info');
+  }, [addToast]);
 
   // Filtered and Sorted Posts calculation
   const filteredPosts = useMemo(() => {
@@ -695,13 +896,16 @@ export const AppProvider = ({ children }) => {
     return posts.filter((p) => p.isBookmarked);
   }, [posts]);
 
-  // Derived user posts
+  // Derived user posts (Accurate detection regardless of alias changes)
   const myPosts = useMemo(() => {
-    return posts.filter(
-      (p) =>
-        (p.authorPseudonym || '').includes('(You)') ||
-        (user?.pseudonym && p.authorPseudonym === user.pseudonym)
-    );
+    return posts.filter((p) => {
+      if (p.isMyPost) return true;
+      if ((p.authorPseudonym || '').includes('(You)')) return true;
+      if (user?.pseudonym && p.authorPseudonym === user.pseudonym) return true;
+      if (user?._id && p.author === user._id) return true;
+      if (user?.id && p.author === user.id) return true;
+      return false;
+    });
   }, [posts, user]);
 
   return (
@@ -717,6 +921,9 @@ export const AppProvider = ({ children }) => {
         reports,
         user,
         isLoggedIn,
+        settings,
+        updateSettings,
+        resetInMemoryState,
         backendStatus,
         isLoadingPosts,
         isLoadingPolls,
@@ -745,6 +952,7 @@ export const AppProvider = ({ children }) => {
         logout,
         fetchPosts,
         fetchPolls,
+        fetchReports,
       }}
     >
       {children}

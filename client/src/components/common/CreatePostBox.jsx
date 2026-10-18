@@ -26,8 +26,15 @@ export default function CreatePostBox({ onPostCreated }) {
 
     setIsSubmitting(true);
     try {
-      const tags = customTag.trim()
-        ? customTag.split(' ').map((t) => (t.startsWith('#') ? t : `#${t}`))
+      const sanitizedTokens = customTag
+        .trim()
+        .split(/\s+/)
+        .map((t) => t.replace(/[^a-zA-Z0-9#]/g, ''))
+        .filter(Boolean)
+        .map((t) => (t.startsWith('#') ? t : `#${t}`));
+
+      const tags = sanitizedTokens.length > 0
+        ? sanitizedTokens
         : [`#${category}`, '#SecretSpace'];
 
       await addPost({
@@ -73,6 +80,7 @@ export default function CreatePostBox({ onPostCreated }) {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               onFocus={() => setIsExpanded(true)}
+              maxLength={MAX_CHARS}
               placeholder="What's on your mind? Share a secret, confession, or question..."
               rows={isExpanded ? 3 : 2}
               className="w-full text-sm text-main placeholder:text-muted bg-canvas rounded-xl p-3 border border-border focus:bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none transition"

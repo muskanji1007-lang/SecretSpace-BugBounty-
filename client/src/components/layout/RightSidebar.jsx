@@ -41,10 +41,13 @@ export default function RightSidebar() {
                 : 0;
               const isSelected = activePoll.userSelectedOption === opt.id;
 
+              const isClosed = activePoll.status === 'closed';
+              const showResults = activePoll.hasVoted || isClosed;
+
               return (
                 <button
                   key={opt.id}
-                  disabled={activePoll.hasVoted}
+                  disabled={showResults}
                   onClick={() => votePoll(activePoll.id, opt.id)}
                   className={`w-full text-left p-2.5 rounded-xl border text-xs font-medium relative overflow-hidden transition cursor-pointer ${
                     isSelected
@@ -52,7 +55,7 @@ export default function RightSidebar() {
                       : 'border-border hover:border-primary/50 text-main bg-canvas/60'
                   }`}
                 >
-                  {activePoll.hasVoted && (
+                  {showResults && (
                     <div
                       className="absolute inset-y-0 left-0 bg-surface/80 transition-all duration-500 z-0"
                       style={{ width: `${percentage}%` }}
@@ -60,7 +63,7 @@ export default function RightSidebar() {
                   )}
                   <div className="relative z-10 flex items-center justify-between">
                     <span className="truncate pr-2">{opt.text}</span>
-                    {activePoll.hasVoted && (
+                    {showResults && (
                       <span className="font-bold shrink-0 text-deep">
                         {percentage}%
                       </span>

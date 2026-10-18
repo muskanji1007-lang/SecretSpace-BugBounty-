@@ -19,11 +19,12 @@ const MAX_COMMENT_LENGTH = 300;
 export default function PostDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { posts, addComment, addReply, user } = useApp();
+  const { posts, addComment, addReply, user, addToast } = useApp();
 
   const [commentText, setCommentText] = useState('');
   const [activeReplyId, setActiveReplyId] = useState(null);
   const [replyText, setReplyText] = useState('');
+  const [upvotedComments, setUpvotedComments] = useState(new Set());
 
   const post = posts.find((p) => p.id === id);
 
@@ -59,6 +60,19 @@ export default function PostDetailsPage() {
     addReply(post.id, commentId, replyText.trim());
     setReplyText('');
     setActiveReplyId(null);
+  };
+
+  const handleCommentUpvote = (commentId) => {
+    if (upvotedComments.has(commentId)) {
+      addToast('You already upvoted this comment', 'info');
+      return;
+    }
+    setUpvotedComments((prev) => new Set([...prev, commentId]));
+    const targetComment = (post.comments || []).find((c) => c.id === commentId);
+    if (targetComment) {
+      targetComment.upvotes = (targetComment.upvotes || 0) + 1;
+    }
+    addToast('Comment upvoted anonymously!', 'success');
   };
 
   const currentUserAvatar =
@@ -171,7 +185,15 @@ export default function PostDetailsPage() {
                   </p>
 
                   <div className="flex items-center gap-4 pl-9 text-[11px] text-muted pt-1">
-                    <button className="flex items-center gap-1 text-muted hover:text-deep cursor-pointer">
+                    <button
+                      onClick={() => handleCommentUpvote(comment.id)}
+                      className={`flex items-center gap-1 transition cursor-pointer ${
+                        upvotedComments.has(comment.id)
+                          ? 'text-primary font-bold'
+                          : 'text-muted hover:text-deep'
+                      }`}
+                      title="Upvote comment"
+                    >
                       <ThumbsUp className="w-3.5 h-3.5" />
                       <span>{comment.upvotes || 0}</span>
                     </button>
@@ -194,6 +216,7 @@ export default function PostDetailsPage() {
                         type="text"
                         value={replyText}
                         onChange={(e) => setReplyText(e.target.value)}
+                        maxLength={MAX_COMMENT_LENGTH}
                         placeholder={`Reply to ${comment.author}...`}
                         className="w-full text-xs p-2 rounded-lg bg-card border border-border text-main placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-primary"
                       />

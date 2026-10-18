@@ -51,7 +51,7 @@ export default function Sidebar({ onOpenCreateModal }) {
         </Link>
 
         <nav className="space-y-1">
-          {NAV_ITEMS.map((item) => {
+          {NAV_ITEMS.filter((item) => item.badge !== 'Mod' || user?.role === 'admin').map((item) => {
             const Icon = item.icon;
             return (
               <NavLink

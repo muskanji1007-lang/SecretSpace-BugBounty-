@@ -25,7 +25,9 @@ export default function ReportModal({ isOpen, onClose, post }) {
       reason: selectedReason,
       snippet: post.content.substring(0, 100) + '...',
       reportedItemType: 'post',
+      details: details.trim(),
     });
+    setDetails('');
     onClose();
   };
 

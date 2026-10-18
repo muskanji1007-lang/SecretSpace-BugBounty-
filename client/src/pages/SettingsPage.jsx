@@ -9,39 +9,43 @@ import {
 } from '../components/common/icons.jsx';
 
 export default function SettingsPage() {
-  const { logout, addToast } = useApp();
+  const { logout, addToast, settings, updateSettings, resetInMemoryState } = useApp();
 
-  const [notifications, setNotifications] = useState({
+  const notifications = settings?.notifications || {
     upvotes: true,
     comments: true,
     polls: true,
     trendingAlerts: false,
-  });
+  };
 
-  const [privacy, setPrivacy] = useState({
+  const privacy = settings?.privacy || {
     scrambleWeekly: true,
     hideHostelWing: false,
     blurSensitive: true,
-  });
+  };
 
   const handleToggleNotif = (key) => {
-    setNotifications((prev) => {
-      const updated = { ...prev, [key]: !prev[key] };
-      addToast('Notification preference updated for this session', 'info');
-      return updated;
+    updateSettings({
+      notifications: {
+        ...notifications,
+        [key]: !notifications[key],
+      },
     });
+    addToast('Notification preference updated & saved', 'info');
   };
 
   const handleTogglePrivacy = (key) => {
-    setPrivacy((prev) => {
-      const updated = { ...prev, [key]: !prev[key] };
-      addToast('Privacy shield setting adjusted', 'success');
-      return updated;
+    updateSettings({
+      privacy: {
+        ...privacy,
+        [key]: !privacy[key],
+      },
     });
+    addToast('Privacy shield setting adjusted & saved', 'success');
   };
 
   const handleResetSession = () => {
-    addToast('Session memory cleared. All temporary interactions refreshed.', 'info');
+    resetInMemoryState();
   };
 
   return (

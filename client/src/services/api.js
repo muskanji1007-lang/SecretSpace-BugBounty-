@@ -1,14 +1,42 @@
 // SecretSpace Centralized API Client Layer
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const resolveApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL.replace(/\/$/, '');
+  }
 
-// In-memory token storage (preserves session without permanent localStorage databases)
+  // Smart production detection: When loaded from Vercel frontend, connect to Vercel backend by default
+  if (
+    typeof window !== 'undefined' &&
+    (window.location.hostname.includes('vercel.app') || window.location.protocol === 'https:')
+  ) {
+    return 'https://secret-space-6hvw.vercel.app/api';
+  }
+
+  return 'http://localhost:5000/api';
+};
+
+const API_BASE_URL = resolveApiBaseUrl();
+
+// Ephemeral session token storage (lasts for browser tab session without permanent local database)
 let inMemoryToken = null;
 
 export const setAuthToken = (token) => {
   inMemoryToken = token;
+  try {
+    if (token) {
+      sessionStorage.setItem('secretspace_token', token);
+    } else {
+      sessionStorage.removeItem('secretspace_token');
+    }
+  } catch {}
 };
 
 export const getAuthToken = () => {
+  if (!inMemoryToken) {
+    try {
+      inMemoryToken = sessionStorage.getItem('secretspace_token');
+    } catch {}
+  }
   return inMemoryToken;
 };
 
@@ -20,8 +48,9 @@ const request = async (endpoint, options = {}) => {
     ...(options.headers || {}),
   };
 
-  if (inMemoryToken) {
-    headers['Authorization'] = `Bearer ${inMemoryToken}`;
+  const activeToken = getAuthToken();
+  if (activeToken) {
+    headers['Authorization'] = `Bearer ${activeToken}`;
   }
 
   try {
@@ -45,7 +74,7 @@ const request = async (endpoint, options = {}) => {
   } catch (error) {
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
       const networkErr = new Error(
-        'Unable to connect to SecretSpace backend server. Ensure backend is running on http://localhost:5000'
+        `Unable to reach SecretSpace backend at ${API_BASE_URL}. Check network connection and API server status.`
       );
       networkErr.code = 'NETWORK_ERROR';
       throw networkErr;

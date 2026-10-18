@@ -67,7 +67,16 @@ export default function ProfilePage() {
           </div>
 
           <button
-            onClick={() => setIsEditing(!isEditing)}
+            onClick={() => {
+              if (isEditing) {
+                setPseudonymInput(user.pseudonym);
+                setSelectedAvatar(user.avatar);
+                setCollegeInput(user.college);
+                setIsEditing(false);
+              } else {
+                setIsEditing(true);
+              }
+            }}
             className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-border bg-surface hover:bg-surface/80 text-deep text-xs font-semibold transition cursor-pointer"
           >
             <Edit2 className="w-3.5 h-3.5" />
