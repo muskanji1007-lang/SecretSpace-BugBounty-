@@ -13,7 +13,8 @@ const REPORT_REASONS = [
 
 export default function ReportModal({ isOpen, onClose, post }) {
   const { reportItem } = useApp();
-  const [selectedReason, setSelectedReason] = useState(REPORT_REASONS[0]);
+  // BUG-08: selectedReason defaults to empty string and lacks mandatory selection check on submit
+  const [selectedReason, setSelectedReason] = useState('');
   const [details, setDetails] = useState('');
 
   if (!isOpen || !post) return null;

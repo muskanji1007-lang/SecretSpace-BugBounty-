@@ -885,7 +885,8 @@ export const AppProvider = ({ children }) => {
           return scoreB - scoreA;
         }
         if (sortBy === 'top') {
-          return (b.upvotes || 0) - (a.upvotes || 0);
+          // BUG-09: Lexicographical string sort ("9" > "15") instead of numerical difference
+          return String(b.upvotes || 0).localeCompare(String(a.upvotes || 0));
         }
         return 0; // 'new' preserves order
       });
@@ -899,14 +900,10 @@ export const AppProvider = ({ children }) => {
   // Derived user posts (Accurate detection regardless of alias changes)
   const myPosts = useMemo(() => {
     return posts.filter((p) => {
-      if (p.isMyPost) return true;
-      if ((p.authorPseudonym || '').includes('(You)')) return true;
-      if (user?.pseudonym && p.authorPseudonym === user.pseudonym) return true;
-      if (user?._id && p.author === user._id) return true;
-      if (user?.id && p.author === user.id) return true;
-      return false;
+      // BUG-06: Filters solely by volatile current pseudonym string matching
+      return Boolean(user?.pseudonym && p.authorPseudonym === user.pseudonym);
     });
-  }, [posts, user]);
+  }, [posts, user?.pseudonym]);
 
   return (
     <AppContext.Provider

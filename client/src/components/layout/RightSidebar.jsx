@@ -41,8 +41,8 @@ export default function RightSidebar() {
                 : 0;
               const isSelected = activePoll.userSelectedOption === opt.id;
 
-              const isClosed = activePoll.status === 'closed';
-              const showResults = activePoll.hasVoted || isClosed;
+              // BUG-05: Omits poll status check (isClosed), allowing voting on expired sidebar polls
+              const showResults = activePoll.hasVoted;
 
               return (
                 <button

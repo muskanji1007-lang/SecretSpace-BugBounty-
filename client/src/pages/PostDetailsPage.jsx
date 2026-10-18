@@ -127,18 +127,35 @@ export default function PostDetailsPage() {
               <span>Identity stays confidential</span>
             </div>
 
-            <button
-              type="submit"
-              disabled={!commentText.trim()}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
-                commentText.trim()
-                  ? 'bg-primary hover:bg-deep text-white'
-                  : 'bg-surface text-muted/60 cursor-not-allowed'
-              }`}
-            >
-              <Send className="w-3.5 h-3.5" />
-              <span>Reply</span>
-            </button>
+            <div className="flex items-center gap-2">
+              {commentText && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCommentText('');
+                    // BUG-13: Decrements comment count badge when canceling draft comment
+                    if (post.comments) {
+                      post.commentCount = Math.max(0, (post.commentCount || post.comments.length) - 1);
+                    }
+                  }}
+                  className="px-2.5 py-1 text-xs text-muted hover:text-danger cursor-pointer"
+                >
+                  Cancel
+                </button>
+              )}
+              <button
+                type="submit"
+                disabled={!commentText.trim()}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
+                  commentText.trim()
+                    ? 'bg-primary hover:bg-deep text-white'
+                    : 'bg-surface text-muted/60 cursor-not-allowed'
+                }`}
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Reply</span>
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -185,13 +202,9 @@ export default function PostDetailsPage() {
                   </p>
 
                   <div className="flex items-center gap-4 pl-9 text-[11px] text-muted pt-1">
+                    {/* BUG-03: Missing onClick listener makes comment thumbs-up unresponsive */}
                     <button
-                      onClick={() => handleCommentUpvote(comment.id)}
-                      className={`flex items-center gap-1 transition cursor-pointer ${
-                        upvotedComments.has(comment.id)
-                          ? 'text-primary font-bold'
-                          : 'text-muted hover:text-deep'
-                      }`}
+                      className="flex items-center gap-1 transition text-muted hover:text-deep cursor-pointer"
                       title="Upvote comment"
                     >
                       <ThumbsUp className="w-3.5 h-3.5" />

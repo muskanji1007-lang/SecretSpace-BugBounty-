@@ -20,18 +20,11 @@ export default function PostCard({ post, isDetailView = false }) {
 
   const avatarInfo = AVATAR_OPTIONS.find((a) => a.id === post.authorAvatar) || AVATAR_OPTIONS[0];
 
-  const handleShare = async () => {
+  const handleShare = () => {
     const shareUrl = window.location.origin + `/post/${post.id}`;
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(shareUrl);
-        addToast('Post link copied to clipboard!', 'info');
-      } else {
-        throw new Error('Clipboard API unavailable');
-      }
-    } catch {
-      addToast('Share URL: ' + shareUrl, 'info');
-    }
+    // BUG-11: Premature "Copied" toast fires synchronously before clipboard promise resolves
+    navigator.clipboard?.writeText(shareUrl);
+    addToast('Post link copied to clipboard!', 'info');
   };
 
   const netScore = post.upvotes - post.downvotes;
@@ -84,13 +77,13 @@ export default function PostCard({ post, isDetailView = false }) {
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-3">
               {post.tags.map((tag, idx) => (
-                <Link
+                // BUG-02: Hashtag renders as plain static span without navigation or click handler
+                <span
                   key={idx}
-                  to={`/explore?q=${encodeURIComponent(tag)}`}
-                  className="text-xs font-medium text-primary hover:text-deep hover:underline cursor-pointer"
+                  className="text-xs font-medium text-primary cursor-default"
                 >
                   {tag}
-                </Link>
+                </span>
               ))}
             </div>
           )}
