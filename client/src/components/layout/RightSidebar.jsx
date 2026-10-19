@@ -40,8 +40,6 @@ export default function RightSidebar() {
                 ? Math.round((opt.votes / activePoll.totalVotes) * 100)
                 : 0;
               const isSelected = activePoll.userSelectedOption === opt.id;
-
-              // BUG-05: Omits poll status check (isClosed), allowing voting on expired sidebar polls
               const showResults = activePoll.hasVoted;
 
               return (

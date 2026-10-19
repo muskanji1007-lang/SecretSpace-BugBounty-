@@ -18,7 +18,6 @@ export default function CreatePostBox({ onPostCreated }) {
 
   const charCount = content.length;
   const charsRemaining = MAX_CHARS - charCount;
-  // BUG-04: Length check without trim allows whitespace-only confessions
   const isValid = content.length >= 1;
 
   const handleSubmit = async (e) => {
@@ -39,7 +38,7 @@ export default function CreatePostBox({ onPostCreated }) {
         : [`#${category}`, '#SecretSpace'];
 
       await addPost({
-        content: content, // BUG-04: Omits .trim(), submitting pure whitespaces
+        content: content,
         category,
         collegeTag,
         tags,
@@ -77,7 +76,6 @@ export default function CreatePostBox({ onPostCreated }) {
           </div>
 
           <div className="flex-1">
-            {/* BUG-07: Omits maxLength constraint, showing negative remaining chars on paste */}
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -154,7 +152,6 @@ export default function CreatePostBox({ onPostCreated }) {
                 </label>
                 <div className="relative">
                   <MapPin className="w-3.5 h-3.5 text-primary absolute left-2.5 top-2.5" />
-                  {/* BUG-15: Uncontrolled defaultValue freezes UI label on previous spot after submission */}
                   <input
                     type="text"
                     defaultValue={collegeTag || 'Campus North'}

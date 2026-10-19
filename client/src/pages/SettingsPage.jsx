@@ -18,7 +18,6 @@ export default function SettingsPage() {
     trendingAlerts: false,
   };
 
-  // BUG-12: Privacy toggles held in transient component state only, reverting on page navigation
   const [privacy, setPrivacy] = useState({
     scrambleWeekly: true,
     hideHostelWing: false,

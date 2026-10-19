@@ -62,7 +62,6 @@ export default function ExplorePage() {
   const handleClear = () => {
     setSearchQuery('');
     setSearchParams({});
-    // BUG-01: Omits setActiveCategory('all'), trapping user in category filter
   };
 
   return (

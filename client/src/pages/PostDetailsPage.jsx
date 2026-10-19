@@ -133,7 +133,6 @@ export default function PostDetailsPage() {
                   type="button"
                   onClick={() => {
                     setCommentText('');
-                    // BUG-13: Decrements comment count badge when canceling draft comment
                     if (post.comments) {
                       post.commentCount = Math.max(0, (post.commentCount || post.comments.length) - 1);
                     }
@@ -202,7 +201,6 @@ export default function PostDetailsPage() {
                   </p>
 
                   <div className="flex items-center gap-4 pl-9 text-[11px] text-muted pt-1">
-                    {/* BUG-03: Missing onClick listener makes comment thumbs-up unresponsive */}
                     <button
                       className="flex items-center gap-1 transition text-muted hover:text-deep cursor-pointer"
                       title="Upvote comment"

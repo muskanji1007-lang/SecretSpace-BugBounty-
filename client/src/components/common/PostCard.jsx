@@ -22,7 +22,6 @@ export default function PostCard({ post, isDetailView = false }) {
 
   const handleShare = () => {
     const shareUrl = window.location.origin + `/post/${post.id}`;
-    // BUG-11: Premature "Copied" toast fires synchronously before clipboard promise resolves
     navigator.clipboard?.writeText(shareUrl);
     addToast('Post link copied to clipboard!', 'info');
   };
@@ -77,7 +76,6 @@ export default function PostCard({ post, isDetailView = false }) {
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-3">
               {post.tags.map((tag, idx) => (
-                // BUG-02: Hashtag renders as plain static span without navigation or click handler
                 <span
                   key={idx}
                   className="text-xs font-medium text-primary cursor-default"

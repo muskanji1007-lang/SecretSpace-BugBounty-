@@ -902,7 +902,6 @@ export const AppProvider = ({ children }) => {
           return scoreB - scoreA;
         }
         if (sortBy === 'top') {
-          // BUG-09: Lexicographical string sort ("9" > "15") instead of numerical difference
           return String(b.upvotes || 0).localeCompare(String(a.upvotes || 0));
         }
         return 0; // 'new' preserves order
@@ -917,7 +916,6 @@ export const AppProvider = ({ children }) => {
   // Derived user posts (Accurate detection regardless of alias changes)
   const myPosts = useMemo(() => {
     return posts.filter((p) => {
-      // BUG-06: Filters solely by volatile current pseudonym string matching
       return Boolean(user?.pseudonym && p.authorPseudonym === user.pseudonym);
     });
   }, [posts, user?.pseudonym]);

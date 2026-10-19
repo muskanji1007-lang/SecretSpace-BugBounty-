@@ -14,7 +14,7 @@ export default function AppLayout() {
     <div className="min-h-screen bg-canvas text-main flex flex-col">
       <Navbar onOpenCreateModal={() => setIsCreateModalOpen(true)} />
 
-      {/* Main Container - BUG-14: pb-0 on mobile causes fixed bottom nav bar to obscure last post */}
+      {/* Main Container */}
       <div className="flex-1 max-w-7xl w-full mx-auto flex justify-center pb-0 md:pb-6 overflow-x-hidden">
         {/* Left Navigation */}
         <Sidebar onOpenCreateModal={() => setIsCreateModalOpen(true)} />
