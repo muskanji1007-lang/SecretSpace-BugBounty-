@@ -5,6 +5,7 @@ import { AVATAR_OPTIONS } from '../data/mockData.js';
 import {
   Sparkles,
   Lock,
+  Mail,
   RefreshCw,
   School,
   ArrowRight,
@@ -17,6 +18,7 @@ export default function SignupPage() {
   const { signup } = useApp();
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState('');
   const [pseudonym, setPseudonym] = useState('Phantom Student #419');
   const [campusCode, setCampusCode] = useState('APEX-CAMPUS-NORTH');
   const [password, setPassword] = useState('');
@@ -33,6 +35,11 @@ export default function SignupPage() {
 
   const validate = () => {
     const errs = {};
+    if (!email.trim()) {
+      errs.email = 'College email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      errs.email = 'Please enter a valid email address';
+    }
     if (!pseudonym.trim()) errs.pseudonym = 'Pseudonym is required';
     if (!campusCode.trim()) errs.campusCode = 'Campus affiliation code is required';
     if (!password) {
@@ -49,7 +56,7 @@ export default function SignupPage() {
     e.preventDefault();
     if (!validate()) return;
 
-    const ok = await signup({ pseudonym, campusCode, password, avatar: selectedAvatar });
+    const ok = await signup({ email: email.trim(), pseudonym, campusCode, password, avatar: selectedAvatar });
     if (ok) {
       navigate('/');
     }
@@ -71,6 +78,25 @@ export default function SignupPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold text-main uppercase tracking-wider mb-1.5">
+              College Email
+            </label>
+            <div className="relative">
+              <Mail className="w-4 h-4 text-muted absolute left-3.5 top-3" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="student@university.edu"
+                className="w-full text-xs pl-10 pr-4 py-2.5 rounded-xl border border-border bg-canvas focus:bg-card focus:outline-none focus:ring-1 focus:ring-primary text-main placeholder:text-muted"
+              />
+            </div>
+            {errors.email && (
+              <p className="text-[11px] text-danger mt-1">{errors.email}</p>
+            )}
+          </div>
+
           <div>
             <label className="block text-xs font-semibold text-main uppercase tracking-wider mb-1.5">
               Anonymous Campus Alias

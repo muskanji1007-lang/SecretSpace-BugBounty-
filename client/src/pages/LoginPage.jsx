@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext.jsx';
-import { Lock, Mail, Eye, EyeOff, ArrowRight, UserCheck, Sun, Moon } from '../components/common/icons.jsx';
+import { Lock, Mail, Eye, EyeOff, ArrowRight, Sun, Moon } from '../components/common/icons.jsx';
 
 export default function LoginPage() {
-  const { login, quickDemoLogin, theme, toggleTheme } = useApp();
+  const { login, theme, toggleTheme } = useApp();
   const navigate = useNavigate();
 
   const [emailOrCode, setEmailOrCode] = useState('');
@@ -39,16 +39,6 @@ export default function LoginPage() {
       if (ok) {
         navigate('/');
       }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleQuickLogin = async (role) => {
-    setIsLoading(true);
-    try {
-      await quickDemoLogin(role);
-      navigate(role === 'admin' ? '/admin' : '/');
     } finally {
       setIsLoading(false);
     }
@@ -104,43 +94,6 @@ export default function LoginPage() {
           <p className="text-xs text-muted max-w-xs mx-auto">
             Sign in to unlock your campus confessions, reactions & polls
           </p>
-        </div>
-
-        {/* 1-Click Test Demo Logins */}
-        <div className="p-3.5 rounded-2xl bg-surface/60 border border-border space-y-2 mb-5">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-deep">
-            <UserCheck className="w-4 h-4 text-primary" />
-            <span>1-Click Test Logins (Instant Access)</span>
-          </div>
-          <p className="text-[11px] text-muted">
-            Click below to instantly open the dashboard without typing:
-          </p>
-          <div className="grid grid-cols-2 gap-2 pt-1">
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('student')}
-              disabled={isLoading}
-              className="py-2.5 px-3 rounded-xl bg-card border border-border hover:border-primary text-xs font-bold text-deep hover:bg-surface transition shadow-2xs cursor-pointer text-center"
-            >
-              🎓 Student Login
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('admin')}
-              disabled={isLoading}
-              className="py-2.5 px-3 rounded-xl bg-card border border-border hover:border-primary text-xs font-bold text-deep hover:bg-surface transition shadow-2xs cursor-pointer text-center"
-            >
-              🛡️ Admin Login
-            </button>
-          </div>
-        </div>
-
-        <div className="relative flex py-1 items-center mb-4">
-          <div className="flex-grow border-t border-border"></div>
-          <span className="flex-shrink mx-3 text-[10px] font-bold text-muted uppercase tracking-wider">
-            Or Sign In With Email
-          </span>
-          <div className="flex-grow border-t border-border"></div>
         </div>
 
         {/* Form */}
