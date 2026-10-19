@@ -12,7 +12,7 @@ const MOBILE_NAV_ITEMS = [
 
 export default function MobileNav() {
   return (
-    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-card/95 backdrop-blur-md border-t border-border flex items-center justify-around py-2 px-1 safe-area-pb">
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#211116]/95 backdrop-blur-md border-t border-[#38202A] flex items-center justify-around py-2 px-1 safe-area-pb">
       {MOBILE_NAV_ITEMS.map((item) => {
         const Icon = item.icon;
         return (
@@ -22,17 +22,19 @@ export default function MobileNav() {
             end={item.to === '/'}
             className={({ isActive }) =>
               `flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
-                isActive ? 'text-primary font-semibold' : 'text-muted hover:text-deep'
+                isActive ? 'text-white font-semibold' : 'text-[#D4B8C1] hover:text-white'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <Icon
-                  className={`w-5 h-5 ${
-                    isActive ? 'text-primary stroke-[2.5]' : 'text-muted'
-                  }`}
-                />
+                <div className={`p-1 rounded-lg transition ${isActive ? 'bg-[#501E30]' : ''}`}>
+                  <Icon
+                    className={`w-5 h-5 ${
+                      isActive ? 'text-white stroke-[2.5]' : 'text-[#D4B8C1]'
+                    }`}
+                  />
+                </div>
                 <span className="text-[10px] mt-0.5 tracking-tight">{item.label}</span>
               </>
             )}

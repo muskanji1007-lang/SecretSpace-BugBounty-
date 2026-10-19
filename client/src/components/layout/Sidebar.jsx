@@ -34,17 +34,17 @@ export default function Sidebar({ onOpenCreateModal }) {
   const pendingReportsCount = reports.filter((r) => r.status === 'pending').length;
 
   return (
-    <aside className="w-64 shrink-0 hidden md:flex flex-col justify-between sticky top-0 h-screen p-4 border-r border-border bg-card select-none">
+    <aside className="w-64 shrink-0 hidden md:flex flex-col justify-between sticky top-0 h-screen p-4 border-r border-[#38202A] bg-[#211116] text-[#D4B8C1] select-none">
       <div>
         <Link to="/" className="flex items-center gap-2.5 px-3 py-3 mb-6 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary to-accent text-white flex items-center justify-center font-black shadow-md shadow-primary/20 group-hover:opacity-95 transition">
-            <Sparkles className="w-5 h-5" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#B83259] to-[#982748] text-white flex items-center justify-center font-black shadow-md shadow-[#B83259]/20 group-hover:opacity-95 transition">
+            <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="font-extrabold text-lg text-deep tracking-tight leading-none group-hover:text-primary transition">
-              Secret<span className="text-primary">Space</span>
+            <h1 className="font-extrabold text-lg text-white tracking-tight leading-none group-hover:text-white/90 transition">
+              Secret<span className="text-[#B83259]">Space</span>
             </h1>
-            <span className="text-[10px] font-semibold tracking-wider uppercase text-muted">
+            <span className="text-[10px] font-semibold tracking-wider uppercase text-[#D4B8C1]">
               Anonymous Campus
             </span>
           </div>
@@ -59,10 +59,10 @@ export default function Sidebar({ onOpenCreateModal }) {
                 to={item.to}
                 end={item.to === '/'}
                 className={({ isActive }) =>
-                  `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition cursor-pointer ${
+                  `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition cursor-pointer group ${
                     isActive
-                      ? 'bg-primary text-white shadow-sm shadow-primary/25 font-semibold'
-                      : 'text-muted hover:bg-surface hover:text-deep'
+                      ? 'bg-[#501E30] text-white shadow-sm font-semibold'
+                      : 'text-[#D4B8C1] hover:bg-[#38202A] hover:text-white'
                   }`
                 }
               >
@@ -70,8 +70,8 @@ export default function Sidebar({ onOpenCreateModal }) {
                   <>
                     <div className="flex items-center gap-3">
                       <Icon
-                        className={`w-4 h-4 ${
-                          isActive ? 'text-white' : 'text-muted group-hover:text-primary'
+                        className={`w-4 h-4 transition ${
+                          isActive ? 'text-white' : 'text-[#D4B8C1] group-hover:text-white'
                         }`}
                       />
                       <span>{item.label}</span>
@@ -82,7 +82,7 @@ export default function Sidebar({ onOpenCreateModal }) {
                         className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
                           isActive
                             ? 'bg-white/20 text-white'
-                            : 'bg-surface text-deep'
+                            : 'bg-[#38202A] text-[#F9E5EB]'
                         }`}
                       >
                         {bookmarkedPosts.length}
@@ -90,7 +90,7 @@ export default function Sidebar({ onOpenCreateModal }) {
                     )}
 
                     {item.badge === 'Mod' && pendingReportsCount > 0 && (
-                      <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full bg-danger text-white">
+                      <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full bg-[#B42338] text-white">
                         {pendingReportsCount}
                       </span>
                     )}
@@ -104,7 +104,7 @@ export default function Sidebar({ onOpenCreateModal }) {
         <div className="mt-6 px-1">
           <button
             onClick={onOpenCreateModal}
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-primary to-deep hover:from-primary/95 hover:to-deep/95 text-white font-semibold text-sm shadow-md shadow-primary/25 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white font-semibold text-sm shadow-md shadow-[#B83259]/25 transition cursor-pointer"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Drop a Secret</span>
@@ -114,18 +114,18 @@ export default function Sidebar({ onOpenCreateModal }) {
 
       <Link
         to="/profile"
-        className="flex items-center gap-3 p-3 rounded-xl border border-border bg-canvas hover:bg-surface transition"
+        className="flex items-center gap-3 p-3 rounded-xl border border-[#38202A] bg-[#2A151D] hover:bg-[#38202A] transition"
       >
         <div
-          className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs border ${avatarObj.color} shrink-0`}
+          className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs border border-[#501E30] bg-[#501E30] text-white shrink-0"
         >
           {avatarObj.name.substring(0, 2).toUpperCase()}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="font-semibold text-xs text-main truncate">
+          <div className="font-semibold text-xs text-white truncate">
             {user.pseudonym}
           </div>
-          <div className="text-[11px] text-muted truncate">{user.college}</div>
+          <div className="text-[11px] text-[#D4B8C1] truncate">{user.college}</div>
         </div>
       </Link>
     </aside>

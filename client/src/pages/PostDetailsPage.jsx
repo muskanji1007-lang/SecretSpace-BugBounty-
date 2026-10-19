@@ -132,7 +132,7 @@ export default function PostDetailsPage() {
               disabled={!commentText.trim()}
               className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
                 commentText.trim()
-                  ? 'bg-primary hover:bg-deep text-white'
+                  ? 'bg-primary hover:bg-primary-hover text-white'
                   : 'bg-surface text-muted/60 cursor-not-allowed'
               }`}
             >
@@ -231,7 +231,7 @@ export default function PostDetailsPage() {
                         <button
                           type="button"
                           onClick={() => handleReplySubmit(comment.id)}
-                          className="px-3 py-1 bg-primary hover:bg-deep text-white text-xs font-semibold rounded-lg cursor-pointer"
+                          className="px-3 py-1 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg cursor-pointer"
                         >
                           Send
                         </button>

@@ -59,7 +59,7 @@ export default function SignupPage() {
     <div className="min-h-[85vh] flex items-center justify-center py-6 px-4">
       <div className="max-w-md w-full bg-card border border-border rounded-3xl p-8 shadow-xl shadow-deep/5 space-y-6">
         <div className="text-center space-y-1.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary to-accent text-white mx-auto flex items-center justify-center font-black shadow-lg shadow-primary/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#B83259] to-[#982748] text-white mx-auto flex items-center justify-center font-black shadow-lg shadow-[#B83259]/20">
             <Sparkles className="w-6 h-6" />
           </div>
           <h2 className="text-2xl font-black text-deep tracking-tight">
@@ -180,7 +180,7 @@ export default function SignupPage() {
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-accent to-primary hover:opacity-95 text-white font-semibold text-sm shadow-md shadow-primary/25 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white font-bold text-sm shadow-md shadow-[#B83259]/25 transition cursor-pointer"
           >
             <span>Create Anonymous Profile</span>
             <ArrowRight className="w-4 h-4" />

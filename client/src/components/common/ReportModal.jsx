@@ -43,7 +43,7 @@ export default function ReportModal({ isOpen, onClose, post }) {
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-rose-50 text-danger flex items-center justify-center border border-rose-200">
+          <div className="w-10 h-10 rounded-xl bg-surface text-danger flex items-center justify-center border border-border">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
@@ -111,7 +111,7 @@ export default function ReportModal({ isOpen, onClose, post }) {
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 px-4 rounded-xl bg-danger hover:bg-rose-700 text-white font-medium text-sm shadow-md shadow-danger/20 transition cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-xl bg-danger hover:opacity-95 text-white font-medium text-sm shadow-md shadow-danger/20 transition cursor-pointer"
             >
               Submit Flag
             </button>

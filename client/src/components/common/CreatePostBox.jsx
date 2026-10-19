@@ -213,7 +213,7 @@ export default function CreatePostBox({ onPostCreated }) {
               disabled={!isValid || isSubmitting}
               className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
                 isValid && !isSubmitting
-                  ? 'bg-primary hover:bg-deep text-white shadow-primary/20'
+                  ? 'bg-primary hover:bg-primary-hover text-white shadow-sm shadow-primary/25'
                   : 'bg-surface text-muted/60 cursor-not-allowed'
               }`}
             >

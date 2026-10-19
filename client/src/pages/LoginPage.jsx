@@ -79,23 +79,23 @@ export default function LoginPage() {
             {/* Soft layered glow */}
             <div
               className={`absolute inset-0 rounded-full blur-md ${
-                isDark ? 'bg-primary/30' : 'bg-pink-300/40'
+                isDark ? 'bg-primary/20' : 'bg-[#F9E5EB]'
               }`}
             />
             {/* Cute Ghost SVG */}
             <svg viewBox="0 0 160 180" className="w-20 h-20 relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M30 80C30 45 52 20 80 20C108 20 130 45 130 80V140C130 145 125 148 120 145C114 141 108 141 102 145C97 149 91 149 86 145C80 141 74 141 68 145C63 149 57 149 52 145C46 141 40 141 34 145C31 147 28 145 28 140V80Z"
-                fill={isDark ? '#E9D5FF' : '#FFFFFF'}
-                stroke={isDark ? '#C084FC' : '#E9D5FF'}
-                strokeWidth="3"
+                fill={isDark ? '#2D1720' : '#FFFDFD'}
+                stroke={isDark ? '#501E30' : '#EADDE1'}
+                strokeWidth="2"
               />
-              <circle cx="68" cy="72" r="5" fill="#1E122C" />
-              <circle cx="92" cy="72" r="5" fill="#1E122C" />
-              <ellipse cx="60" cy="80" rx="4" ry="2" fill="#F472B6" opacity="0.6" />
-              <ellipse cx="100" cy="80" rx="4" ry="2" fill="#F472B6" opacity="0.6" />
+              <circle cx="68" cy="72" r="5" fill={isDark ? '#FFFDFD' : '#291B20'} />
+              <circle cx="92" cy="72" r="5" fill={isDark ? '#FFFDFD' : '#291B20'} />
+              <ellipse cx="60" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
+              <ellipse cx="100" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
             </svg>
-            <span className="absolute -top-1 -right-1 text-xs text-accent">♡</span>
+            <span className="absolute -top-1 -right-1 text-xs text-primary">♡</span>
           </div>
 
           <h2 className="text-2xl font-black text-deep tracking-tight">
@@ -199,7 +199,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-accent to-primary hover:opacity-95 text-white font-bold text-sm shadow-md shadow-primary/25 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white font-bold text-sm shadow-md shadow-[#B83259]/25 transition cursor-pointer"
           >
             <span>{isLoading ? 'Unlocking...' : 'Unlock Campus Feed'}</span>
             <ArrowRight className="w-4 h-4" />

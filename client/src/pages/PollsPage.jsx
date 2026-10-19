@@ -82,7 +82,7 @@ export default function PollsPage() {
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-deep text-white text-xs font-semibold rounded-xl shadow-sm shadow-primary/20 transition cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-xl shadow-sm shadow-primary/20 transition cursor-pointer"
         >
           <PlusCircle className="w-4 h-4" />
           <span>Create Poll</span>
@@ -160,7 +160,7 @@ export default function PollsPage() {
                       {(poll.hasVoted || poll.status === 'closed') && (
                         <div
                           className={`absolute inset-y-0 left-0 transition-all duration-500 ${
-                            isSelected ? 'bg-surface' : 'bg-surface/50'
+                            isSelected ? 'bg-primary/20' : 'bg-surface'
                           }`}
                           style={{ width: `${percentage}%` }}
                         />
@@ -312,7 +312,7 @@ export default function PollsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-primary hover:bg-deep text-white font-medium text-xs shadow-md shadow-primary/20 transition cursor-pointer"
+                  className="flex-1 py-2.5 px-4 rounded-xl bg-primary hover:bg-primary-hover text-white font-medium text-xs shadow-md shadow-primary/20 transition cursor-pointer"
                 >
                   Publish Poll
                 </button>

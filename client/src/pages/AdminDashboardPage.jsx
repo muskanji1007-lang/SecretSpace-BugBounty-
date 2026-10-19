@@ -132,7 +132,7 @@ export default function AdminDashboardPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-xs text-danger bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">
+                      <span className="font-bold text-xs text-danger bg-surface px-2.5 py-0.5 rounded-full border border-border">
                         {report.reason}
                       </span>
                       <span className="text-[11px] text-muted">
@@ -155,7 +155,7 @@ export default function AdminDashboardPage() {
                       isPending
                         ? 'bg-amber-50 text-warning border border-amber-200'
                         : report.status === 'content_removed'
-                        ? 'bg-rose-50 text-danger border border-rose-200'
+                        ? 'bg-surface text-danger border border-border'
                         : 'bg-surface text-muted border border-border'
                     }`}
                   >
@@ -179,7 +179,7 @@ export default function AdminDashboardPage() {
 
                     <button
                       onClick={() => resolveReport(report.id, 'remove')}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-danger hover:bg-rose-700 text-white text-xs font-semibold shadow-xs transition cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-danger hover:opacity-95 text-white text-xs font-semibold shadow-xs transition cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                       <span>Remove Content</span>

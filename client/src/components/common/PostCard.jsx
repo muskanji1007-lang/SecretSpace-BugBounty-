@@ -162,7 +162,7 @@ export default function PostCard({ post, isDetailView = false }) {
 
             <button
               onClick={() => setIsReportOpen(true)}
-              className="p-2 rounded-xl hover:bg-rose-50 text-muted hover:text-danger transition cursor-pointer"
+              className="p-2 rounded-xl hover:bg-surface text-muted hover:text-danger transition cursor-pointer"
               title="Report Post"
               aria-label="Report"
             >
