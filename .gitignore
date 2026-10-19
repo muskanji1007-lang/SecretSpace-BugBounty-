@@ -20,3 +20,9 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Private evaluation & bug reports (Never push to GitHub to prevent cheating)
+*Bug_Bounty*
+*Report*
+*.csv
+*.xlsx
