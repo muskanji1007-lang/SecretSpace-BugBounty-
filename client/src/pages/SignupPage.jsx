@@ -5,6 +5,7 @@ import { AVATAR_OPTIONS } from '../data/mockData.js';
 import {
   Sparkles,
   Lock,
+  Mail,
   RefreshCw,
   School,
   ArrowRight,
@@ -17,6 +18,7 @@ export default function SignupPage() {
   const { signup } = useApp();
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState('');
   const [pseudonym, setPseudonym] = useState('Phantom Student #419');
   const [campusCode, setCampusCode] = useState('APEX-CAMPUS-NORTH');
   const [password, setPassword] = useState('');
@@ -33,6 +35,11 @@ export default function SignupPage() {
 
   const validate = () => {
     const errs = {};
+    if (!email.trim()) {
+      errs.email = 'College email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      errs.email = 'Please enter a valid email address';
+    }
     if (!pseudonym.trim()) errs.pseudonym = 'Pseudonym is required';
     if (!campusCode.trim()) errs.campusCode = 'Campus affiliation code is required';
     if (!password) {
@@ -49,7 +56,7 @@ export default function SignupPage() {
     e.preventDefault();
     if (!validate()) return;
 
-    const ok = await signup({ pseudonym, campusCode, password, avatar: selectedAvatar });
+    const ok = await signup({ email: email.trim(), pseudonym, campusCode, password, avatar: selectedAvatar });
     if (ok) {
       navigate('/');
     }
@@ -59,7 +66,7 @@ export default function SignupPage() {
     <div className="min-h-[85vh] flex items-center justify-center py-6 px-4">
       <div className="max-w-md w-full bg-card border border-border rounded-3xl p-8 shadow-xl shadow-deep/5 space-y-6">
         <div className="text-center space-y-1.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary to-accent text-white mx-auto flex items-center justify-center font-black shadow-lg shadow-primary/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#B83259] to-[#982748] text-white mx-auto flex items-center justify-center font-black shadow-lg shadow-[#B83259]/20">
             <Sparkles className="w-6 h-6" />
           </div>
           <h2 className="text-2xl font-black text-deep tracking-tight">
@@ -71,6 +78,25 @@ export default function SignupPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold text-main uppercase tracking-wider mb-1.5">
+              College Email
+            </label>
+            <div className="relative">
+              <Mail className="w-4 h-4 text-muted absolute left-3.5 top-3" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="student@university.edu"
+                className="w-full text-xs pl-10 pr-4 py-2.5 rounded-xl border border-border bg-canvas focus:bg-card focus:outline-none focus:ring-1 focus:ring-primary text-main placeholder:text-muted"
+              />
+            </div>
+            {errors.email && (
+              <p className="text-[11px] text-danger mt-1">{errors.email}</p>
+            )}
+          </div>
+
           <div>
             <label className="block text-xs font-semibold text-main uppercase tracking-wider mb-1.5">
               Anonymous Campus Alias
@@ -180,7 +206,7 @@ export default function SignupPage() {
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-accent to-primary hover:opacity-95 text-white font-semibold text-sm shadow-md shadow-primary/25 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white font-bold text-sm shadow-md shadow-[#B83259]/25 transition cursor-pointer"
           >
             <span>Create Anonymous Profile</span>
             <ArrowRight className="w-4 h-4" />

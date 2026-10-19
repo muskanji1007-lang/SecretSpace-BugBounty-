@@ -37,7 +37,7 @@ export default function ProfilePage() {
     <div className="space-y-6">
       {/* Profile Card Header */}
       <div className="bg-card border border-border rounded-3xl p-6 shadow-2xs relative overflow-hidden">
-        <div className="h-24 -mx-6 -mt-6 bg-gradient-to-r from-deep via-primary to-accent" />
+        <div className="h-24 -mx-6 -mt-6 bg-gradient-to-r from-[#211116] via-[#501E30] to-[#B83259]" />
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-10 mb-4">
           <div className="flex items-end gap-3.5">
@@ -159,7 +159,7 @@ export default function ProfilePage() {
               </button>
               <button
                 type="submit"
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-deep text-white text-xs font-semibold rounded-xl shadow-xs cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-xl shadow-xs cursor-pointer transition"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span>Save Changes</span>

@@ -23,7 +23,7 @@ export default function Navbar({ onOpenCreateModal }) {
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
         {/* Brand / Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-accent to-primary text-white flex items-center justify-center font-black shadow-sm">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#B83259] to-[#982748] text-white flex items-center justify-center font-black shadow-sm">
             <Sparkles className="w-4 h-4" />
           </div>
           <span className="font-extrabold text-base text-deep tracking-tight">
@@ -99,7 +99,7 @@ export default function Navbar({ onOpenCreateModal }) {
 
           <button
             onClick={onOpenCreateModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-accent to-primary hover:opacity-95 text-white text-xs font-semibold rounded-xl shadow-xs transition cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white text-xs font-semibold rounded-xl shadow-xs transition cursor-pointer"
           >
             <PlusCircle className="w-3.5 h-3.5" />
             <span>Drop Secret</span>
@@ -116,7 +116,7 @@ export default function Navbar({ onOpenCreateModal }) {
               </Link>
               <button
                 onClick={logout}
-                className="p-2 rounded-xl hover:bg-rose-50 hover:text-danger text-muted transition cursor-pointer"
+                className="p-2 rounded-xl hover:bg-surface hover:text-danger text-muted transition cursor-pointer"
                 title="Log Out"
               >
                 <LogOut className="w-3.5 h-3.5" />
@@ -125,7 +125,7 @@ export default function Navbar({ onOpenCreateModal }) {
           ) : (
             <Link
               to="/login"
-              className="px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-accent to-primary hover:opacity-95 shadow-xs transition cursor-pointer"
+              className="px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] shadow-xs transition cursor-pointer"
             >
               Login
             </Link>

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext.jsx';
-import { Lock, Mail, Eye, EyeOff, ArrowRight, UserCheck, Sun, Moon } from '../components/common/icons.jsx';
+import { Lock, Mail, Eye, EyeOff, ArrowRight, Sun, Moon } from '../components/common/icons.jsx';
 
 export default function LoginPage() {
-  const { login, quickDemoLogin, theme, toggleTheme } = useApp();
+  const { login, theme, toggleTheme } = useApp();
   const navigate = useNavigate();
 
   const [emailOrCode, setEmailOrCode] = useState('');
@@ -44,16 +44,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleQuickLogin = async (role) => {
-    setIsLoading(true);
-    try {
-      await quickDemoLogin(role);
-      navigate(role === 'admin' ? '/admin' : '/');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center py-10 px-4 transition-colors">
       <div className="max-w-md w-full bg-card border border-border rounded-3xl p-6 sm:p-8 shadow-2xl relative transition-all">
@@ -79,23 +69,23 @@ export default function LoginPage() {
             {/* Soft layered glow */}
             <div
               className={`absolute inset-0 rounded-full blur-md ${
-                isDark ? 'bg-primary/30' : 'bg-pink-300/40'
+                isDark ? 'bg-primary/20' : 'bg-[#F9E5EB]'
               }`}
             />
             {/* Cute Ghost SVG */}
             <svg viewBox="0 0 160 180" className="w-20 h-20 relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M30 80C30 45 52 20 80 20C108 20 130 45 130 80V140C130 145 125 148 120 145C114 141 108 141 102 145C97 149 91 149 86 145C80 141 74 141 68 145C63 149 57 149 52 145C46 141 40 141 34 145C31 147 28 145 28 140V80Z"
-                fill={isDark ? '#E9D5FF' : '#FFFFFF'}
-                stroke={isDark ? '#C084FC' : '#E9D5FF'}
-                strokeWidth="3"
+                fill={isDark ? '#2D1720' : '#FFFDFD'}
+                stroke={isDark ? '#501E30' : '#EADDE1'}
+                strokeWidth="2"
               />
-              <circle cx="68" cy="72" r="5" fill="#1E122C" />
-              <circle cx="92" cy="72" r="5" fill="#1E122C" />
-              <ellipse cx="60" cy="80" rx="4" ry="2" fill="#F472B6" opacity="0.6" />
-              <ellipse cx="100" cy="80" rx="4" ry="2" fill="#F472B6" opacity="0.6" />
+              <circle cx="68" cy="72" r="5" fill={isDark ? '#FFFDFD' : '#291B20'} />
+              <circle cx="92" cy="72" r="5" fill={isDark ? '#FFFDFD' : '#291B20'} />
+              <ellipse cx="60" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
+              <ellipse cx="100" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
             </svg>
-            <span className="absolute -top-1 -right-1 text-xs text-accent">♡</span>
+            <span className="absolute -top-1 -right-1 text-xs text-primary">♡</span>
           </div>
 
           <h2 className="text-2xl font-black text-deep tracking-tight">
@@ -104,43 +94,6 @@ export default function LoginPage() {
           <p className="text-xs text-muted max-w-xs mx-auto">
             Sign in to unlock your campus confessions, reactions & polls
           </p>
-        </div>
-
-        {/* 1-Click Test Demo Logins */}
-        <div className="p-3.5 rounded-2xl bg-surface/60 border border-border space-y-2 mb-5">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-deep">
-            <UserCheck className="w-4 h-4 text-primary" />
-            <span>1-Click Test Logins (Instant Access)</span>
-          </div>
-          <p className="text-[11px] text-muted">
-            Click below to instantly open the dashboard without typing:
-          </p>
-          <div className="grid grid-cols-2 gap-2 pt-1">
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('student')}
-              disabled={isLoading}
-              className="py-2.5 px-3 rounded-xl bg-card border border-border hover:border-primary text-xs font-bold text-deep hover:bg-surface transition shadow-2xs cursor-pointer text-center"
-            >
-              🎓 Student Login
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('admin')}
-              disabled={isLoading}
-              className="py-2.5 px-3 rounded-xl bg-card border border-border hover:border-primary text-xs font-bold text-deep hover:bg-surface transition shadow-2xs cursor-pointer text-center"
-            >
-              🛡️ Admin Login
-            </button>
-          </div>
-        </div>
-
-        <div className="relative flex py-1 items-center mb-4">
-          <div className="flex-grow border-t border-border"></div>
-          <span className="flex-shrink mx-3 text-[10px] font-bold text-muted uppercase tracking-wider">
-            Or Sign In With Email
-          </span>
-          <div className="flex-grow border-t border-border"></div>
         </div>
 
         {/* Form */}
@@ -199,7 +152,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-accent to-primary hover:opacity-95 text-white font-bold text-sm shadow-md shadow-primary/25 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white font-bold text-sm shadow-md shadow-[#B83259]/25 transition cursor-pointer"
           >
             <span>{isLoading ? 'Unlocking...' : 'Unlock Campus Feed'}</span>
             <ArrowRight className="w-4 h-4" />

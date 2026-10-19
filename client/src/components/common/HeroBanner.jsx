@@ -10,19 +10,19 @@ export default function HeroBanner({ onOpenCreateModal }) {
     <div
       className={`relative overflow-hidden rounded-3xl p-6 sm:p-8 transition-all duration-300 border mb-6 ${
         isDark
-          ? 'bg-gradient-to-br from-[#130E2E] via-[#18113B] to-[#0D0A22] border-[#2E245C] text-white shadow-xl shadow-purple-950/30'
-          : 'bg-gradient-to-br from-[#FFF5FA] via-[#FAF5FF] to-[#F3E8FF] border-[#F1E3F8] text-[#1E122C] shadow-xs'
+          ? 'bg-gradient-to-br from-[#211116] via-[#2A151D] to-[#150B0E] border-[#38202A] text-white shadow-xl shadow-[#211116]/40'
+          : 'bg-gradient-to-br from-[#FFF4F5] via-[#F8F3F4] to-[#F9E5EB] border-[#EADDE1] text-[#291B20] shadow-xs'
       }`}
     >
-      {/* Subtle background glow bubbles */}
+      {/* Subtle Cherry background glow bubbles */}
       <div
         className={`absolute -top-12 -right-12 w-64 h-64 rounded-full blur-3xl pointer-events-none ${
-          isDark ? 'bg-primary/20' : 'bg-pink-300/25'
+          isDark ? 'bg-[#B83259]/15' : 'bg-[#F9E5EB]/70'
         }`}
       />
       <div
         className={`absolute -bottom-10 -left-10 w-48 h-48 rounded-full blur-2xl pointer-events-none ${
-          isDark ? 'bg-accent/15' : 'bg-purple-200/30'
+          isDark ? 'bg-[#501E30]/25' : 'bg-[#FFF4F5]/80'
         }`}
       />
 
@@ -31,11 +31,11 @@ export default function HeroBanner({ onOpenCreateModal }) {
         <span
           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border ${
             isDark
-              ? 'bg-[#1E1742] border-[#392B6E] text-purple-200'
-              : 'bg-white/80 border-[#EBD6F5] text-deep'
+              ? 'bg-[#2A151D] border-[#38202A] text-[#F9E5EB]'
+              : 'bg-white/90 border-[#EADDE1] text-deep'
           }`}
         >
-          <Sparkles className="w-3.5 h-3.5 text-accent" />
+          <Sparkles className="w-3.5 h-3.5 text-primary" />
           <span>100% Anonymous Campus Space</span>
         </span>
 
@@ -45,10 +45,10 @@ export default function HeroBanner({ onOpenCreateModal }) {
           type="button"
           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer border ${
             isDark
-              ? 'bg-[#1E1742] hover:bg-[#282057] border-[#392B6E] text-purple-200'
-              : 'bg-white hover:bg-surface border-[#EBD6F5] text-deep shadow-2xs'
+              ? 'bg-[#2A151D] hover:bg-[#38202A] border-[#38202A] text-[#F9E5EB]'
+              : 'bg-white hover:bg-surface border-[#EADDE1] text-deep shadow-2xs'
           }`}
-          title="Toggle between Screenshot Light and Dark Palette"
+          title="Toggle between Light and Dark Mode"
         >
           {isDark ? (
             <>
@@ -75,14 +75,14 @@ export default function HeroBanner({ onOpenCreateModal }) {
             {isDark ? (
               <>
                 Share what's <br className="hidden sm:inline" />
-                <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-accent bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#FFFDFD] via-[#F9E5EB] to-[#B83259] bg-clip-text text-transparent">
                   on your mind...
                 </span>
               </>
             ) : (
               <>
                 Your thoughts, <br className="hidden sm:inline" />
-                <span className="bg-gradient-to-r from-deep via-primary to-accent bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-deep via-primary to-primary-hover bg-clip-text text-transparent">
                   Your space.
                 </span>
               </>
@@ -91,7 +91,7 @@ export default function HeroBanner({ onOpenCreateModal }) {
 
           <p
             className={`text-xs sm:text-sm leading-relaxed max-w-md ${
-              isDark ? 'text-purple-200/80' : 'text-muted'
+              isDark ? 'text-[#D4B8C1]' : 'text-muted'
             }`}
           >
             {isDark
@@ -102,28 +102,26 @@ export default function HeroBanner({ onOpenCreateModal }) {
           <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
             <button
               onClick={onOpenCreateModal}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-accent via-primary to-deep hover:opacity-95 shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5 cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#B83259] via-[#982748] to-[#501E30] hover:opacity-95 shadow-lg shadow-[#B83259]/25 transition transform hover:-translate-y-0.5 cursor-pointer"
             >
-              <span>{isDark ? 'Join Now' : 'Join Now'}</span>
+              <span>Join Now</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* Cute Ghost Mascot Graphic (Matching User's Screenshot) */}
+        {/* Cute Mascot Graphic with Cherry Noir Accents */}
         <div className="relative shrink-0 flex items-center justify-center w-48 h-48 select-none">
-          {/* Layered Organic Blob Backdrop for Light Mode */}
           {!isDark ? (
             <>
-              <div className="absolute inset-0 bg-pink-200/50 rounded-full blur-md transform -rotate-6 scale-95" />
-              <div className="absolute inset-2 bg-purple-200/60 rounded-full blur-sm transform rotate-12 scale-90" />
-              <div className="absolute inset-4 bg-gradient-to-tr from-pink-100 to-purple-100 rounded-full shadow-inner" />
+              <div className="absolute inset-0 bg-[#F9E5EB]/60 rounded-full blur-md transform -rotate-6 scale-95" />
+              <div className="absolute inset-2 bg-[#FFF4F5]/80 rounded-full blur-sm transform rotate-12 scale-90" />
+              <div className="absolute inset-4 bg-gradient-to-tr from-[#FFF4F5] to-[#F9E5EB] rounded-full shadow-inner" />
             </>
           ) : (
             <>
-              {/* Glowing Nebula for Dark Mode */}
-              <div className="absolute inset-0 bg-primary/30 rounded-full blur-xl transform scale-100 animate-pulse" />
-              <div className="absolute inset-3 bg-accent/20 rounded-full blur-md" />
+              <div className="absolute inset-0 bg-[#B83259]/20 rounded-full blur-xl transform scale-100 animate-pulse" />
+              <div className="absolute inset-3 bg-[#501E30]/30 rounded-full blur-md" />
             </>
           )}
 
@@ -131,7 +129,7 @@ export default function HeroBanner({ onOpenCreateModal }) {
           <svg
             viewBox="0 0 160 180"
             className={`w-36 h-36 relative z-10 transition-transform duration-500 hover:scale-105 ${
-              isDark ? 'drop-shadow-[0_10px_20px_rgba(168,85,247,0.4)]' : 'drop-shadow-md'
+              isDark ? 'drop-shadow-[0_10px_20px_rgba(184,50,89,0.35)]' : 'drop-shadow-md'
             }`}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -139,62 +137,54 @@ export default function HeroBanner({ onOpenCreateModal }) {
             {/* Ghost Body */}
             <path
               d="M30 80C30 45 52 20 80 20C108 20 130 45 130 80V140C130 145 125 148 120 145C114 141 108 141 102 145C97 149 91 149 86 145C80 141 74 141 68 145C63 149 57 149 52 145C46 141 40 141 34 145C31 147 28 145 28 140V80Z"
-              fill={isDark ? 'url(#ghostDarkGrad)' : '#FFFFFF'}
+              fill={isDark ? 'url(#ghostDarkGrad)' : '#FFFDFD'}
+              stroke={isDark ? '#501E30' : '#EADDE1'}
+              strokeWidth="2"
             />
 
             {/* Ghost Eyes */}
-            <circle cx="68" cy="72" r="5.5" fill={isDark ? '#120D2C' : '#1E122C'} />
-            <circle cx="92" cy="72" r="5.5" fill={isDark ? '#120D2C' : '#1E122C'} />
+            <circle cx="68" cy="72" r="5.5" fill="#291B20" />
+            <circle cx="92" cy="72" r="5.5" fill="#291B20" />
 
             {/* Cute Cheeks */}
-            <ellipse cx="60" cy="80" rx="4" ry="2" fill="#F472B6" opacity={isDark ? '0.7' : '0.5'} />
-            <ellipse cx="100" cy="80" rx="4" ry="2" fill="#F472B6" opacity={isDark ? '0.7' : '0.5'} />
+            <ellipse cx="60" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
+            <ellipse cx="100" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
 
             {/* Gradients */}
             <defs>
               <linearGradient id="ghostDarkGrad" x1="80" y1="20" x2="80" y2="150" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#F5EEFF" />
-                <stop offset="0.6" stopColor="#E9D5FF" />
-                <stop offset="1" stopColor="#D8B4FE" />
+                <stop stopColor="#FFFDFD" />
+                <stop offset="0.6" stopColor="#F9E5EB" />
+                <stop offset="1" stopColor="#EADDE1" />
               </linearGradient>
             </defs>
           </svg>
 
-          {/* Cute Floating Heart & Sparkle Doodles from Screenshot */}
+          {/* Cute Floating Hearts in Cherry Red */}
           <span
-            className={`absolute top-2 right-4 text-xs select-none animate-bounce ${
-              isDark ? 'text-pink-300' : 'text-accent'
-            }`}
+            className="absolute top-2 right-4 text-xs select-none animate-bounce text-primary"
             style={{ animationDuration: '3s' }}
           >
             ♡
           </span>
-          <span
-            className={`absolute bottom-3 left-4 text-sm select-none ${
-              isDark ? 'text-purple-300' : 'text-primary'
-            }`}
-          >
+          <span className="absolute bottom-3 left-4 text-sm select-none text-deep">
             ♡
           </span>
-          <span
-            className={`absolute top-8 left-2 text-[10px] select-none ${
-              isDark ? 'text-amber-200' : 'text-pink-400'
-            }`}
-          >
+          <span className="absolute top-8 left-2 text-[10px] select-none text-primary">
             ✧
           </span>
         </div>
       </div>
 
-      {/* Feature Badges Bar (From Screenshot bottom row) */}
+      {/* Feature Badges Bar */}
       <div
         className={`mt-6 pt-4 border-t grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-semibold relative z-10 ${
-          isDark ? 'border-[#2E245C]' : 'border-[#F1E3F8]'
+          isDark ? 'border-[#38202A]' : 'border-[#EADDE1]'
         }`}
       >
         <div
           className={`flex items-center gap-2 px-3 py-2 rounded-xl transition ${
-            isDark ? 'bg-[#181138] text-purple-200' : 'bg-white/80 text-deep border border-[#F1E3F8]'
+            isDark ? 'bg-[#2A151D] text-[#F9E5EB]' : 'bg-white/80 text-deep border border-[#EADDE1]'
           }`}
         >
           <MessageSquare className="w-3.5 h-3.5 text-primary shrink-0" />
@@ -203,28 +193,28 @@ export default function HeroBanner({ onOpenCreateModal }) {
 
         <div
           className={`flex items-center gap-2 px-3 py-2 rounded-xl transition ${
-            isDark ? 'bg-[#181138] text-purple-200' : 'bg-white/80 text-deep border border-[#F1E3F8]'
+            isDark ? 'bg-[#2A151D] text-[#F9E5EB]' : 'bg-white/80 text-deep border border-[#EADDE1]'
           }`}
         >
-          <Heart className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+          <Heart className="w-3.5 h-3.5 text-primary shrink-0" />
           <span className="truncate">Reactions & Comments</span>
         </div>
 
         <div
           className={`flex items-center gap-2 px-3 py-2 rounded-xl transition ${
-            isDark ? 'bg-[#181138] text-purple-200' : 'bg-white/80 text-deep border border-[#F1E3F8]'
+            isDark ? 'bg-[#2A151D] text-[#F9E5EB]' : 'bg-white/80 text-deep border border-[#EADDE1]'
           }`}
         >
-          <BarChart3 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+          <BarChart3 className="w-3.5 h-3.5 text-deep shrink-0" />
           <span className="truncate">Campus Polls</span>
         </div>
 
         <div
           className={`flex items-center gap-2 px-3 py-2 rounded-xl transition ${
-            isDark ? 'bg-[#181138] text-purple-200' : 'bg-white/80 text-deep border border-[#F1E3F8]'
+            isDark ? 'bg-[#2A151D] text-[#F9E5EB]' : 'bg-white/80 text-deep border border-[#EADDE1]'
           }`}
         >
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+          <ShieldCheck className="w-3.5 h-3.5 text-success shrink-0" />
           <span className="truncate">Report & Stay Safe</span>
         </div>
       </div>

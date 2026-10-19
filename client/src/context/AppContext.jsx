@@ -702,10 +702,19 @@ export const AppProvider = ({ children }) => {
   }, [backendStatus, isLoggedIn]);
 
   const login = async ({ emailOrCode, password }) => {
+    if (!emailOrCode || !emailOrCode.trim()) {
+      addToast('Please enter your college email or key', 'error');
+      return false;
+    }
+    if (!password || password.length < 6) {
+      addToast('Please enter your password (minimum 6 characters)', 'error');
+      return false;
+    }
+
     if (backendStatus.online && backendStatus.database === 'connected') {
       try {
-        const email = emailOrCode.includes('@') ? emailOrCode : `${emailOrCode.toLowerCase()}@campus.edu`;
-        const res = await api.auth.login({ email, password: password || 'studentpassword123' });
+        const email = emailOrCode.includes('@') ? emailOrCode.trim() : `${emailOrCode.trim().toLowerCase()}@campus.edu`;
+        const res = await api.auth.login({ email, password });
         if (res?.token) {
           setAuthToken(res.token);
           setUser(res.user);
@@ -730,7 +739,7 @@ export const AppProvider = ({ children }) => {
     const isAdmin = emailOrCode.trim().toLowerCase() === 'admin@campus.edu';
     const fallbackUser = {
       ...user,
-      email: emailOrCode.includes('@') ? emailOrCode : `${emailOrCode.toLowerCase()}@campus.edu`,
+      email: emailOrCode.includes('@') ? emailOrCode.trim() : `${emailOrCode.trim().toLowerCase()}@campus.edu`,
       pseudonym: isAdmin ? 'Campus Guardian (Mod)' : user.pseudonym || 'Freshman Ghost #101',
       role: isAdmin ? 'admin' : 'user',
     };
@@ -741,7 +750,7 @@ export const AppProvider = ({ children }) => {
     try {
       sessionStorage.setItem('secretspace_user', JSON.stringify(fallbackUser));
     } catch {}
-    addToast(`Welcome back! Session is active.`, 'success');
+    addToast(`Welcome back, ${fallbackUser.pseudonym}!`, 'success');
     return true;
   };
 
@@ -784,13 +793,20 @@ export const AppProvider = ({ children }) => {
   };
 
   const signup = async ({ email, pseudonym, campusCode, password, avatar }) => {
+    if (!password || password.length < 6) {
+      addToast('Password must be at least 6 characters', 'error');
+      return false;
+    }
+
+    const userEmail = email && email.trim()
+      ? email.trim()
+      : `${pseudonym.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || 'student'}@campus.edu`;
+
     if (backendStatus.online && backendStatus.database === 'connected') {
       try {
-        const generatedEmail =
-          email || `${pseudonym.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || 'student'}@campus.edu`;
         const res = await api.auth.register({
-          email: generatedEmail,
-          password: password || 'studentpassword123',
+          email: userEmail,
+          password,
           pseudonym: pseudonym || 'Anonymous Student',
           avatar,
           collegeTag: campusCode || 'Campus North',
@@ -816,6 +832,7 @@ export const AppProvider = ({ children }) => {
 
     const newUser = {
       ...user,
+      email: userEmail,
       pseudonym: pseudonym || 'Freshman Ghost #101',
       collegeTag: campusCode || 'Campus North',
       college: campusCode || 'Campus North',

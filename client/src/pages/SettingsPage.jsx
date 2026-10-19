@@ -188,7 +188,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Session Controls */}
-      <div className="bg-card border border-rose-200/60 rounded-2xl p-5 shadow-2xs space-y-4">
+      <div className="bg-card border border-danger/20 rounded-2xl p-5 shadow-2xs space-y-4">
         <div className="flex items-center gap-2 text-danger">
           <AlertTriangle className="w-4 h-4" />
           <h3 className="font-bold text-xs uppercase tracking-wider">
@@ -206,7 +206,7 @@ export default function SettingsPage() {
 
           <button
             onClick={logout}
-            className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-rose-50 hover:bg-rose-100 text-danger text-xs font-semibold transition cursor-pointer border border-rose-200"
+            className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-surface hover:bg-[#F9E5EB] text-danger text-xs font-semibold transition cursor-pointer border border-danger/30"
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out Session</span>

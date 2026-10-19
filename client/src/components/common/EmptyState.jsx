@@ -20,7 +20,7 @@ export default function EmptyState({
       {actionLabel && onAction && (
         <button
           onClick={onAction}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-deep text-white text-sm font-semibold rounded-xl shadow-md shadow-primary/20 transition cursor-pointer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-xl shadow-md shadow-primary/20 transition cursor-pointer"
         >
           <Sparkles className="w-4 h-4" />
           {actionLabel}

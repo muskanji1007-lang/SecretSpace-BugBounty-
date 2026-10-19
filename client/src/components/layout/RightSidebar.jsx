@@ -57,7 +57,7 @@ export default function RightSidebar() {
                 >
                   {showResults && (
                     <div
-                      className="absolute inset-y-0 left-0 bg-surface/80 transition-all duration-500 z-0"
+                      className="absolute inset-y-0 left-0 bg-primary/20 transition-all duration-500 z-0"
                       style={{ width: `${percentage}%` }}
                     />
                   )}
