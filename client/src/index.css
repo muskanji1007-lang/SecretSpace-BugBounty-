@@ -16,7 +16,6 @@
   --color-warning: var(--color-warning);
   --color-danger: var(--color-danger);
 
-  /* Cherry Noir Mixed Theme Tokens */
   --color-sidebar-bg: var(--color-sidebar-bg);
   --color-sidebar-hover: var(--color-sidebar-hover);
   --color-sidebar-active: var(--color-sidebar-active);
@@ -26,7 +25,6 @@
 }
 
 :root {
-  /* Cherry Noir Mixed Theme: Light Page + Dark Burgundy Sidebar */
   --color-primary: #B83259;
   --color-primary-hover: #982748;
   --color-deep: #501E30;

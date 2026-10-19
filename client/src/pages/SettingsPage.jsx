@@ -186,7 +186,6 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* Session Controls */}
       <div className="bg-card border border-danger/20 rounded-2xl p-5 shadow-2xs space-y-4">
         <div className="flex items-center gap-2 text-danger">
           <AlertTriangle className="w-4 h-4" />
