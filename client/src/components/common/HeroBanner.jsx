@@ -110,7 +110,6 @@ export default function HeroBanner({ onOpenCreateModal }) {
           </div>
         </div>
 
-        {/* Cute Mascot Graphic with Cherry Noir Accents */}
         <div className="relative shrink-0 flex items-center justify-center w-48 h-48 select-none">
           {!isDark ? (
             <>
@@ -125,7 +124,6 @@ export default function HeroBanner({ onOpenCreateModal }) {
             </>
           )}
 
-          {/* Floating Ghost SVG */}
           <svg
             viewBox="0 0 160 180"
             className={`w-36 h-36 relative z-10 transition-transform duration-500 hover:scale-105 ${
@@ -134,7 +132,6 @@ export default function HeroBanner({ onOpenCreateModal }) {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* Ghost Body */}
             <path
               d="M30 80C30 45 52 20 80 20C108 20 130 45 130 80V140C130 145 125 148 120 145C114 141 108 141 102 145C97 149 91 149 86 145C80 141 74 141 68 145C63 149 57 149 52 145C46 141 40 141 34 145C31 147 28 145 28 140V80Z"
               fill={isDark ? 'url(#ghostDarkGrad)' : '#FFFDFD'}
@@ -142,15 +139,12 @@ export default function HeroBanner({ onOpenCreateModal }) {
               strokeWidth="2"
             />
 
-            {/* Ghost Eyes */}
             <circle cx="68" cy="72" r="5.5" fill="#291B20" />
             <circle cx="92" cy="72" r="5.5" fill="#291B20" />
 
-            {/* Cute Cheeks */}
             <ellipse cx="60" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
             <ellipse cx="100" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
 
-            {/* Gradients */}
             <defs>
               <linearGradient id="ghostDarkGrad" x1="80" y1="20" x2="80" y2="150" gradientUnits="userSpaceOnUse">
                 <stop stopColor="#FFFDFD" />
@@ -160,7 +154,6 @@ export default function HeroBanner({ onOpenCreateModal }) {
             </defs>
           </svg>
 
-          {/* Cute Floating Hearts in Cherry Red */}
           <span
             className="absolute top-2 right-4 text-xs select-none animate-bounce text-primary"
             style={{ animationDuration: '3s' }}

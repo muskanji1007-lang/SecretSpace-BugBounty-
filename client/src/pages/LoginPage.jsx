@@ -47,7 +47,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center py-10 px-4 transition-colors">
       <div className="max-w-md w-full bg-card border border-border rounded-3xl p-6 sm:p-8 shadow-2xl relative transition-all">
-        {/* Top Header Bar with Theme Toggle */}
         <div className="flex items-center justify-between mb-4">
           <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-surface text-deep border border-border">
             Campus Verification Gate
@@ -63,16 +62,13 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* Cute Mascot & Heading (Matching Screenshot) */}
         <div className="text-center space-y-2 mb-6">
           <div className="relative w-20 h-20 mx-auto select-none">
-            {/* Soft layered glow */}
             <div
               className={`absolute inset-0 rounded-full blur-md ${
                 isDark ? 'bg-primary/20' : 'bg-[#F9E5EB]'
               }`}
             />
-            {/* Cute Ghost SVG */}
             <svg viewBox="0 0 160 180" className="w-20 h-20 relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M30 80C30 45 52 20 80 20C108 20 130 45 130 80V140C130 145 125 148 120 145C114 141 108 141 102 145C97 149 91 149 86 145C80 141 74 141 68 145C63 149 57 149 52 145C46 141 40 141 34 145C31 147 28 145 28 140V80Z"
@@ -96,7 +92,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-main uppercase tracking-wider mb-1.5">

@@ -29,7 +29,6 @@ export default function HomePage() {
 
   return (
     <div className="space-y-4">
-      {/* Visual Hero Banner (Matching Screenshot Color Palette & Mascot) */}
       <HeroBanner onOpenCreateModal={() => setIsModalOpen(true)} />
 
       {/* Category Pills Slider */}

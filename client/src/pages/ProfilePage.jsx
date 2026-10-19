@@ -35,7 +35,6 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      {/* Profile Card Header */}
       <div className="bg-card border border-border rounded-3xl p-6 shadow-2xs relative overflow-hidden">
         <div className="h-24 -mx-6 -mt-6 bg-gradient-to-r from-[#211116] via-[#501E30] to-[#B83259]" />
 
@@ -84,7 +83,6 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        {/* Editing Drawer */}
         {isEditing && (
           <form
             onSubmit={handleSave}
@@ -196,7 +194,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Badges Section */}
       <div className="bg-card border border-border rounded-3xl p-6 shadow-2xs space-y-3">
         <div className="flex items-center gap-2">
           <Award className="w-4 h-4 text-primary" />
@@ -218,7 +215,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* In-App Notifications Drawer */}
       <div className="bg-card border border-border rounded-3xl p-6 shadow-2xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

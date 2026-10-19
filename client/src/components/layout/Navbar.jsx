@@ -31,7 +31,6 @@ export default function Navbar({ onOpenCreateModal }) {
           </span>
         </Link>
 
-        {/* Quick Nav Links (Matching Screenshot Header: Home, Explore, Polls) */}
         <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold">
           <NavLink
             to="/"

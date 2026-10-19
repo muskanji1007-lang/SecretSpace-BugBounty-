@@ -93,7 +93,6 @@ export default function PostDetailsPage() {
 
       <PostCard post={post} isDetailView={true} />
 
-      {/* Anonymous Comment Form */}
       <div className="bg-card border border-border rounded-2xl p-4 shadow-2xs">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
@@ -159,7 +158,6 @@ export default function PostDetailsPage() {
         </form>
       </div>
 
-      {/* Comments Section */}
       <div className="space-y-3">
         <div className="flex items-center gap-2 px-1">
           <MessageSquare className="w-4 h-4 text-primary" />
