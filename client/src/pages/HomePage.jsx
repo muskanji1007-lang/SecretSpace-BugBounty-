@@ -31,7 +31,6 @@ export default function HomePage() {
     <div className="space-y-4">
       <HeroBanner onOpenCreateModal={() => setIsModalOpen(true)} />
 
-      {/* Category Pills Slider */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none">
         {CATEGORIES.map((cat) => (
           <button
@@ -48,10 +47,9 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* Inline Create Post Box */}
+
       <CreatePostBox />
 
-      {/* Feed Sorting Bar */}
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-1.5 text-xs">
           <span className="text-muted font-medium">Sort by:</span>
@@ -95,7 +93,7 @@ export default function HomePage() {
         </span>
       </div>
 
-      {/* Feed List */}
+     
       {isLoading ? (
         <LoadingSkeleton count={3} />
       ) : filteredPosts.length > 0 ? (
@@ -114,7 +112,6 @@ export default function HomePage() {
         />
       )}
 
-      {/* Modal Triggered from Hero */}
       <CreatePostModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );

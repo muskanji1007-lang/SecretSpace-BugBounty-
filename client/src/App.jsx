@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import { AppProvider, useApp } from './context/AppContext.jsx';
 import AppLayout from './components/layout/AppLayout.jsx';
 
-// Pages
 import HomePage from './pages/HomePage.jsx';
 import ExplorePage from './pages/ExplorePage.jsx';
 import PollsPage from './pages/PollsPage.jsx';
@@ -16,7 +15,6 @@ import ProfilePage from './pages/ProfilePage.jsx';
 import SettingsPage from './pages/SettingsPage.jsx';
 import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
 
-// Guard: User must be logged in to access the dashboard / campus feed
 function ProtectedRoute() {
   const { isLoggedIn } = useApp();
   if (!isLoggedIn) {
@@ -25,7 +23,6 @@ function ProtectedRoute() {
   return <Outlet />;
 }
 
-// Guard: If already logged in, redirect away from login / signup to home
 function PublicOnlyRoute({ children }) {
   const { isLoggedIn } = useApp();
   if (isLoggedIn) {
@@ -34,7 +31,6 @@ function PublicOnlyRoute({ children }) {
   return children;
 }
 
-// Guard: User must be an administrator to access the moderation desk
 function AdminRoute() {
   const { user, isLoggedIn } = useApp();
   if (!isLoggedIn) {
@@ -51,7 +47,6 @@ export default function App() {
     <AppProvider>
       <BrowserRouter>
         <Routes>
-          {/* Public Auth Routes (Must login first) */}
           <Route
             path="login"
             element={
@@ -69,7 +64,6 @@ export default function App() {
             }
           />
 
-          {/* Protected Dashboard Routes (Opens only after login) */}
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route index element={<HomePage />} />
@@ -86,7 +80,6 @@ export default function App() {
             </Route>
           </Route>
 
-          {/* Catch-all Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
