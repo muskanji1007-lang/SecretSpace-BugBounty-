@@ -39,10 +39,8 @@ export default function MyActivityPage() {
     };
   }, [backendStatus.online, backendStatus.database, isLoggedIn]);
 
-  // Combine remote activity with local context posts to ensure newly dropped secrets never vanish
   const displayedPosts = React.useMemo(() => {
     if (remoteActivity?.posts && remoteActivity.posts.length > 0) {
-      // Merge remote posts with any local post authored in this session
       const remoteIds = new Set(remoteActivity.posts.map((p) => p.id));
       const localOnly = myPosts.filter((p) => !remoteIds.has(p.id));
       return [...localOnly, ...remoteActivity.posts];
