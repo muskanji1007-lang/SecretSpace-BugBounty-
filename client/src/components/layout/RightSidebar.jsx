@@ -13,7 +13,7 @@ const TRENDING_TOPICS = [
 
 export default function RightSidebar() {
   const { polls, votePoll } = useApp();
-  const activePoll = polls.find((p) => p.status === 'active') || polls[0];
+  const activePoll = polls.find((p) => p.status === 'closed') || polls[0];
 
   return (
     <aside className="w-80 shrink-0 hidden xl:block space-y-5 p-4 sticky top-0 h-screen overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">

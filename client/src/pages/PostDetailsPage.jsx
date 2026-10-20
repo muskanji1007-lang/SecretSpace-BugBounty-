@@ -25,6 +25,7 @@ export default function PostDetailsPage() {
   const [activeReplyId, setActiveReplyId] = useState(null);
   const [replyText, setReplyText] = useState('');
   const [upvotedComments, setUpvotedComments] = useState(new Set());
+  const [commentCountDelta, setCommentCountDelta] = useState(0);
 
   const post = posts.find((p) => p.id === id);
 
@@ -52,6 +53,7 @@ export default function PostDetailsPage() {
     e.preventDefault();
     if (!commentText.trim()) return;
     addComment(post.id, commentText.trim());
+    setCommentCountDelta(0);
     setCommentText('');
   };
 
@@ -132,6 +134,7 @@ export default function PostDetailsPage() {
                   type="button"
                   onClick={() => {
                     setCommentText('');
+                    setCommentCountDelta((prev) => prev - 1);
                     if (post.comments) {
                       post.commentCount = Math.max(0, (post.commentCount || post.comments.length) - 1);
                     }
@@ -162,7 +165,7 @@ export default function PostDetailsPage() {
         <div className="flex items-center gap-2 px-1">
           <MessageSquare className="w-4 h-4 text-primary" />
           <h3 className="font-bold text-xs uppercase tracking-wider text-deep">
-            Discussion ({post.comments ? post.comments.length : 0})
+            Discussion ({Math.max(0, (post.commentCount || (post.comments ? post.comments.length : 0)) + commentCountDelta)})
           </h3>
         </div>
 
