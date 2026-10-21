@@ -8,33 +8,41 @@ SecretSpace is a full-stack web application starter built with **React**, **Vite
 
 ```text
 SecretSpace/
-├── client/                 # Frontend (React + Vite + Tailwind CSS)
+├── client/                     # Frontend (React 19 + Vite + Tailwind CSS v4)
+│   ├── public/                 # Favicons & public static assets
 │   ├── src/
-│   │   ├── assets/         # Static assets and icons
-│   │   ├── App.jsx         # Main React component
-│   │   ├── App.css         # Custom application styles
-│   │   ├── index.css       # Tailwind CSS v4 entry point
-│   │   └── main.jsx        # React root mounting point
-│   ├── .env.example        # Client environment variables template
-│   ├── index.html          # HTML template
-│   ├── package.json        # Frontend dependencies & scripts
-│   └── vite.config.js      # Vite and Tailwind CSS plugin configuration
+│   │   ├── assets/             # Branding graphics & vector assets
+│   │   ├── components/
+│   │   │   ├── common/         # Reusable widgets (Cards, Modals, Feed items, Icons)
+│   │   │   └── layout/         # Navigation bars, Sidebars, Responsive layout wrapper
+│   │   ├── context/            # React AppContext (state management & session guards)
+│   │   ├── data/               # Mock datasets & categories
+│   │   ├── pages/              # Routed pages (Feed, Explore, Polls, Profile, Admin, etc.)
+│   │   ├── services/           # Axios/Fetch API client & service endpoints
+│   │   ├── App.jsx             # Route definitions & protected route guards
+│   │   ├── index.css           # Tailwind CSS v4 theme tokens & Cherry Noir palette
+│   │   └── main.jsx            # React root application entry point
+│   ├── .env.example            # Client environment variables template
+│   ├── index.html              # HTML document template
+│   ├── package.json            # Frontend dependencies & build scripts
+│   └── vite.config.js          # Vite build & Tailwind CSS plugin configuration
 │
-├── server/                 # Backend (Node.js + Express + Mongoose + JWT)
+├── server/                     # Backend API (Node.js + Express + Mongoose + JWT)
 │   ├── src/
-│   │   ├── config/         # MongoDB connection & guards
-│   │   ├── controllers/    # Auth, Posts, Comments, Polls, Bookmarks, Reports, Admin
-│   │   ├── middleware/     # JWT Auth, Rate limiting, Error handlers
-│   │   ├── models/         # User, Post, Comment, Poll, Vote, Bookmark, Report
-│   │   ├── routes/         # Modular REST routers
-│   │   ├── scripts/        # Database seed script (npm run seed)
-│   │   └── index.js        # Express application entry point
-│   ├── tests/              # Automated backend test suite (npm test)
-│   ├── .env.example        # Server environment variables template
-│   └── package.json        # Backend dependencies & scripts
+│   │   ├── config/             # Database connection & environment configuration
+│   │   ├── controllers/        # Route controllers (Auth, Posts, Polls, Reports, Admin)
+│   │   ├── middleware/         # JWT verification, Role authorization, Error handlers
+│   │   ├── models/             # Mongoose schemas (User, Post, Comment, Poll, Report)
+│   │   ├── routes/             # Modular REST API route handlers
+│   │   ├── scripts/            # Database seed script (npm run seed)
+│   │   └── index.js            # Express application entry point & CORS configuration
+│   ├── tests/                  # Automated unit and integration test suite (npm test)
+│   ├── .env.example            # Server environment variables template
+│   └── package.json            # Backend dependencies & scripts
 │
-├── .gitignore              # Git ignore rules for dependencies & environments
-└── README.md               # Project documentation and setup guide
+├── reports/                    # Competition evaluation & verified bug bounty reports (.gitignore)
+├── .gitignore                  # Git ignore rules for node_modules, .env & private reports
+└── README.md                   # Project documentation and quickstart guide
 ```
 
 ---
