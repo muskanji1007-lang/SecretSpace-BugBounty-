@@ -33,6 +33,18 @@ export const connectDB = async () => {
     return mongoose.connection;
   }
 
+  // If already connecting (readyState 2), wait for it to finish
+  if (mongoose.connection.readyState === 2) {
+    await new Promise((resolve) => {
+      mongoose.connection.once('connected', resolve);
+      mongoose.connection.once('error', resolve);
+      setTimeout(resolve, 4000);
+    });
+    if (mongoose.connection.readyState === 1) {
+      return mongoose.connection;
+    }
+  }
+
   const rawUri = process.env.MONGODB_URI || process.env.MONGO_URI;
   if (!rawUri && process.env.VERCEL) {
     lastConnectionError = 'MONGODB_URI environment variable is missing in Vercel project settings';
@@ -92,6 +104,10 @@ export const getDBDiagnostic = () => {
 export const requireDB = async (req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
     await connectDB();
+  }
+
+  if (mongoose.connection.readyState !== 1 && mongoose.connection.readyState === 2) {
+    await new Promise((r) => setTimeout(r, 500));
   }
 
   if (!isDBConnected()) {
