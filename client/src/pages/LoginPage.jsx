@@ -162,8 +162,8 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => {
-                setEmailOrCode('alex@campus.edu');
-                setPassword('secret123');
+                setEmailOrCode('student@campus.edu');
+                setPassword('studentpassword123');
               }}
               className="px-2.5 py-1.5 rounded-xl border border-border bg-surface/50 hover:bg-surface text-deep text-xs font-medium transition cursor-pointer text-center"
             >
@@ -173,7 +173,7 @@ export default function LoginPage() {
               type="button"
               onClick={() => {
                 setEmailOrCode('admin@campus.edu');
-                setPassword('admin123');
+                setPassword('adminpassword123');
               }}
               className="px-2.5 py-1.5 rounded-xl border border-border bg-surface/50 hover:bg-surface text-deep text-xs font-medium transition cursor-pointer text-center"
             >
