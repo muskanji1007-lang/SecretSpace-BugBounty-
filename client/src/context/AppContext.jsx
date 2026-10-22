@@ -416,13 +416,15 @@ export const AppProvider = ({ children }) => {
       return false;
     }
 
-    try {
-      await api.posts.delete(postId);
-    } catch (err) {
-      console.warn('[AppContext] Backend post delete notice:', err.message);
-      if (err.status === 403 || err.status === 401) {
-        addToast(err.message || 'Cannot delete post: unauthorized', 'error');
-        return false;
+    if (isLoggedIn) {
+      try {
+        await api.posts.delete(postId);
+      } catch (err) {
+        console.warn('[AppContext] Backend post delete notice:', err.message);
+        if (err.status === 403 || err.status === 401) {
+          addToast(err.message || 'Cannot delete post: unauthorized', 'error');
+          return false;
+        }
       }
     }
 
@@ -452,28 +454,30 @@ export const AppProvider = ({ children }) => {
   const addComment = async (postId, content) => {
     if (!content || !content.trim()) return;
 
-    try {
-      const res = await api.comments.create(postId, { content: content.trim() });
-      if (res?.data) {
-        setPosts((prev) =>
-          prev.map((post) => {
-            if (post.id !== postId) return post;
-            return {
-              ...post,
-              commentCount: (post.commentCount || 0) + 1,
-              comments: [...(post.comments || []), res.data],
-            };
-          })
-        );
-        setUser((prev) => ({
-          ...prev,
-          stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
-        }));
-        addToast('Anonymous comment posted in database!', 'success');
-        return;
+    if (isLoggedIn) {
+      try {
+        const res = await api.comments.create(postId, { content: content.trim() });
+        if (res?.data) {
+          setPosts((prev) =>
+            prev.map((post) => {
+              if (post.id !== postId) return post;
+              return {
+                ...post,
+                commentCount: (post.commentCount || 0) + 1,
+                comments: [...(post.comments || []), res.data],
+              };
+            })
+          );
+          setUser((prev) => ({
+            ...prev,
+            stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
+          }));
+          addToast('Anonymous comment posted in database!', 'success');
+          return;
+        }
+      } catch (error) {
+        console.warn('[AppContext] Real backend comment notice:', error.message);
       }
-    } catch (error) {
-      console.warn('[AppContext] Real backend comment notice:', error.message);
     }
 
     // In-memory fallback
@@ -508,28 +512,30 @@ export const AppProvider = ({ children }) => {
   const addReply = async (postId, commentId, content) => {
     if (!content || !content.trim()) return;
 
-    try {
-      const res = await api.comments.create(postId, { content: content.trim(), parentId: commentId });
-      if (res?.data) {
-        setPosts((prev) =>
-          prev.map((post) => {
-            if (post.id !== postId) return post;
-            const updated = (post.comments || []).map((c) => {
-              if (c.id !== commentId) return c;
-              return { ...c, replies: [...(c.replies || []), res.data] };
-            });
-            return { ...post, commentCount: (post.commentCount || 0) + 1, comments: updated };
-          })
-        );
-        setUser((prev) => ({
-          ...prev,
-          stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
-        }));
-        addToast('Reply sent anonymously in database!', 'success');
-        return;
+    if (isLoggedIn) {
+      try {
+        const res = await api.comments.create(postId, { content: content.trim(), parentId: commentId });
+        if (res?.data) {
+          setPosts((prev) =>
+            prev.map((post) => {
+              if (post.id !== postId) return post;
+              const updated = (post.comments || []).map((c) => {
+                if (c.id !== commentId) return c;
+                return { ...c, replies: [...(c.replies || []), res.data] };
+              });
+              return { ...post, commentCount: (post.commentCount || 0) + 1, comments: updated };
+            })
+          );
+          setUser((prev) => ({
+            ...prev,
+            stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
+          }));
+          addToast('Reply sent anonymously in database!', 'success');
+          return;
+        }
+      } catch (error) {
+        console.warn('[AppContext] Real backend reply notice:', error.message);
       }
-    } catch (error) {
-      console.warn('[AppContext] Real backend reply notice:', error.message);
     }
 
     const newReply = {
@@ -560,17 +566,19 @@ export const AppProvider = ({ children }) => {
 
   // Vote on a Poll
   const votePoll = async (pollId, optionId) => {
-    try {
-      const res = await api.polls.vote(pollId, optionId);
-      if (res?.data) {
-        setPolls((prev) =>
-          prev.map((p) => (p.id === pollId ? { ...p, ...res.data } : p))
-        );
-        addToast('Vote registered anonymously in database!', 'success');
-        return;
+    if (isLoggedIn) {
+      try {
+        const res = await api.polls.vote(pollId, optionId);
+        if (res?.data) {
+          setPolls((prev) =>
+            prev.map((p) => (p.id === pollId ? { ...p, ...res.data } : p))
+          );
+          addToast('Vote registered anonymously in database!', 'success');
+          return;
+        }
+      } catch (error) {
+        console.warn('[AppContext] Real backend poll vote notice:', error.message);
       }
-    } catch (error) {
-      console.warn('[AppContext] Real backend poll vote notice:', error.message);
     }
 
     // In-memory fallback
@@ -608,17 +616,19 @@ export const AppProvider = ({ children }) => {
       return null;
     }
 
-    try {
-      const res = await api.polls.create({ question, options, collegeTag });
-      if (res?.data) {
-        setPolls((prev) => [res.data, ...prev]);
-        addToast('Anonymous campus poll created in database!', 'success');
-        return res.data;
-      }
-    } catch (error) {
-      console.warn('[AppContext] Real backend create poll notice:', error.message);
-      if (error.code === 'DB_UNAVAILABLE') {
-        addToast('API reached! (Poll cached in browser because MongoDB Atlas is not yet linked in Vercel)', 'warning');
+    if (isLoggedIn) {
+      try {
+        const res = await api.polls.create({ question, options, collegeTag });
+        if (res?.data) {
+          setPolls((prev) => [res.data, ...prev]);
+          addToast('Anonymous campus poll created in database!', 'success');
+          return res.data;
+        }
+      } catch (error) {
+        console.warn('[AppContext] Real backend create poll notice:', error.message);
+        if (error.code === 'DB_UNAVAILABLE') {
+          addToast('API reached! (Poll cached in browser because MongoDB Atlas is not yet linked in Vercel)', 'warning');
+        }
       }
     }
 

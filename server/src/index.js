@@ -89,7 +89,8 @@ const handleHealthCheck = async (req, res) => {
     database: diag.connected ? 'connected' : 'disconnected',
     diagnostic: {
       configured: diag.configured,
-      clusterHost: diag.host,
+      clusterHost: diag.clusterHost || diag.host,
+      databaseUser: diag.databaseUser || 'not_configured',
       connectionState: diag.readyState === 1 ? 'connected' : diag.readyState === 2 ? 'connecting' : 'disconnected',
       detail: diag.error,
     },

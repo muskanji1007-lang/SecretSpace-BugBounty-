@@ -8,6 +8,19 @@ if (!cached) {
 
 let lastConnectionError = null;
 
+export const sanitizeMongoUri = (rawUri) => {
+  if (!rawUri || typeof rawUri !== 'string') return '';
+  let clean = rawUri.trim().replace(/^["']+|["']+$/g, '');
+  // Auto-remove accidental angle brackets from copied documentation templates: e.g. <user>:<pass>
+  clean = clean.replace(/:\/\/<([^>]+)>/, '://$1');
+  clean = clean.replace(/:<([^>]+)>@/, ':$1@');
+  if (clean.startsWith('mongodb+srv://') && !clean.includes('authSource=')) {
+    const sep = clean.includes('?') ? '&' : '?';
+    clean = `${clean}${sep}authSource=admin`;
+  }
+  return clean;
+};
+
 export const connectDB = async () => {
   if (cached.conn && mongoose.connection.readyState === 1) {
     return cached.conn;
@@ -20,7 +33,7 @@ export const connectDB = async () => {
     return null;
   }
 
-  const mongoUri = rawUri || 'mongodb://localhost:27017/secretspace';
+  const mongoUri = rawUri ? sanitizeMongoUri(rawUri) : 'mongodb://localhost:27017/secretspace';
 
   if (!cached.promise) {
     const opts = {
@@ -59,12 +72,16 @@ export const isDBConnected = () => {
 export const getDBDiagnostic = () => {
   const uri = process.env.MONGODB_URI || process.env.MONGO_URI || '';
   let sanitizedHost = 'not_configured';
+  let sanitizedUser = 'not_configured';
   if (uri) {
     try {
       const match = uri.match(/@([^/?]+)/);
       sanitizedHost = match ? match[1] : 'present_but_format_issue';
+      const userMatch = uri.match(/:\/\/([^:]+):/);
+      sanitizedUser = userMatch ? userMatch[1] : 'present_without_user';
     } catch {
       sanitizedHost = 'error_parsing';
+      sanitizedUser = 'error_parsing';
     }
   }
 
@@ -72,7 +89,8 @@ export const getDBDiagnostic = () => {
     connected: mongoose.connection.readyState === 1,
     readyState: mongoose.connection.readyState,
     configured: Boolean(uri),
-    host: sanitizedHost,
+    clusterHost: sanitizedHost,
+    databaseUser: sanitizedUser,
     error: lastConnectionError || (mongoose.connection.readyState === 1 ? null : 'Database connection not established'),
   };
 };
