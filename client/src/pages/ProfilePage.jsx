@@ -13,24 +13,44 @@ import {
 } from '../components/common/icons.jsx';
 
 export default function ProfilePage() {
-  const { user, updateProfile, myPosts } = useApp();
+  const { user, updateProfile, myPosts = [] } = useApp();
+
+  const avatarId = typeof user?.avatar === 'object' ? user?.avatar?.id : (user?.avatar || 'ghost');
+  const activeAvatarObj =
+    AVATAR_OPTIONS.find((a) => a.id === avatarId) || AVATAR_OPTIONS[0];
 
   const [isEditing, setIsEditing] = useState(false);
-  const [pseudonymInput, setPseudonymInput] = useState(user.pseudonym);
-  const [selectedAvatar, setSelectedAvatar] = useState(user.avatar);
-  const [collegeInput, setCollegeInput] = useState(user.college);
-
-  const activeAvatarObj =
-    AVATAR_OPTIONS.find((a) => a.id === user.avatar) || AVATAR_OPTIONS[0];
+  const [pseudonymInput, setPseudonymInput] = useState(user?.pseudonym || 'Anonymous Student');
+  const [selectedAvatar, setSelectedAvatar] = useState(avatarId);
+  const [collegeInput, setCollegeInput] = useState(user?.college || user?.collegeTag || 'Campus North');
 
   const handleSave = (e) => {
     e.preventDefault();
     updateProfile({
-      pseudonym: pseudonymInput.trim() || user.pseudonym,
+      pseudonym: pseudonymInput.trim() || user?.pseudonym || 'Anonymous Student',
       avatar: selectedAvatar,
-      college: collegeInput.trim() || user.college,
+      college: collegeInput.trim() || user?.college || user?.collegeTag || 'Campus North',
     });
     setIsEditing(false);
+  };
+
+  const badges = Array.isArray(user?.badges) && user.badges.length > 0
+    ? user.badges
+    : ['Early Explorer', 'Campus Verified', 'Night Owl'];
+
+  const notifications = Array.isArray(user?.notifications) && user.notifications.length > 0
+    ? user.notifications
+    : [
+        { id: 'notif-1', text: 'Someone upvoted your confession in #Engineering Block B', time: '12m ago', unread: true },
+        { id: 'notif-2', text: 'Your comment reached 25+ upvotes in Library Hacks!', time: '1h ago', unread: true },
+        { id: 'notif-3', text: 'New poll added: Attendance criteria reform', time: '2h ago', unread: false },
+      ];
+
+  const userStats = {
+    confessionsCount: user?.stats?.confessionsCount ?? (myPosts?.length || 0),
+    commentsCount: user?.stats?.commentsCount ?? 0,
+    upvotesReceived: user?.stats?.upvotesReceived ?? 0,
+    savedPostsCount: user?.stats?.savedPostsCount ?? 0,
   };
 
   return (
@@ -41,13 +61,13 @@ export default function ProfilePage() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-10 mb-4">
           <div className="flex items-end gap-3.5">
             <div
-              className={`w-20 h-20 rounded-2xl flex items-center justify-center font-black text-2xl border-4 border-card shadow-lg ${activeAvatarObj.color} bg-card shrink-0`}
+              className={`w-20 h-20 rounded-2xl flex items-center justify-center font-black text-2xl border-4 border-card shadow-lg ${activeAvatarObj?.color || 'bg-surface text-primary border-border'} bg-card shrink-0`}
             >
-              {activeAvatarObj.name.substring(0, 2).toUpperCase()}
+              {(activeAvatarObj?.name || 'PS').substring(0, 2).toUpperCase()}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-black text-main">{user.pseudonym}</h2>
+                <h2 className="text-lg font-black text-main">{user?.pseudonym || 'Anonymous Student'}</h2>
                 <span className="p-1 rounded-full bg-surface text-deep" title="Verified Campus Student">
                   <Shield className="w-3.5 h-3.5 text-primary" />
                 </span>
@@ -55,11 +75,11 @@ export default function ProfilePage() {
               <div className="flex items-center gap-3 text-xs text-muted mt-0.5">
                 <span className="flex items-center gap-1 text-deep font-medium">
                   <MapPin className="w-3.5 h-3.5 text-primary" />
-                  {user.college}
+                  {user?.college || user?.collegeTag || 'Campus North'}
                 </span>
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3.5 h-3.5" />
-                  {user.joinedDate}
+                  {user?.joinedDate || 'Joined Oct 2026'}
                 </span>
               </div>
             </div>
@@ -68,9 +88,9 @@ export default function ProfilePage() {
           <button
             onClick={() => {
               if (isEditing) {
-                setPseudonymInput(user.pseudonym);
-                setSelectedAvatar(user.avatar);
-                setCollegeInput(user.college);
+                setPseudonymInput(user?.pseudonym || 'Anonymous Student');
+                setSelectedAvatar(avatarId);
+                setCollegeInput(user?.college || user?.collegeTag || 'Campus North');
                 setIsEditing(false);
               } else {
                 setIsEditing(true);
@@ -169,25 +189,25 @@ export default function ProfilePage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-border">
           <div className="p-3 rounded-2xl bg-canvas border border-border text-center">
             <span className="block text-xl font-black text-deep">
-              {myPosts.length}
+              {userStats.confessionsCount}
             </span>
             <span className="text-[11px] font-medium text-muted">Secrets Shared</span>
           </div>
           <div className="p-3 rounded-2xl bg-canvas border border-border text-center">
             <span className="block text-xl font-black text-deep">
-              {user.stats.commentsCount}
+              {userStats.commentsCount}
             </span>
             <span className="text-[11px] font-medium text-muted">Comments</span>
           </div>
           <div className="p-3 rounded-2xl bg-canvas border border-border text-center">
             <span className="block text-xl font-black text-deep">
-              {user.stats.upvotesReceived}
+              {userStats.upvotesReceived}
             </span>
             <span className="text-[11px] font-medium text-muted">Upvotes Earned</span>
           </div>
           <div className="p-3 rounded-2xl bg-canvas border border-border text-center">
             <span className="block text-xl font-black text-deep">
-              {user.stats.savedPostsCount}
+              {userStats.savedPostsCount}
             </span>
             <span className="text-[11px] font-medium text-muted">Bookmarks</span>
           </div>
@@ -203,7 +223,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="flex flex-wrap gap-2.5">
-          {user.badges.map((badge, idx) => (
+          {badges.map((badge, idx) => (
             <div
               key={idx}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface border border-border text-deep text-xs font-semibold shadow-2xs"
@@ -229,7 +249,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="space-y-2">
-          {user.notifications.map((notif) => (
+          {notifications.map((notif) => (
             <div
               key={notif.id}
               className={`p-3 rounded-2xl border text-xs flex items-start justify-between gap-3 transition ${

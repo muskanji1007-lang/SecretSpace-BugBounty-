@@ -34,6 +34,30 @@ const loadPersistedPolls = () => {
   return INITIAL_POLLS;
 };
 
+export const normalizeUser = (rawUser) => {
+  if (!rawUser) return MOCK_USER;
+  const avatarId = typeof rawUser.avatar === 'object' ? rawUser.avatar?.id : (rawUser.avatar || 'ghost');
+  return {
+    ...MOCK_USER,
+    ...rawUser,
+    id: rawUser._id || rawUser.id || 'u-1',
+    _id: rawUser._id || rawUser.id || 'u-1',
+    pseudonym: rawUser.pseudonym || MOCK_USER.pseudonym,
+    avatar: avatarId,
+    college: rawUser.college || rawUser.collegeTag || MOCK_USER.college,
+    collegeTag: rawUser.collegeTag || rawUser.college || MOCK_USER.college,
+    joinedDate: rawUser.joinedDate || (rawUser.createdAt ? `Joined ${new Date(rawUser.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}` : MOCK_USER.joinedDate),
+    stats: {
+      confessionsCount: rawUser.stats?.confessionsCount ?? 0,
+      commentsCount: rawUser.stats?.commentsCount ?? 0,
+      upvotesReceived: rawUser.stats?.upvotesReceived ?? 0,
+      savedPostsCount: rawUser.stats?.savedPostsCount ?? 0,
+    },
+    badges: Array.isArray(rawUser.badges) && rawUser.badges.length > 0 ? rawUser.badges : MOCK_USER.badges,
+    notifications: Array.isArray(rawUser.notifications) && rawUser.notifications.length > 0 ? rawUser.notifications : MOCK_USER.notifications,
+  };
+};
+
 export const AppProvider = ({ children }) => {
   // Theme State (Supports Light & Dark Modes)
   const [theme, setTheme] = useState('light');
@@ -81,7 +105,7 @@ export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     try {
       const savedUser = sessionStorage.getItem('secretspace_user');
-      if (savedUser) return JSON.parse(savedUser);
+      if (savedUser) return normalizeUser(JSON.parse(savedUser));
     } catch {}
     return MOCK_USER;
   });
@@ -154,7 +178,11 @@ export const AppProvider = ({ children }) => {
         search: params.search !== undefined ? params.search : searchQuery,
       });
       if (res && res.success && Array.isArray(res.data)) {
-        setPosts(res.data);
+        if (res.data.length > 0) {
+          setPosts(res.data);
+        } else {
+          setPosts((prev) => (prev && prev.length > 0 ? prev : loadPersistedPosts()));
+        }
       }
     } catch (error) {
       console.warn('[AppContext] Could not fetch real posts:', error.message);
@@ -170,7 +198,11 @@ export const AppProvider = ({ children }) => {
     try {
       const res = await api.polls.getAll();
       if (res && res.success && Array.isArray(res.data)) {
-        setPolls(res.data);
+        if (res.data.length > 0) {
+          setPolls(res.data);
+        } else {
+          setPolls((prev) => (prev && prev.length > 0 ? prev : loadPersistedPolls()));
+        }
       }
     } catch (error) {
       console.warn('[AppContext] Could not fetch real polls:', error.message);
@@ -814,13 +846,14 @@ export const AppProvider = ({ children }) => {
         const email = emailOrCode.includes('@') ? emailOrCode.trim() : `${emailOrCode.trim().toLowerCase()}@campus.edu`;
         const res = await api.auth.login({ email, password });
         if (res?.token) {
+          const safeUser = normalizeUser(res.user);
           setAuthToken(res.token);
-          setUser(res.user);
+          setUser(safeUser);
           setIsLoggedIn(true);
           try {
-            sessionStorage.setItem('secretspace_user', JSON.stringify(res.user));
+            sessionStorage.setItem('secretspace_user', JSON.stringify(safeUser));
           } catch {}
-          addToast(`Welcome back, ${res.user.pseudonym}!`, 'success');
+          addToast(`Welcome back, ${safeUser.pseudonym}!`, 'success');
           fetchPosts();
           fetchPolls();
           return true;
@@ -910,11 +943,12 @@ export const AppProvider = ({ children }) => {
           collegeTag: campusCode || 'Campus North',
         });
         if (res?.token) {
+          const safeUser = normalizeUser(res.user);
           setAuthToken(res.token);
-          setUser(res.user);
+          setUser(safeUser);
           setIsLoggedIn(true);
           try {
-            sessionStorage.setItem('secretspace_user', JSON.stringify(res.user));
+            sessionStorage.setItem('secretspace_user', JSON.stringify(safeUser));
           } catch {}
           addToast('Anonymous account created! Your identity is hidden.', 'success');
           fetchPosts();

@@ -129,31 +129,46 @@ const seedDatabase = async () => {
 
     console.log('[Seed] Seeding sample polls...');
     await Poll.create({
-      question: 'Should the Central Campus Library extend 24/7 hours to the entire semester, not just finals week?',
+      question: 'Should mandatory minimum lecture attendance be lowered from 75% to 60%?',
       options: [
-        { text: 'Yes, absolutely needed for study peace', votes: 245 },
-        { text: 'Only during midterms and finals', votes: 62 },
-        { text: 'No, hostel reading rooms are enough', votes: 14 },
+        { text: 'Yes, 60% allows self-study & projects', votes: 512 },
+        { text: 'No, 75% keeps classes disciplined', votes: 78 },
+        { text: 'Scrap attendance entirely (optional)', votes: 52 },
       ],
-      collegeTag: 'Library Council',
+      collegeTag: 'Academic Council Poll',
       author: adminUser._id,
-      authorPseudonym: 'Campus Pulse',
-      totalVotes: 321,
+      authorPseudonym: 'Phantom Student #11',
+      totalVotes: 642,
       status: 'active',
     });
 
     await Poll.create({
-      question: 'Best campus cafeteria late-night emergency coffee?',
+      question: 'Best survival beverage during 3 AM all-nighter prep?',
       options: [
-        { text: 'Nescafe Kiosk near Admin Block', votes: 110 },
-        { text: 'Night Canteen in Hostel 7', votes: 184 },
-        { text: 'Vending machines in CS Dept', votes: 45 },
+        { text: 'Night Canteen Double Espresso', votes: 230 },
+        { text: 'Iced Matcha / Green Tea', votes: 64 },
+        { text: 'Energy Drinks (Sting / Red Bull)', votes: 98 },
+        { text: 'Cold Water & Sheer Panic', votes: 26 },
       ],
-      collegeTag: 'Food & Life',
+      collegeTag: 'Campus Food Survey',
       author: studentUser._id,
-      authorPseudonym: 'Midnight Coffee Club',
-      totalVotes: 339,
+      authorPseudonym: 'Caffeine Overload #99',
+      totalVotes: 418,
       status: 'active',
+    });
+
+    await Poll.create({
+      question: 'Which framework should we run the annual campus hackathon on?',
+      options: [
+        { text: 'React + Express / Node.js', votes: 185 },
+        { text: 'Next.js + Supabase', votes: 95 },
+        { text: 'Django / FastAPI + Python', votes: 40 },
+      ],
+      collegeTag: 'Department Tech Council',
+      author: adminUser._id,
+      authorPseudonym: 'Night Coder #02',
+      totalVotes: 320,
+      status: 'closed',
     });
 
     console.log('[Seed] Seeding moderation report...');
