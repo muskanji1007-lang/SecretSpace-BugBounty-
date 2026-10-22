@@ -182,6 +182,10 @@ export const AppProvider = ({ children }) => {
 
   // Fetch moderation reports (Admin)
   const fetchReports = useCallback(async () => {
+    if (!isLoggedIn || user?.role !== 'admin') {
+      setReports((prev) => (prev.length === 0 ? MOCK_REPORTS : prev));
+      return;
+    }
     try {
       const res = await api.admin.getReports();
       if (res && res.success && Array.isArray(res.data)) {
@@ -191,7 +195,7 @@ export const AppProvider = ({ children }) => {
       console.warn('[AppContext] Could not fetch real reports:', error.message);
       setReports((prev) => (prev.length === 0 ? MOCK_REPORTS : prev));
     }
-  }, []);
+  }, [isLoggedIn, user?.role]);
 
   // Initial Health & Connectivity Check on mount (Runs ONLY ONCE on app boot)
   useEffect(() => {
@@ -268,15 +272,17 @@ export const AppProvider = ({ children }) => {
       })
     );
 
-    try {
-      const res = await api.posts.vote(postId, direction);
-      if (res?.data) {
-        setPosts((prevPosts) =>
-          prevPosts.map((p) => (p.id === postId ? { ...p, ...res.data } : p))
-        );
+    if (isLoggedIn) {
+      try {
+        const res = await api.posts.vote(postId, direction);
+        if (res?.data) {
+          setPosts((prevPosts) =>
+            prevPosts.map((p) => (p.id === postId ? { ...p, ...res.data } : p))
+          );
+        }
+      } catch (error) {
+        console.warn('[AppContext] Real backend vote notice:', error.message);
       }
-    } catch (error) {
-      console.warn('[AppContext] Real backend vote notice:', error.message);
     }
   };
 
