@@ -11,9 +11,16 @@ let lastConnectionError = null;
 export const sanitizeMongoUri = (rawUri) => {
   if (!rawUri || typeof rawUri !== 'string') return '';
   let clean = rawUri.trim().replace(/^["']+|["']+$/g, '');
-  // Auto-remove accidental angle brackets from copied documentation templates: e.g. <user>:<pass>
-  clean = clean.replace(/:\/\/<([^>]+)>/, '://$1');
-  clean = clean.replace(/:<([^>]+)>@/, ':$1@');
+
+  // Strip any accidental angle brackets < > copied from documentation templates
+  const atIndex = clean.lastIndexOf('@');
+  if (atIndex !== -1) {
+    const credPart = clean.substring(0, atIndex);
+    const hostPart = clean.substring(atIndex);
+    const cleanCredPart = credPart.replace(/[<>]/g, '');
+    clean = cleanCredPart + hostPart;
+  }
+
   if (clean.startsWith('mongodb+srv://') && !clean.includes('authSource=')) {
     const sep = clean.includes('?') ? '&' : '?';
     clean = `${clean}${sep}authSource=admin`;
@@ -70,7 +77,8 @@ export const isDBConnected = () => {
 };
 
 export const getDBDiagnostic = () => {
-  const uri = process.env.MONGODB_URI || process.env.MONGO_URI || '';
+  const raw = process.env.MONGODB_URI || process.env.MONGO_URI || '';
+  const uri = sanitizeMongoUri(raw);
   let sanitizedHost = 'not_configured';
   let sanitizedUser = 'not_configured';
   if (uri) {
@@ -88,7 +96,7 @@ export const getDBDiagnostic = () => {
   return {
     connected: mongoose.connection.readyState === 1,
     readyState: mongoose.connection.readyState,
-    configured: Boolean(uri),
+    configured: Boolean(raw),
     clusterHost: sanitizedHost,
     databaseUser: sanitizedUser,
     error: lastConnectionError || (mongoose.connection.readyState === 1 ? null : 'Database connection not established'),
