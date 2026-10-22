@@ -326,34 +326,36 @@ export const AppProvider = ({ children }) => {
       authorAvatar: authorAvatar || user?.avatar || 'ghost',
     };
 
-    // Always attempt real backend API save first so Network requests are made
-    try {
-      const res = await api.posts.create(postPayload);
-      if (res && res.success && res.data) {
-        const savedPost = res.data;
-        setPosts((prev) => [savedPost, ...prev]);
-        setActiveCategory('all');
-        setSearchQuery('');
-        setUser((prev) => {
-          const updated = {
-            ...prev,
-            stats: { ...prev.stats, confessionsCount: (prev.stats?.confessionsCount || 0) + 1 },
-          };
-          try {
-            sessionStorage.setItem('secretspace_user', JSON.stringify(updated));
-          } catch {}
-          return updated;
-        });
-        addToast('Secret confession published anonymously to database!', 'success');
-        return savedPost;
-      }
-    } catch (error) {
-      console.warn('[AppContext] Real backend post save notice:', error.message);
-      if (error.code === 'DB_UNAVAILABLE') {
-        addToast(
-          'API reached! (Temporarily cached in browser because MongoDB Atlas is not yet linked in Vercel)',
-          'warning'
-        );
+    // If logged in, persist to real backend API
+    if (isLoggedIn) {
+      try {
+        const res = await api.posts.create(postPayload);
+        if (res && res.success && res.data) {
+          const savedPost = res.data;
+          setPosts((prev) => [savedPost, ...prev]);
+          setActiveCategory('all');
+          setSearchQuery('');
+          setUser((prev) => {
+            const updated = {
+              ...prev,
+              stats: { ...prev.stats, confessionsCount: (prev.stats?.confessionsCount || 0) + 1 },
+            };
+            try {
+              sessionStorage.setItem('secretspace_user', JSON.stringify(updated));
+            } catch {}
+            return updated;
+          });
+          addToast('Secret confession published anonymously to database!', 'success');
+          return savedPost;
+        }
+      } catch (error) {
+        console.warn('[AppContext] Real backend post save notice:', error.message);
+        if (error.code === 'DB_UNAVAILABLE') {
+          addToast(
+            'API reached! (Temporarily cached in browser because MongoDB Atlas is not yet linked in Vercel)',
+            'warning'
+          );
+        }
       }
     }
 
