@@ -29,8 +29,8 @@ export const sanitizeMongoUri = (rawUri) => {
 };
 
 export const connectDB = async () => {
-  if (cached.conn && mongoose.connection.readyState === 1) {
-    return cached.conn;
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
   }
 
   const rawUri = process.env.MONGODB_URI || process.env.MONGO_URI;
@@ -42,34 +42,19 @@ export const connectDB = async () => {
 
   const mongoUri = rawUri ? sanitizeMongoUri(rawUri) : 'mongodb://localhost:27017/secretspace';
 
-  if (!cached.promise) {
+  try {
     const opts = {
-      bufferCommands: false,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 8000,
       autoIndex: true,
     };
-
-    cached.promise = mongoose.connect(mongoUri, opts).then((m) => {
-      lastConnectionError = null;
-      console.log(`[Database] MongoDB Connected: ${m.connection.host}`);
-      return m;
-    }).catch((err) => {
-      cached.promise = null;
-      lastConnectionError = err.message;
-      console.error(`[Database] MongoDB Connection Error: ${err.message}`);
-      return null;
-    });
-  }
-
-  try {
-    cached.conn = await cached.promise;
+    await mongoose.connect(mongoUri, opts);
+    lastConnectionError = null;
+    return mongoose.connection;
   } catch (error) {
-    cached.promise = null;
     lastConnectionError = error.message;
-    console.error(`[Database] Awaiting connection failed: ${error.message}`);
+    console.error(`[Database] MongoDB Connection Error: ${error.message}`);
+    return null;
   }
-
-  return cached.conn;
 };
 
 export const isDBConnected = () => {
