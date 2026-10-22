@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import { connectDB, isDBConnected } from './config/db.js';
+import { connectDB, isDBConnected, getDBDiagnostic } from './config/db.js';
 import { generalLimiter } from './middleware/rateLimiter.js';
 import { notFoundHandler, errorHandler } from './middleware/errorHandler.js';
 
@@ -76,12 +76,23 @@ app.use('/api', async (req, res, next) => {
 });
 
 // Health check endpoint with database status reporting (supports both /health and /api/health)
-const handleHealthCheck = (req, res) => {
-  const dbConnected = isDBConnected();
+const handleHealthCheck = async (req, res) => {
+  if (!isDBConnected()) {
+    try {
+      await connectDB();
+    } catch {}
+  }
+  const diag = getDBDiagnostic();
   res.json({
     status: 'ok',
     service: 'SecretSpace API',
-    database: dbConnected ? 'connected' : 'disconnected',
+    database: diag.connected ? 'connected' : 'disconnected',
+    diagnostic: {
+      configured: diag.configured,
+      clusterHost: diag.host,
+      connectionState: diag.readyState === 1 ? 'connected' : diag.readyState === 2 ? 'connecting' : 'disconnected',
+      detail: diag.error,
+    },
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
   });
