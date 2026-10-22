@@ -14,7 +14,7 @@ const resolveApiBaseUrl = () => {
     typeof window !== 'undefined' &&
     (window.location.hostname.includes('vercel.app') || window.location.protocol === 'https:')
   ) {
-    return 'https://secret-space-6hvw.vercel.app/api';
+    return 'https://secret-space-bug-bounty-4tim.vercel.app/api';
   }
 
   return 'http://localhost:5000/api';
