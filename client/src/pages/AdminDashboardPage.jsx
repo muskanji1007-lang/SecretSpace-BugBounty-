@@ -24,9 +24,9 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-card border border-border rounded-2xl p-5 shadow-2xs flex items-center justify-between">
+      <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold shrink-0">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
@@ -37,7 +37,7 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-surface text-deep border border-border">
+        <span className="self-start sm:self-center text-[11px] font-bold px-3 py-1 rounded-full bg-surface text-deep border border-border shrink-0">
           Admin Preview Mode
         </span>
       </div>
@@ -84,8 +84,8 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-b border-border pb-2">
-        <div className="flex items-center gap-1.5 text-xs font-semibold">
+      <div className="flex items-center justify-between border-b border-border pb-2 overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-1.5 text-xs font-semibold whitespace-nowrap">
           <button
             onClick={() => setFilterStatus('all')}
             className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
@@ -127,7 +127,7 @@ export default function AdminDashboardPage() {
             return (
               <div
                 key={report.id}
-                className="bg-card border border-border rounded-2xl p-5 shadow-2xs space-y-3"
+                className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -168,7 +168,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 {isPending && (
-                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
+                  <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-border">
                     <button
                       onClick={() => resolveReport(report.id, 'dismiss')}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border text-main hover:bg-surface text-xs font-semibold transition cursor-pointer"

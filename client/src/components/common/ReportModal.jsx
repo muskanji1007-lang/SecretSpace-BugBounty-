@@ -33,7 +33,7 @@ export default function ReportModal({ isOpen, onClose, post }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-main/40 backdrop-blur-xs animate-in fade-in">
-      <div className="bg-card rounded-2xl max-w-md w-full p-6 shadow-2xl border border-border relative">
+      <div className="bg-card rounded-2xl max-w-md w-full p-4 sm:p-6 shadow-2xl border border-border relative max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-1.5 rounded-lg text-muted hover:text-main hover:bg-surface transition cursor-pointer"

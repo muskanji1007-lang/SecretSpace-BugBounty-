@@ -91,7 +91,7 @@ export default function PostDetailsPage() {
         <span className="text-xs text-muted">Post #{post.id.replace('post-', '')}</span>
       </div>
 
-      <PostCard post={post} isDetailView={true} />
+      <PostCard post={post} isDetailView={true} onDelete={() => navigate('/')} />
 
       <div className="bg-card border border-border rounded-2xl p-4 shadow-2xs">
         <div className="flex items-center justify-between mb-2">
@@ -179,11 +179,11 @@ export default function PostDetailsPage() {
                     </span>
                   </div>
 
-                  <p className="text-xs text-main leading-relaxed pl-9">
+                  <p className="text-xs text-main leading-relaxed pl-3 sm:pl-9">
                     {comment.content}
                   </p>
 
-                  <div className="flex items-center gap-4 pl-9 text-[11px] text-muted pt-1">
+                  <div className="flex items-center gap-4 pl-3 sm:pl-9 text-[11px] text-muted pt-1">
                     <button
                       onClick={() => handleCommentUpvote(comment.id)}
                       className={`flex items-center gap-1 transition cursor-pointer ${
@@ -210,7 +210,7 @@ export default function PostDetailsPage() {
                   </div>
 
                   {activeReplyId === comment.id && (
-                    <div className="ml-9 p-3 bg-surface/50 rounded-xl border border-border space-y-2 animate-in fade-in">
+                    <div className="ml-3 sm:ml-9 p-3 bg-surface/50 rounded-xl border border-border space-y-2 animate-in fade-in">
                       <input
                         type="text"
                         value={replyText}
@@ -239,7 +239,7 @@ export default function PostDetailsPage() {
                   )}
 
                   {comment.replies && comment.replies.length > 0 && (
-                    <div className="ml-9 pl-3 border-l-2 border-border space-y-2.5 pt-1">
+                    <div className="ml-3 sm:ml-9 pl-3 border-l-2 border-border space-y-2.5 pt-1">
                       {comment.replies.map((reply) => (
                         <div key={reply.id} className="text-xs space-y-1">
                           <div className="flex items-center gap-1.5 text-muted">

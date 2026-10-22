@@ -67,7 +67,7 @@ export default function ExplorePage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-card border border-border rounded-2xl p-5 shadow-2xs">
+      <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-8 h-8 rounded-xl bg-surface text-deep flex items-center justify-center">
             <Compass className="w-4 h-4 text-primary" />
@@ -121,7 +121,7 @@ export default function ExplorePage() {
         <h3 className="text-xs font-bold text-muted uppercase tracking-wider mb-3 px-1">
           Browse by Category
         </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5">
           {CATEGORIES.map((cat) => {
             const Icon = ICON_MAP[cat.icon] || Sparkles;
             const isSelected = activeCategory === cat.id;
@@ -130,7 +130,7 @@ export default function ExplorePage() {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`p-3.5 rounded-2xl border text-left flex items-start gap-3 transition cursor-pointer ${
+                className={`p-2.5 sm:p-3.5 rounded-2xl border text-left flex items-start gap-2 sm:gap-3 transition cursor-pointer ${
                   isSelected
                     ? 'border-primary bg-primary text-white shadow-sm shadow-primary/20'
                     : 'border-border bg-card hover:border-primary/40 text-main'

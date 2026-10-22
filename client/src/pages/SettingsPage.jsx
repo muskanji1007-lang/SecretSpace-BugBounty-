@@ -50,7 +50,7 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-card border border-border rounded-2xl p-5 shadow-2xs flex items-center gap-3">
+      <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-surface text-deep flex items-center justify-center">
           <Settings className="w-5 h-5 text-primary" />
         </div>
@@ -63,7 +63,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Privacy & Anonymity Shields */}
-      <div className="bg-card border border-border rounded-2xl p-5 shadow-2xs space-y-4">
+      <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs space-y-4">
         <div className="flex items-center gap-2">
           <Shield className="w-4 h-4 text-primary" />
           <h3 className="font-bold text-xs uppercase tracking-wider text-deep">
@@ -72,7 +72,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="space-y-3">
-          <label className="flex items-center justify-between p-3 rounded-xl border border-border hover:border-primary/40 bg-canvas cursor-pointer transition">
+          <label className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border hover:border-primary/40 bg-canvas cursor-pointer transition">
             <div>
               <div className="text-xs font-semibold text-main">
                 Weekly Alias Scrambling
@@ -126,7 +126,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Notification Preferences */}
-      <div className="bg-card border border-border rounded-2xl p-5 shadow-2xs space-y-4">
+      <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs space-y-4">
         <div className="flex items-center gap-2">
           <Bell className="w-4 h-4 text-primary" />
           <h3 className="font-bold text-xs uppercase tracking-wider text-deep">
@@ -135,7 +135,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="space-y-3">
-          <label className="flex items-center justify-between p-3 rounded-xl border border-border hover:border-primary/40 bg-canvas cursor-pointer transition">
+          <label className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border hover:border-primary/40 bg-canvas cursor-pointer transition">
             <div>
               <div className="text-xs font-semibold text-main">
                 Secret Upvotes
@@ -152,7 +152,7 @@ export default function SettingsPage() {
             />
           </label>
 
-          <label className="flex items-center justify-between p-3 rounded-xl border border-border hover:border-primary/40 bg-canvas cursor-pointer transition">
+          <label className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border hover:border-primary/40 bg-canvas cursor-pointer transition">
             <div>
               <div className="text-xs font-semibold text-main">
                 Anonymous Comment Replies
@@ -169,7 +169,7 @@ export default function SettingsPage() {
             />
           </label>
 
-          <label className="flex items-center justify-between p-3 rounded-xl border border-border hover:border-primary/40 bg-canvas cursor-pointer transition">
+          <label className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border hover:border-primary/40 bg-canvas cursor-pointer transition">
             <div>
               <div className="text-xs font-semibold text-main">
                 Campus Poll Launches
@@ -188,7 +188,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="bg-card border border-danger/20 rounded-2xl p-5 shadow-2xs space-y-4">
+      <div className="bg-card border border-danger/20 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-4">
         <div className="flex items-center gap-2 text-danger">
           <AlertTriangle className="w-4 h-4" />
           <h3 className="font-bold text-xs uppercase tracking-wider">

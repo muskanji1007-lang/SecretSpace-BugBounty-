@@ -11,7 +11,10 @@ export const connectDB = async () => {
     return cached.conn;
   }
 
-  const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/secretspace';
+  const mongoUri =
+    process.env.MONGODB_URI ||
+    process.env.MONGO_URI ||
+    'mongodb://localhost:27017/secretspace';
 
   if (!cached.promise) {
     const opts = {

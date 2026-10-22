@@ -8,7 +8,7 @@ export default function HeroBanner({ onOpenCreateModal }) {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-3xl p-6 sm:p-8 transition-all duration-300 border mb-6 ${
+      className={`relative overflow-hidden rounded-3xl p-4 sm:p-8 transition-all duration-300 border mb-6 ${
         isDark
           ? 'bg-gradient-to-br from-[#211116] via-[#2A151D] to-[#150B0E] border-[#38202A] text-white shadow-xl shadow-[#211116]/40'
           : 'bg-gradient-to-br from-[#FFF4F5] via-[#F8F3F4] to-[#F9E5EB] border-[#EADDE1] text-[#291B20] shadow-xs'
@@ -27,7 +27,7 @@ export default function HeroBanner({ onOpenCreateModal }) {
       />
 
       {/* Top Controls: Mode Switcher Badge */}
-      <div className="flex items-center justify-between mb-4 relative z-10">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-4 relative z-10">
         <span
           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border ${
             isDark
@@ -36,7 +36,7 @@ export default function HeroBanner({ onOpenCreateModal }) {
           }`}
         >
           <Sparkles className="w-3.5 h-3.5 text-primary" />
-          <span>100% Anonymous Campus Space</span>
+          <span className="truncate">100% Anonymous Campus</span>
         </span>
 
         {/* Theme Toggle Button */}

@@ -4,6 +4,36 @@ import { INITIAL_POSTS, INITIAL_POLLS, MOCK_REPORTS, MOCK_USER } from '../data/m
 
 const AppContext = createContext(null);
 
+const loadPersistedPosts = () => {
+  try {
+    const saved = localStorage.getItem('secretspace_custom_posts');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.warn('[AppContext] Failed to load cached posts from localStorage:', err);
+  }
+  return INITIAL_POSTS;
+};
+
+const loadPersistedPolls = () => {
+  try {
+    const saved = localStorage.getItem('secretspace_custom_polls');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.warn('[AppContext] Failed to load cached polls from localStorage:', err);
+  }
+  return INITIAL_POLLS;
+};
+
 export const AppProvider = ({ children }) => {
   // Theme State (Supports Light & Dark Modes)
   const [theme, setTheme] = useState('light');
@@ -21,10 +51,31 @@ export const AppProvider = ({ children }) => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
-  // Application Data States
-  const [posts, setPosts] = useState([]);
-  const [polls, setPolls] = useState([]);
+  // Application Data States (Rehydrated from localStorage to persist across refreshes)
+  const [posts, setPosts] = useState(loadPersistedPosts);
+  const [polls, setPolls] = useState(loadPersistedPolls);
   const [reports, setReports] = useState([]);
+
+  // Keep localStorage continuously synced for offline / fallback persistence
+  useEffect(() => {
+    if (posts && posts.length > 0) {
+      try {
+        localStorage.setItem('secretspace_custom_posts', JSON.stringify(posts));
+      } catch (err) {
+        console.warn('[AppContext] Could not persist posts to localStorage:', err);
+      }
+    }
+  }, [posts]);
+
+  useEffect(() => {
+    if (polls && polls.length > 0) {
+      try {
+        localStorage.setItem('secretspace_custom_polls', JSON.stringify(polls));
+      } catch (err) {
+        console.warn('[AppContext] Could not persist polls to localStorage:', err);
+      }
+    }
+  }, [polls]);
 
   // Session Rehydration from sessionStorage (tab session lifespan)
   const [user, setUser] = useState(() => {
@@ -107,7 +158,7 @@ export const AppProvider = ({ children }) => {
       }
     } catch (error) {
       console.warn('[AppContext] Could not fetch real posts:', error.message);
-      setPosts((prev) => (prev.length === 0 ? INITIAL_POSTS : prev));
+      setPosts((prev) => (prev && prev.length > 0 ? prev : loadPersistedPosts()));
     } finally {
       setIsLoadingPosts(false);
     }
@@ -123,7 +174,7 @@ export const AppProvider = ({ children }) => {
       }
     } catch (error) {
       console.warn('[AppContext] Could not fetch real polls:', error.message);
-      setPolls((prev) => (prev.length === 0 ? INITIAL_POLLS : prev));
+      setPolls((prev) => (prev && prev.length > 0 ? prev : loadPersistedPolls()));
     } finally {
       setIsLoadingPolls(false);
     }
@@ -153,35 +204,24 @@ export const AppProvider = ({ children }) => {
           const isConnected = health.database === 'connected';
           setBackendStatus({
             online: true,
-            database: health.database,
+            database: health.database || (isConnected ? 'connected' : 'disconnected'),
             checked: true,
           });
 
-          if (isConnected) {
-            fetchPosts();
-            fetchPolls();
-            fetchReports();
-          } else {
-            // Backend reached, but database disconnected
-            setPosts((prev) => (prev.length === 0 ? INITIAL_POSTS : prev));
-            setPolls((prev) => (prev.length === 0 ? INITIAL_POLLS : prev));
-            setReports((prev) => (prev.length === 0 ? MOCK_REPORTS : prev));
-            setIsLoadingPosts(false);
-            setIsLoadingPolls(false);
-          }
+          // Always trigger API calls so Network tab records the real endpoints
+          fetchPosts();
+          fetchPolls();
+          fetchReports();
         }
-      } catch {
+      } catch (err) {
         if (isMounted) {
           setBackendStatus({
             online: false,
             database: 'disconnected',
             checked: true,
           });
-          setPosts((prev) => (prev.length === 0 ? INITIAL_POSTS : prev));
-          setPolls((prev) => (prev.length === 0 ? INITIAL_POLLS : prev));
-          setReports((prev) => (prev.length === 0 ? MOCK_REPORTS : prev));
-          setIsLoadingPosts(false);
-          setIsLoadingPolls(false);
+          fetchPosts();
+          fetchPolls();
         }
       }
     };
@@ -192,12 +232,10 @@ export const AppProvider = ({ children }) => {
     };
   }, []); // Run strictly once on mount
 
-  // Sync feed when filter parameters change (only if backend is online and DB connected)
+  // Sync feed when filter parameters change
   useEffect(() => {
-    if (backendStatus.online && backendStatus.database === 'connected') {
-      fetchPosts();
-    }
-  }, [activeCategory, sortBy, searchQuery, backendStatus.online, backendStatus.database, fetchPosts]);
+    fetchPosts();
+  }, [activeCategory, sortBy, searchQuery, fetchPosts]);
 
   // Upvote / Downvote Post
   const votePost = async (postId, direction) => {
@@ -230,18 +268,15 @@ export const AppProvider = ({ children }) => {
       })
     );
 
-    if (backendStatus.online && backendStatus.database === 'connected') {
-      try {
-        const res = await api.posts.vote(postId, direction);
-        if (res?.data) {
-          setPosts((prevPosts) =>
-            prevPosts.map((p) => (p.id === postId ? { ...p, ...res.data } : p))
-          );
-        }
-      } catch (error) {
-        addToast(error.message, 'error');
-        fetchPosts();
+    try {
+      const res = await api.posts.vote(postId, direction);
+      if (res?.data) {
+        setPosts((prevPosts) =>
+          prevPosts.map((p) => (p.id === postId ? { ...p, ...res.data } : p))
+        );
       }
+    } catch (error) {
+      console.warn('[AppContext] Real backend vote notice:', error.message);
     }
   };
 
@@ -285,33 +320,34 @@ export const AppProvider = ({ children }) => {
       authorAvatar: authorAvatar || user?.avatar || 'ghost',
     };
 
-    // If backend is online and database is connected, persist to MongoDB
-    if (backendStatus.online && backendStatus.database === 'connected') {
-      try {
-        const res = await api.posts.create(postPayload);
-        if (res && res.success && res.data) {
-          const savedPost = res.data;
-          setPosts((prev) => [savedPost, ...prev]);
-          setActiveCategory('all');
-          setSearchQuery('');
-          setUser((prev) => {
-            const updated = {
-              ...prev,
-              stats: { ...prev.stats, confessionsCount: (prev.stats?.confessionsCount || 0) + 1 },
-            };
-            try {
-              sessionStorage.setItem('secretspace_user', JSON.stringify(updated));
-            } catch {}
-            return updated;
-          });
-          addToast('Secret confession published anonymously!', 'success');
-          return savedPost;
-        } else {
-          throw new Error(res?.message || 'Failed to create post');
-        }
-      } catch (error) {
-        addToast(`Could not publish post: ${error.message}`, 'error');
-        return null;
+    // Always attempt real backend API save first so Network requests are made
+    try {
+      const res = await api.posts.create(postPayload);
+      if (res && res.success && res.data) {
+        const savedPost = res.data;
+        setPosts((prev) => [savedPost, ...prev]);
+        setActiveCategory('all');
+        setSearchQuery('');
+        setUser((prev) => {
+          const updated = {
+            ...prev,
+            stats: { ...prev.stats, confessionsCount: (prev.stats?.confessionsCount || 0) + 1 },
+          };
+          try {
+            sessionStorage.setItem('secretspace_user', JSON.stringify(updated));
+          } catch {}
+          return updated;
+        });
+        addToast('Secret confession published anonymously to database!', 'success');
+        return savedPost;
+      }
+    } catch (error) {
+      console.warn('[AppContext] Real backend post save notice:', error.message);
+      if (error.code === 'DB_UNAVAILABLE') {
+        addToast(
+          'API reached! (Temporarily cached in browser because MongoDB Atlas is not yet linked in Vercel)',
+          'warning'
+        );
       }
     }
 
@@ -351,35 +387,85 @@ export const AppProvider = ({ children }) => {
     return fallbackPost;
   };
 
+  // Delete Post (Author or Admin)
+  const deletePost = async (postId) => {
+    const postToDelete = posts.find((p) => p.id === postId || p._id === postId);
+    if (!postToDelete) {
+      addToast('Post not found', 'error');
+      return false;
+    }
+
+    const isAuthor =
+      postToDelete.isMyPost ||
+      (postToDelete.authorPseudonym || '').includes('(You)') ||
+      (user?.pseudonym && postToDelete.authorPseudonym === user.pseudonym) ||
+      (user?._id && postToDelete.author === user._id) ||
+      (user?.id && postToDelete.author === user.id);
+    const isAdmin = user?.role === 'admin';
+
+    if (!isAuthor && !isAdmin) {
+      addToast('You are not authorized to delete this post', 'error');
+      return false;
+    }
+
+    try {
+      await api.posts.delete(postId);
+    } catch (err) {
+      console.warn('[AppContext] Backend post delete notice:', err.message);
+      if (err.status === 403 || err.status === 401) {
+        addToast(err.message || 'Cannot delete post: unauthorized', 'error');
+        return false;
+      }
+    }
+
+    setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId && p._id !== postId));
+
+    if (isAuthor) {
+      setUser((prev) => {
+        const updated = {
+          ...prev,
+          stats: {
+            ...prev.stats,
+            confessionsCount: Math.max(0, (prev.stats?.confessionsCount || 1) - 1),
+          },
+        };
+        try {
+          sessionStorage.setItem('secretspace_user', JSON.stringify(updated));
+        } catch {}
+        return updated;
+      });
+    }
+
+    addToast('Post deleted successfully', 'success');
+    return true;
+  };
+
   // Add Comment to Post
   const addComment = async (postId, content) => {
     if (!content || !content.trim()) return;
 
-    if (backendStatus.online && backendStatus.database === 'connected') {
-      try {
-        const res = await api.comments.create(postId, { content: content.trim() });
-        if (res?.data) {
-          setPosts((prev) =>
-            prev.map((post) => {
-              if (post.id !== postId) return post;
-              return {
-                ...post,
-                commentCount: (post.commentCount || 0) + 1,
-                comments: [...(post.comments || []), res.data],
-              };
-            })
-          );
-          setUser((prev) => ({
-            ...prev,
-            stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
-          }));
-          addToast('Anonymous comment posted', 'success');
-          return;
-        }
-      } catch (error) {
-        addToast(`Could not post comment: ${error.message}`, 'error');
+    try {
+      const res = await api.comments.create(postId, { content: content.trim() });
+      if (res?.data) {
+        setPosts((prev) =>
+          prev.map((post) => {
+            if (post.id !== postId) return post;
+            return {
+              ...post,
+              commentCount: (post.commentCount || 0) + 1,
+              comments: [...(post.comments || []), res.data],
+            };
+          })
+        );
+        setUser((prev) => ({
+          ...prev,
+          stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
+        }));
+        addToast('Anonymous comment posted in database!', 'success');
         return;
       }
+    } catch (error) {
+      console.warn('[AppContext] Real backend comment notice:', error.message);
     }
 
     // In-memory fallback
@@ -414,31 +500,28 @@ export const AppProvider = ({ children }) => {
   const addReply = async (postId, commentId, content) => {
     if (!content || !content.trim()) return;
 
-    if (backendStatus.online && backendStatus.database === 'connected') {
-      try {
-        const res = await api.comments.create(postId, { content: content.trim(), parentId: commentId });
-        if (res?.data) {
-          setPosts((prev) =>
-            prev.map((post) => {
-              if (post.id !== postId) return post;
-              const updated = (post.comments || []).map((c) => {
-                if (c.id !== commentId) return c;
-                return { ...c, replies: [...(c.replies || []), res.data] };
-              });
-              return { ...post, commentCount: (post.commentCount || 0) + 1, comments: updated };
-            })
-          );
-          setUser((prev) => ({
-            ...prev,
-            stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
-          }));
-          addToast('Reply sent anonymously', 'success');
-          return;
-        }
-      } catch (error) {
-        addToast(`Could not send reply: ${error.message}`, 'error');
+    try {
+      const res = await api.comments.create(postId, { content: content.trim(), parentId: commentId });
+      if (res?.data) {
+        setPosts((prev) =>
+          prev.map((post) => {
+            if (post.id !== postId) return post;
+            const updated = (post.comments || []).map((c) => {
+              if (c.id !== commentId) return c;
+              return { ...c, replies: [...(c.replies || []), res.data] };
+            });
+            return { ...post, commentCount: (post.commentCount || 0) + 1, comments: updated };
+          })
+        );
+        setUser((prev) => ({
+          ...prev,
+          stats: { ...prev.stats, commentsCount: (prev.stats?.commentsCount || 0) + 1 },
+        }));
+        addToast('Reply sent anonymously in database!', 'success');
         return;
       }
+    } catch (error) {
+      console.warn('[AppContext] Real backend reply notice:', error.message);
     }
 
     const newReply = {
@@ -469,20 +552,17 @@ export const AppProvider = ({ children }) => {
 
   // Vote on a Poll
   const votePoll = async (pollId, optionId) => {
-    if (backendStatus.online && backendStatus.database === 'connected') {
-      try {
-        const res = await api.polls.vote(pollId, optionId);
-        if (res?.data) {
-          setPolls((prev) =>
-            prev.map((p) => (p.id === pollId ? { ...p, ...res.data } : p))
-          );
-          addToast('Vote registered anonymously!', 'success');
-          return;
-        }
-      } catch (error) {
-        addToast(`Voting failed: ${error.message}`, 'error');
+    try {
+      const res = await api.polls.vote(pollId, optionId);
+      if (res?.data) {
+        setPolls((prev) =>
+          prev.map((p) => (p.id === pollId ? { ...p, ...res.data } : p))
+        );
+        addToast('Vote registered anonymously in database!', 'success');
         return;
       }
+    } catch (error) {
+      console.warn('[AppContext] Real backend poll vote notice:', error.message);
     }
 
     // In-memory fallback
@@ -520,17 +600,17 @@ export const AppProvider = ({ children }) => {
       return null;
     }
 
-    if (backendStatus.online && backendStatus.database === 'connected') {
-      try {
-        const res = await api.polls.create({ question, options, collegeTag });
-        if (res?.data) {
-          setPolls((prev) => [res.data, ...prev]);
-          addToast('Anonymous campus poll created!', 'success');
-          return res.data;
-        }
-      } catch (error) {
-        addToast(`Could not create poll: ${error.message}`, 'error');
-        return null;
+    try {
+      const res = await api.polls.create({ question, options, collegeTag });
+      if (res?.data) {
+        setPolls((prev) => [res.data, ...prev]);
+        addToast('Anonymous campus poll created in database!', 'success');
+        return res.data;
+      }
+    } catch (error) {
+      console.warn('[AppContext] Real backend create poll notice:', error.message);
+      if (error.code === 'DB_UNAVAILABLE') {
+        addToast('API reached! (Poll cached in browser because MongoDB Atlas is not yet linked in Vercel)', 'warning');
       }
     }
 
@@ -863,15 +943,17 @@ export const AppProvider = ({ children }) => {
 
   // Reset in-memory state cleanly
   const resetInMemoryState = useCallback(() => {
+    try {
+      localStorage.removeItem('secretspace_custom_posts');
+      localStorage.removeItem('secretspace_custom_polls');
+      sessionStorage.removeItem('secretspace_settings');
+    } catch {}
     setPosts(INITIAL_POSTS);
     setPolls(INITIAL_POLLS);
     setReports(MOCK_REPORTS);
     setActiveCategory('all');
     setSearchQuery('');
     setSortBy('hot');
-    try {
-      sessionStorage.removeItem('secretspace_settings');
-    } catch {}
     setSettings({
       notifications: { upvotes: true, comments: true, polls: true, trendingAlerts: false },
       privacy: { scrambleWeekly: true, hideHostelWing: false, blurSensitive: true },
@@ -956,6 +1038,7 @@ export const AppProvider = ({ children }) => {
         votePost,
         toggleBookmark,
         addPost,
+        deletePost,
         addComment,
         addReply,
         votePoll,

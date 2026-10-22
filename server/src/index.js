@@ -35,7 +35,8 @@ app.use(
       const normalized = origin.replace(/\/$/, '');
       if (
         allowedOrigins.includes(normalized) ||
-        normalized.endsWith('.vercel.app')
+        normalized.endsWith('.vercel.app') ||
+        /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(normalized)
       ) {
         return callback(null, true);
       }
@@ -51,6 +52,17 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/', generalLimiter);
 
+// Root informational endpoint
+app.get('/', (req, res) => {
+  res.json({
+    service: 'SecretSpace API Server',
+    status: 'online',
+    health: '/health',
+    apiHealth: '/api/health',
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Ensure MongoDB is connected for incoming API requests in serverless environments
 app.use('/api', async (req, res, next) => {
   if (!isDBConnected()) {
@@ -63,8 +75,8 @@ app.use('/api', async (req, res, next) => {
   next();
 });
 
-// Health check endpoint with database status reporting
-app.get('/api/health', (req, res) => {
+// Health check endpoint with database status reporting (supports both /health and /api/health)
+const handleHealthCheck = (req, res) => {
   const dbConnected = isDBConnected();
   res.json({
     status: 'ok',
@@ -73,7 +85,10 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
   });
-});
+};
+
+app.get('/health', handleHealthCheck);
+app.get('/api/health', handleHealthCheck);
 
 // Mount modular API routes
 app.use('/api/auth', authRoutes);

@@ -2,9 +2,9 @@ import React from 'react';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { useApp } from '../../context/AppContext.jsx';
 import { AVATAR_OPTIONS } from '../../data/mockData.js';
-import { Sparkles, Search, PlusCircle, Sun, Moon, LogOut } from '../common/icons.jsx';
+import { Sparkles, Search, PlusCircle, Sun, Moon, LogOut, Menu } from '../common/icons.jsx';
 
-export default function Navbar({ onOpenCreateModal }) {
+export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
   const { user, isLoggedIn, logout, searchQuery, setSearchQuery, theme, toggleTheme } = useApp();
   const navigate = useNavigate();
 
@@ -19,17 +19,29 @@ export default function Navbar({ onOpenCreateModal }) {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border px-4 py-2.5 transition-colors">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
-        {/* Brand / Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#B83259] to-[#982748] text-white flex items-center justify-center font-black shadow-sm">
-            <Sparkles className="w-4 h-4" />
-          </div>
-          <span className="font-extrabold text-base text-deep tracking-tight">
-            Secret<span className="text-primary">Space</span>
-          </span>
-        </Link>
+    <header className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border px-3 sm:px-4 py-2.5 transition-colors">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
+        {/* Brand / Logo + Mobile Menu Trigger */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <button
+            type="button"
+            onClick={onToggleMobileMenu}
+            className="md:hidden p-1.5 sm:p-2 rounded-xl bg-surface/60 hover:bg-surface text-muted hover:text-deep transition cursor-pointer"
+            aria-label="Toggle navigation drawer"
+            title="Open Menu"
+          >
+            <Menu className="w-5 h-5 text-main" />
+          </button>
+
+          <Link to="/" className="flex items-center gap-2 shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#B83259] to-[#982748] text-white flex items-center justify-center font-black shadow-sm">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <span className="font-extrabold text-base text-deep tracking-tight">
+              Secret<span className="text-primary">Space</span>
+            </span>
+          </Link>
+        </div>
 
         <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold">
           <NavLink
@@ -98,10 +110,11 @@ export default function Navbar({ onOpenCreateModal }) {
 
           <button
             onClick={onOpenCreateModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white text-xs font-semibold rounded-xl shadow-xs transition cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white text-xs font-semibold rounded-xl shadow-xs transition cursor-pointer shrink-0"
           >
             <PlusCircle className="w-3.5 h-3.5" />
-            <span>Drop Secret</span>
+            <span className="hidden sm:inline">Drop Secret</span>
+            <span className="sm:hidden">Post</span>
           </button>
 
           {isLoggedIn ? (

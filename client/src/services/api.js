@@ -1,7 +1,12 @@
 // SecretSpace Centralized API Client Layer
 const resolveApiBaseUrl = () => {
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL.replace(/\/$/, '');
+  let envUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL;
+  if (envUrl && typeof envUrl === 'string') {
+    let clean = envUrl.trim().replace(/\/$/, '');
+    if (!clean.endsWith('/api')) {
+      clean += '/api';
+    }
+    return clean;
   }
 
   // Smart production detection: When loaded from Vercel frontend, connect to Vercel backend by default

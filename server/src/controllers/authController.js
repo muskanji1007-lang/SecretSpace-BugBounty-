@@ -1,6 +1,31 @@
 import { User } from '../models/User.js';
 import { generateToken } from '../middleware/auth.js';
 
+const formatAvatar = (inputAvatar) => {
+  if (typeof inputAvatar === 'string') {
+    return {
+      id: inputAvatar,
+      name: inputAvatar,
+      emoji: '🎭',
+      bg: 'bg-surface text-deep border-border',
+    };
+  }
+  if (inputAvatar && typeof inputAvatar === 'object') {
+    return {
+      id: inputAvatar.id || 'ghost',
+      name: inputAvatar.name || 'Stealth Phantom',
+      emoji: inputAvatar.emoji || '👻',
+      bg: inputAvatar.bg || 'bg-surface text-deep border-border',
+    };
+  }
+  return {
+    id: 'ghost',
+    name: 'Stealth Phantom',
+    emoji: '👻',
+    bg: 'bg-surface text-deep border-border',
+  };
+};
+
 // Register new user
 export const register = async (req, res, next) => {
   try {
@@ -39,12 +64,7 @@ export const register = async (req, res, next) => {
       email,
       password,
       pseudonym: pseudonym || 'Anonymous Student',
-      avatar: avatar || {
-        id: 'ghost',
-        name: 'Stealth Phantom',
-        emoji: '👻',
-        bg: 'bg-surface text-deep border-border',
-      },
+      avatar: formatAvatar(avatar),
       collegeTag: collegeTag || 'Campus North',
       role,
     });
@@ -127,7 +147,7 @@ export const updateProfile = async (req, res, next) => {
 
     const updates = {};
     if (pseudonym) updates.pseudonym = pseudonym.trim();
-    if (avatar) updates.avatar = avatar;
+    if (avatar) updates.avatar = formatAvatar(avatar);
     if (collegeTag) updates.collegeTag = collegeTag.trim();
     if (settings) updates.settings = settings;
 

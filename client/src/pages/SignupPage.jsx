@@ -64,7 +64,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center py-6 px-4">
-      <div className="max-w-md w-full bg-card border border-border rounded-3xl p-8 shadow-xl shadow-deep/5 space-y-6">
+      <div className="max-w-md w-full bg-card border border-border rounded-3xl p-5 sm:p-8 shadow-xl shadow-deep/5 space-y-6">
         <div className="text-center space-y-1.5">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#B83259] to-[#982748] text-white mx-auto flex items-center justify-center font-black shadow-lg shadow-[#B83259]/20">
             <Sparkles className="w-6 h-6" />

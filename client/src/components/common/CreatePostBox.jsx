@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
 import { CATEGORIES, AVATAR_OPTIONS } from '../../data/mockData.js';
-import { Send, MapPin, Shield, Check } from './icons.jsx';
+import { Send, MapPin, Shield, Check, Save, Edit2 } from './icons.jsx';
 
 const MAX_CHARS = 500;
 
 export default function CreatePostBox({ onPostCreated }) {
-  const { addPost, user } = useApp();
+  const { addPost, user, addToast } = useApp();
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('confessions');
   const [collegeTag, setCollegeTag] = useState('Campus Central');
@@ -15,6 +15,77 @@ export default function CreatePostBox({ onPostCreated }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPersonaPicker, setShowPersonaPicker] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasSavedDraft, setHasSavedDraft] = useState(false);
+  const [draftTime, setDraftTime] = useState(null);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('secretspace_post_draft');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && (parsed.content || '').trim()) {
+          setHasSavedDraft(true);
+          if (parsed.savedAt) {
+            setDraftTime(
+              new Date(parsed.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            );
+          }
+        }
+      }
+    } catch {}
+  }, []);
+
+  const handleSaveDraft = (e) => {
+    if (e) e.preventDefault();
+    if (!content.trim()) {
+      addToast('Draft cannot be empty', 'warning');
+      return;
+    }
+    const draftData = {
+      content,
+      category,
+      collegeTag,
+      customTag,
+      selectedAvatar,
+      savedAt: Date.now(),
+    };
+    try {
+      localStorage.setItem('secretspace_post_draft', JSON.stringify(draftData));
+      setHasSavedDraft(true);
+      setDraftTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      addToast('Draft saved! You can resume editing anytime.', 'success');
+    } catch {
+      addToast('Could not save draft to browser storage', 'error');
+    }
+  };
+
+  const handleRestoreDraft = () => {
+    try {
+      const saved = localStorage.getItem('secretspace_post_draft');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.content) setContent(parsed.content);
+        if (parsed.category) setCategory(parsed.category);
+        if (parsed.collegeTag) setCollegeTag(parsed.collegeTag);
+        if (parsed.customTag) setCustomTag(parsed.customTag);
+        if (parsed.selectedAvatar) setSelectedAvatar(parsed.selectedAvatar);
+        setIsExpanded(true);
+        addToast('Saved draft restored!', 'info');
+      }
+    } catch {}
+  };
+
+  const handleDiscardDraft = () => {
+    try {
+      localStorage.removeItem('secretspace_post_draft');
+    } catch {}
+    setHasSavedDraft(false);
+    setDraftTime(null);
+    setContent('');
+    setCustomTag('');
+    setIsExpanded(false);
+    addToast('Draft discarded', 'info');
+  };
 
   const charCount = content.length;
   const charsRemaining = MAX_CHARS - charCount;
@@ -45,6 +116,12 @@ export default function CreatePostBox({ onPostCreated }) {
         authorAvatar: selectedAvatar,
       });
 
+      try {
+        localStorage.removeItem('secretspace_post_draft');
+      } catch {}
+      setHasSavedDraft(false);
+      setDraftTime(null);
+
       setContent('');
       setCustomTag('');
       setIsExpanded(false);
@@ -58,8 +135,37 @@ export default function CreatePostBox({ onPostCreated }) {
     AVATAR_OPTIONS.find((a) => a.id === selectedAvatar) || AVATAR_OPTIONS[0];
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-5 shadow-2xs mb-6 transition-all">
+    <div className="bg-card border border-border rounded-2xl p-3.5 sm:p-5 shadow-2xs mb-6 transition-all">
       <form onSubmit={handleSubmit}>
+        {/* Saved Draft Notification Banner */}
+        {hasSavedDraft && !content && (
+          <div className="mb-3 px-3.5 py-2.5 bg-surface rounded-xl border border-primary/25 flex items-center justify-between gap-2 text-xs animate-in fade-in">
+            <div className="flex items-center gap-2 text-deep truncate">
+              <Edit2 className="w-3.5 h-3.5 text-primary shrink-0" />
+              <span className="truncate">
+                Saved draft found {draftTime ? `(${draftTime})` : ''}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleRestoreDraft}
+                className="font-semibold text-primary hover:text-deep transition cursor-pointer"
+              >
+                Resume Draft
+              </button>
+              <span className="text-border">|</span>
+              <button
+                type="button"
+                onClick={handleDiscardDraft}
+                className="text-muted hover:text-danger transition cursor-pointer"
+              >
+                Discard
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="flex items-start gap-3">
           <div className="relative">
             <button
@@ -179,7 +285,7 @@ export default function CreatePostBox({ onPostCreated }) {
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-3 mt-3 border-t border-border">
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-3 mt-3 border-t border-border">
           <div className="flex items-center gap-2">
             <span
               className={`text-xs font-medium ${
@@ -194,18 +300,31 @@ export default function CreatePostBox({ onPostCreated }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {isExpanded && (
-              <button
-                type="button"
-                onClick={() => {
-                  setIsExpanded(false);
-                  setShowPersonaPicker(false);
-                }}
-                className="px-3 py-1.5 text-xs text-muted hover:text-main cursor-pointer"
-              >
-                Cancel
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={handleSaveDraft}
+                  disabled={!content.trim() || isSubmitting}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-border bg-card hover:bg-surface text-main hover:text-deep rounded-xl transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Save draft for later"
+                >
+                  <Save className="w-3.5 h-3.5 text-primary" />
+                  <span>Save Draft</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsExpanded(false);
+                    setShowPersonaPicker(false);
+                  }}
+                  className="px-3 py-1.5 text-xs text-muted hover:text-main cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </>
             )}
 
             <button

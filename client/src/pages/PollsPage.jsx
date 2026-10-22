@@ -67,7 +67,7 @@ export default function PollsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-card border border-border rounded-2xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-surface text-deep flex items-center justify-center">
             <Vote className="w-5 h-5 text-primary" />
@@ -117,7 +117,7 @@ export default function PollsPage() {
           {filteredPolls.map((poll) => (
             <div
               key={poll.id}
-              className="bg-card border border-border rounded-2xl p-5 shadow-2xs"
+              className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs"
             >
               <div className="flex items-center justify-between text-xs text-muted mb-2">
                 <div className="flex items-center gap-2">
@@ -218,7 +218,7 @@ export default function PollsPage() {
 
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-main/40 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-card rounded-2xl max-w-md w-full p-6 shadow-2xl border border-border relative">
+          <div className="bg-card rounded-2xl max-w-md w-full p-4 sm:p-6 shadow-2xl border border-border relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setIsCreateModalOpen(false)}
               className="absolute top-4 right-4 p-1.5 rounded-lg text-muted hover:text-main hover:bg-surface transition cursor-pointer"

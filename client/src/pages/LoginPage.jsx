@@ -46,7 +46,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-10 px-4 transition-colors">
-      <div className="max-w-md w-full bg-card border border-border rounded-3xl p-6 sm:p-8 shadow-2xl relative transition-all">
+      <div className="max-w-md w-full bg-card border border-border rounded-3xl p-5 sm:p-8 shadow-2xl relative transition-all">
         <div className="flex items-center justify-between mb-4">
           <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-surface text-deep border border-border">
             Campus Verification Gate
@@ -155,7 +155,35 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="text-center pt-4 border-t border-border mt-5">
+        <div className="mt-4 pt-3 border-t border-border">
+          <p className="text-[11px] font-semibold text-muted text-center uppercase tracking-wider mb-2">
+            Quick Demo Fill:
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setEmailOrCode('alex@campus.edu');
+                setPassword('secret123');
+              }}
+              className="px-2.5 py-1.5 rounded-xl border border-border bg-surface/50 hover:bg-surface text-deep text-xs font-medium transition cursor-pointer text-center"
+            >
+              Student Demo
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEmailOrCode('admin@campus.edu');
+                setPassword('admin123');
+              }}
+              className="px-2.5 py-1.5 rounded-xl border border-border bg-surface/50 hover:bg-surface text-deep text-xs font-medium transition cursor-pointer text-center"
+            >
+              Admin Demo
+            </button>
+          </div>
+        </div>
+
+        <div className="text-center pt-4 border-t border-border mt-4">
           <p className="text-xs text-muted">
             New to SecretSpace?{' '}
             <Link to="/signup" className="font-bold text-primary hover:text-deep underline">
