@@ -149,7 +149,7 @@ export default function PollsPage() {
                   return (
                     <button
                       key={option.id}
-                      disabled={poll.hasVoted || poll.status === 'closed'}
+                      disabled={poll.hasVoted}
                       onClick={() => votePoll(poll.id, option.id)}
                       className={`w-full text-left p-3 rounded-xl border text-xs font-medium relative overflow-hidden transition cursor-pointer ${
                         isSelected
@@ -157,7 +157,7 @@ export default function PollsPage() {
                           : 'border-border hover:border-primary/50 text-main bg-card'
                       }`}
                     >
-                      {(poll.hasVoted || poll.status === 'closed') && (
+                      {poll.hasVoted && (
                         <div
                           className={`absolute inset-y-0 left-0 transition-all duration-500 ${
                             isSelected ? 'bg-primary/20' : 'bg-surface'
@@ -174,7 +174,7 @@ export default function PollsPage() {
                           <span>{option.text}</span>
                         </div>
 
-                        {(poll.hasVoted || poll.status === 'closed') && (
+                        {poll.hasVoted && (
                           <div className="flex items-center gap-2 shrink-0">
                             <span className="text-muted text-[11px]">
                               {option.votes} vote{option.votes === 1 ? '' : 's'}

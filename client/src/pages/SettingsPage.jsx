@@ -18,11 +18,11 @@ export default function SettingsPage() {
     trendingAlerts: false,
   };
 
-  const privacy = settings?.privacy || {
+  const [privacy, setPrivacy] = useState({
     scrambleWeekly: true,
     hideHostelWing: false,
     blurSensitive: true,
-  };
+  });
 
   const handleToggleNotif = (key) => {
     updateSettings({
@@ -35,13 +35,11 @@ export default function SettingsPage() {
   };
 
   const handleTogglePrivacy = (key) => {
-    updateSettings({
-      privacy: {
-        ...privacy,
-        [key]: !privacy[key],
-      },
-    });
-    addToast('Privacy shield setting adjusted & saved', 'success');
+    setPrivacy((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+    addToast('Privacy shield setting adjusted', 'success');
   };
 
   const handleResetSession = () => {

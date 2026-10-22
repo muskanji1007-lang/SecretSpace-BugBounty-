@@ -62,7 +62,6 @@ export default function ExplorePage() {
   const handleClear = () => {
     setSearchQuery('');
     setSearchParams({});
-    setActiveCategory('all');
   };
 
   return (

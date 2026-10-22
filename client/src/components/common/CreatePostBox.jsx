@@ -89,7 +89,7 @@ export default function CreatePostBox({ onPostCreated }) {
 
   const charCount = content.length;
   const charsRemaining = MAX_CHARS - charCount;
-  const isValid = content.trim().length >= 1 && charCount <= MAX_CHARS;
+  const isValid = content.length >= 1;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,7 +109,7 @@ export default function CreatePostBox({ onPostCreated }) {
         : [`#${category}`, '#SecretSpace'];
 
       await addPost({
-        content: content.trim(),
+        content: content,
         category,
         collegeTag,
         tags,
@@ -186,7 +186,6 @@ export default function CreatePostBox({ onPostCreated }) {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               onFocus={() => setIsExpanded(true)}
-              maxLength={MAX_CHARS}
               placeholder="What's on your mind? Share a secret, confession, or question..."
               rows={isExpanded ? 3 : 2}
               className="w-full text-sm text-main placeholder:text-muted bg-canvas rounded-xl p-3 border border-border focus:bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none transition"
@@ -261,7 +260,7 @@ export default function CreatePostBox({ onPostCreated }) {
                   <MapPin className="w-3.5 h-3.5 text-primary absolute left-2.5 top-2.5" />
                   <input
                     type="text"
-                    value={collegeTag}
+                    defaultValue={collegeTag || 'Campus North'}
                     onChange={(e) => setCollegeTag(e.target.value)}
                     placeholder="e.g. Library 3rd Floor"
                     className="w-full text-xs pl-8 pr-2 py-2 rounded-lg border border-border bg-card text-main focus:outline-none focus:ring-1 focus:ring-primary"

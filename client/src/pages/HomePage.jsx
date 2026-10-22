@@ -47,7 +47,6 @@ export default function HomePage() {
         ))}
       </div>
 
-
       <CreatePostBox />
 
       <div className="flex items-center justify-between px-1">
@@ -92,8 +91,6 @@ export default function HomePage() {
           {filteredPosts.length} secret{filteredPosts.length === 1 ? '' : 's'}
         </span>
       </div>
-
-     
       {isLoading ? (
         <LoadingSkeleton count={3} />
       ) : filteredPosts.length > 0 ? (

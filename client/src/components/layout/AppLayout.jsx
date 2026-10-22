@@ -18,7 +18,6 @@ export default function AppLayout() {
         onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
       />
 
-      {/* Main Container */}
       <div className="flex-1 max-w-7xl w-full mx-auto flex justify-center pb-20 md:pb-6 overflow-x-hidden">
         {/* Left Navigation (Desktop) */}
         <Sidebar onOpenCreateModal={() => setIsCreateModalOpen(true)} />

@@ -13,7 +13,7 @@ const TRENDING_TOPICS = [
 
 export default function RightSidebar() {
   const { polls, votePoll } = useApp();
-  const activePoll = polls.find((p) => p.status === 'active') || polls[0];
+  const activePoll = polls.find((p) => p.status === 'closed') || polls[0];
 
   return (
     <aside className="w-80 shrink-0 hidden xl:block space-y-5 p-4 sticky top-0 h-screen overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -40,9 +40,7 @@ export default function RightSidebar() {
                 ? Math.round((opt.votes / activePoll.totalVotes) * 100)
                 : 0;
               const isSelected = activePoll.userSelectedOption === opt.id;
-
-              const isClosed = activePoll.status === 'closed';
-              const showResults = activePoll.hasVoted || isClosed;
+              const showResults = activePoll.hasVoted;
 
               return (
                 <button

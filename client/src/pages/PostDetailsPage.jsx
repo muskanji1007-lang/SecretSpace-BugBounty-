@@ -25,6 +25,7 @@ export default function PostDetailsPage() {
   const [activeReplyId, setActiveReplyId] = useState(null);
   const [replyText, setReplyText] = useState('');
   const [upvotedComments, setUpvotedComments] = useState(new Set());
+  const [commentCountDelta, setCommentCountDelta] = useState(0);
 
   const post = posts.find((p) => p.id === id);
 
@@ -52,6 +53,7 @@ export default function PostDetailsPage() {
     e.preventDefault();
     if (!commentText.trim()) return;
     addComment(post.id, commentText.trim());
+    setCommentCountDelta(0);
     setCommentText('');
   };
 
@@ -126,28 +128,44 @@ export default function PostDetailsPage() {
               <span>Identity stays confidential</span>
             </div>
 
-            <button
-              type="submit"
-              disabled={!commentText.trim()}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
-                commentText.trim()
-                  ? 'bg-primary hover:bg-primary-hover text-white'
-                  : 'bg-surface text-muted/60 cursor-not-allowed'
-              }`}
-            >
-              <Send className="w-3.5 h-3.5" />
-              <span>Reply</span>
-            </button>
+            <div className="flex items-center gap-2">
+              {commentText && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCommentText('');
+                    setCommentCountDelta((prev) => prev - 1);
+                    if (post.comments) {
+                      post.commentCount = Math.max(0, (post.commentCount || post.comments.length) - 1);
+                    }
+                  }}
+                  className="px-2.5 py-1 text-xs text-muted hover:text-danger cursor-pointer"
+                >
+                  Cancel
+                </button>
+              )}
+              <button
+                type="submit"
+                disabled={!commentText.trim()}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
+                  commentText.trim()
+                    ? 'bg-primary hover:bg-primary-hover text-white'
+                    : 'bg-surface text-muted/60 cursor-not-allowed'
+                }`}
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Reply</span>
+              </button>
+            </div>
           </div>
         </form>
       </div>
 
-  
       <div className="space-y-3">
         <div className="flex items-center gap-2 px-1">
           <MessageSquare className="w-4 h-4 text-primary" />
           <h3 className="font-bold text-xs uppercase tracking-wider text-deep">
-            Discussion ({post.comments ? post.comments.length : 0})
+            Discussion ({Math.max(0, (post.commentCount || (post.comments ? post.comments.length : 0)) + commentCountDelta)})
           </h3>
         </div>
 
@@ -185,12 +203,7 @@ export default function PostDetailsPage() {
 
                   <div className="flex items-center gap-4 pl-3 sm:pl-9 text-[11px] text-muted pt-1">
                     <button
-                      onClick={() => handleCommentUpvote(comment.id)}
-                      className={`flex items-center gap-1 transition cursor-pointer ${
-                        upvotedComments.has(comment.id)
-                          ? 'text-primary font-bold'
-                          : 'text-muted hover:text-deep'
-                      }`}
+                      className="flex items-center gap-1 transition text-muted hover:text-deep cursor-pointer"
                       title="Upvote comment"
                     >
                       <ThumbsUp className="w-3.5 h-3.5" />

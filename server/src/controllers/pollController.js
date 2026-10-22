@@ -117,10 +117,10 @@ export const votePoll = async (req, res, next) => {
     }
 
     const poll = await Poll.findById(id);
-    if (!poll || poll.status === 'closed') {
+    if (!poll) {
       return res.status(404).json({
         success: false,
-        message: 'Poll not found or already closed',
+        message: 'Poll not found',
         code: 'POLL_NOT_FOUND',
       });
     }
