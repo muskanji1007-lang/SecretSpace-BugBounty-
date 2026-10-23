@@ -6,6 +6,7 @@ import Navbar from './Navbar.jsx';
 import MobileNav from './MobileNav.jsx';
 import CreatePostModal from '../common/CreatePostModal.jsx';
 import ToastContainer from '../common/ToastContainer.jsx';
+import CursorGlow from '../common/CursorGlow.jsx';
 
 export default function AppLayout() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -13,7 +14,8 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-canvas text-main flex flex-col relative selection:bg-primary/20 selection:text-primary overflow-x-hidden">
-      {/* Aceternity / Techkriti Ambient Spotlight Mesh */}
+      {/* BonkersUI Style Cursor Ambient Spotlight & Tech Grid Mesh */}
+      <CursorGlow />
       <div className="fixed inset-0 bg-tech-grid pointer-events-none opacity-40 z-0" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-gradient-to-b from-primary/10 via-purple-600/5 to-transparent blur-3xl pointer-events-none z-0" />
 

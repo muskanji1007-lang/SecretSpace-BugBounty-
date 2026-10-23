@@ -56,7 +56,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
 
   return (
     <>
-      <article className="bento-card rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_25px_rgba(244,63,94,0.12)]">
+      <article className="bento-card bento-lift rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_25px_rgba(244,63,94,0.12)]">
         <div className="flex items-start justify-between gap-3 mb-3.5">
           <div className="flex items-center gap-3">
             <div
@@ -117,7 +117,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
           <div className="flex items-center bg-surface/70 border border-border rounded-xl p-0.5 shrink-0">
             <button
               onClick={() => votePost(post.id, 'up')}
-              className={`p-1.5 rounded-lg transition flex items-center gap-1 cursor-pointer ${
+              className={`tactile-btn p-1.5 rounded-lg transition flex items-center gap-1 cursor-pointer ${
                 post.userVote === 'up'
                   ? 'bg-primary text-white shadow-xs'
                   : 'text-muted hover:bg-surface hover:text-deep'
@@ -131,7 +131,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
 
             <button
               onClick={() => votePost(post.id, 'down')}
-              className={`p-1.5 rounded-lg transition cursor-pointer ${
+              className={`tactile-btn p-1.5 rounded-lg transition cursor-pointer ${
                 post.userVote === 'down'
                   ? 'bg-danger text-white shadow-xs'
                   : 'text-muted hover:bg-surface hover:text-danger'
@@ -146,7 +146,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
           <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
             <Link
               to={`/post/${post.id}`}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:bg-surface text-muted hover:text-deep transition"
+              className="tactile-btn flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:bg-surface text-muted hover:text-deep transition"
               title="Comments"
             >
               <MessageSquare className="w-4 h-4" />
@@ -155,7 +155,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
 
             <button
               onClick={() => toggleBookmark(post.id)}
-              className={`p-2 rounded-xl transition cursor-pointer ${
+              className={`tactile-btn p-2 rounded-xl transition cursor-pointer ${
                 post.isBookmarked
                   ? 'bg-surface text-primary'
                   : 'hover:bg-surface text-muted hover:text-deep'
@@ -170,7 +170,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
 
             <button
               onClick={handleShare}
-              className="p-2 rounded-xl hover:bg-surface text-muted hover:text-deep transition cursor-pointer"
+              className="tactile-btn p-2 rounded-xl hover:bg-surface text-muted hover:text-deep transition cursor-pointer"
               title="Share"
               aria-label="Share"
             >
@@ -179,7 +179,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
 
             <button
               onClick={() => setIsReportOpen(true)}
-              className="p-2 rounded-xl hover:bg-surface text-muted hover:text-danger transition cursor-pointer"
+              className="tactile-btn p-2 rounded-xl hover:bg-surface text-muted hover:text-danger transition cursor-pointer"
               title="Report Post"
               aria-label="Report"
             >
@@ -224,7 +224,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
                     e.stopPropagation();
                     setShowConfirmDelete(true);
                   }}
-                  className="p-2 rounded-xl hover:bg-danger/10 text-muted hover:text-danger transition cursor-pointer"
+                  className="tactile-btn p-2 rounded-xl hover:bg-danger/10 text-muted hover:text-danger transition cursor-pointer"
                   title={user?.role === 'admin' && !isAuthor ? 'Delete Post (Admin Moderation)' : 'Delete Post'}
                   aria-label="Delete Post"
                 >

@@ -40,7 +40,7 @@ export default function HeroBanner({ onOpenCreateModal }) {
         <button
           onClick={toggleTheme}
           type="button"
-          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer border ${
+          className={`tactile-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer border ${
             isDark
               ? 'bg-surface/80 hover:bg-surface border-white/[0.08] text-main hover:text-white'
               : 'bg-white hover:bg-surface border-border text-deep shadow-2xs'
@@ -89,7 +89,7 @@ export default function HeroBanner({ onOpenCreateModal }) {
           <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
             <button
               onClick={onOpenCreateModal}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 shadow-lg shadow-rose-600/30 hover:shadow-rose-600/50 transition-all duration-200 transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+              className="tactile-btn shimmer-sheen inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 shadow-lg shadow-rose-600/30 hover:shadow-rose-600/50 transition cursor-pointer"
             >
               <span>Drop a Secret Now</span>
               <ArrowRight className="w-4 h-4" />

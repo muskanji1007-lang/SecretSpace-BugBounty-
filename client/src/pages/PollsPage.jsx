@@ -82,7 +82,7 @@ export default function PollsPage() {
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs font-semibold rounded-xl shadow-md shadow-rose-600/25 hover:shadow-rose-600/40 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
+          className="tactile-btn shimmer-sheen inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs font-semibold rounded-xl shadow-md shadow-rose-600/25 hover:shadow-rose-600/40 transition cursor-pointer"
         >
           <PlusCircle className="w-4 h-4" />
           <span>Create Poll</span>
@@ -117,7 +117,7 @@ export default function PollsPage() {
           {filteredPolls.map((poll) => (
             <div
               key={poll.id}
-              className="bento-card rounded-2xl p-4 sm:p-5 shadow-sm hover:border-primary/40 transition-all duration-300"
+              className="bento-card bento-lift rounded-2xl p-4 sm:p-5 shadow-sm hover:border-primary/40 transition-all duration-300"
             >
               <div className="flex items-center justify-between text-xs text-muted mb-2">
                 <div className="flex items-center gap-2">
@@ -151,7 +151,7 @@ export default function PollsPage() {
                       key={option.id}
                       disabled={poll.hasVoted}
                       onClick={() => votePoll(poll.id, option.id)}
-                      className={`w-full text-left p-3 rounded-xl border text-xs font-medium relative overflow-hidden transition cursor-pointer ${
+                      className={`tactile-btn w-full text-left p-3 rounded-xl border text-xs font-medium relative overflow-hidden transition cursor-pointer ${
                         isSelected
                           ? 'border-primary bg-primary/15 text-white font-semibold ring-1 ring-primary/40'
                           : 'border-border/80 hover:border-primary/50 text-main bg-surface/50'
@@ -306,13 +306,13 @@ export default function PollsPage() {
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="flex-1 py-2.5 px-4 rounded-xl border border-border text-muted hover:bg-surface font-medium text-xs transition cursor-pointer"
+                  className="tactile-btn flex-1 py-2.5 px-4 rounded-xl border border-border text-muted hover:bg-surface font-medium text-xs transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-primary hover:bg-primary-hover text-white font-medium text-xs shadow-md shadow-primary/20 transition cursor-pointer"
+                  className="tactile-btn shimmer-sheen flex-1 py-2.5 px-4 rounded-xl bg-primary hover:bg-primary-hover text-white font-medium text-xs shadow-md shadow-primary/20 transition cursor-pointer"
                 >
                   Publish Poll
                 </button>

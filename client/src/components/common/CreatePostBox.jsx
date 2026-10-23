@@ -135,7 +135,7 @@ export default function CreatePostBox({ onPostCreated }) {
     AVATAR_OPTIONS.find((a) => a.id === selectedAvatar) || AVATAR_OPTIONS[0];
 
   return (
-    <div className="bento-card rounded-2xl p-4 sm:p-5 mb-6 transition-all shadow-sm">
+    <div className="bento-card bento-lift rounded-2xl p-4 sm:p-5 mb-6 transition-all shadow-sm">
       <form onSubmit={handleSubmit}>
         {/* Saved Draft Notification Banner */}
         {hasSavedDraft && !content && (
@@ -171,7 +171,7 @@ export default function CreatePostBox({ onPostCreated }) {
             <button
               type="button"
               onClick={() => setShowPersonaPicker(!showPersonaPicker)}
-              className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs border ${activeAvatarObj.color} cursor-pointer hover:ring-2 hover:ring-primary/40 transition shrink-0`}
+              className={`tactile-btn w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs border ${activeAvatarObj.color} cursor-pointer hover:ring-2 hover:ring-primary/40 transition shrink-0`}
               title="Click to change your anonymous persona"
             >
               {activeAvatarObj.name.substring(0, 2).toUpperCase()}
@@ -211,7 +211,7 @@ export default function CreatePostBox({ onPostCreated }) {
                     setSelectedAvatar(avatar.id);
                     setShowPersonaPicker(false);
                   }}
-                  className={`flex items-center gap-2 p-2 rounded-lg text-xs font-medium border text-left cursor-pointer transition ${
+                  className={`tactile-btn flex items-center gap-2 p-2 rounded-lg text-xs font-medium border text-left cursor-pointer transition ${
                     selectedAvatar === avatar.id
                       ? 'border-primary bg-card text-deep ring-1 ring-primary'
                       : 'border-border bg-card/70 hover:bg-card text-main'
@@ -306,7 +306,7 @@ export default function CreatePostBox({ onPostCreated }) {
                   type="button"
                   onClick={handleSaveDraft}
                   disabled={!content.trim() || isSubmitting}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-border bg-card hover:bg-surface text-main hover:text-deep rounded-xl transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="tactile-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-border bg-card hover:bg-surface text-main hover:text-deep rounded-xl transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   title="Save draft for later"
                 >
                   <Save className="w-3.5 h-3.5 text-primary" />
@@ -319,7 +319,7 @@ export default function CreatePostBox({ onPostCreated }) {
                     setIsExpanded(false);
                     setShowPersonaPicker(false);
                   }}
-                  className="px-3 py-1.5 text-xs text-muted hover:text-main cursor-pointer"
+                  className="tactile-btn px-3 py-1.5 text-xs text-muted hover:text-main cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -329,7 +329,7 @@ export default function CreatePostBox({ onPostCreated }) {
             <button
               type="submit"
               disabled={!isValid || isSubmitting}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
+              className={`tactile-btn shimmer-sheen inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
                 isValid && !isSubmitting
                   ? 'bg-primary hover:bg-primary-hover text-white shadow-sm shadow-primary/25'
                   : 'bg-surface text-muted/60 cursor-not-allowed'

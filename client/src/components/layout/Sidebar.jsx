@@ -110,7 +110,7 @@ export default function Sidebar({
                 end={item.to === '/'}
                 onClick={handleLinkClick}
                 className={({ isActive }) =>
-                  `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition cursor-pointer group ${
+                  `tactile-btn flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition cursor-pointer group ${
                     isActive
                       ? 'bg-primary/20 text-white border border-primary/35 shadow-xs font-semibold'
                       : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white'
@@ -155,7 +155,7 @@ export default function Sidebar({
         <div className="mt-6 px-1">
           <button
             onClick={handleCreateClick}
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-semibold text-sm shadow-md shadow-rose-600/30 hover:shadow-rose-600/50 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
+            className="tactile-btn shimmer-sheen w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-semibold text-sm shadow-md shadow-rose-600/30 hover:shadow-rose-600/50 transition cursor-pointer"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Drop a Secret</span>
@@ -166,7 +166,7 @@ export default function Sidebar({
       <Link
         to="/profile"
         onClick={handleLinkClick}
-        className="flex items-center gap-3 p-3 rounded-xl border border-sidebar-border bg-sidebar-hover/40 hover:bg-sidebar-hover hover:border-primary/40 transition mt-4"
+        className="tactile-btn flex items-center gap-3 p-3 rounded-xl border border-sidebar-border bg-sidebar-hover/40 hover:bg-sidebar-hover hover:border-primary/40 transition mt-4"
       >
         <div
           className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs border border-primary/40 bg-primary/20 text-white shrink-0"

@@ -19,7 +19,7 @@ export default function RightSidebar() {
     <aside className="w-80 shrink-0 hidden xl:block space-y-5 p-4 sticky top-0 h-screen overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       {/* Active Campus Poll Widget */}
       {activePoll && (
-        <div className="bento-card rounded-2xl p-4 shadow-sm hover:border-primary/40">
+        <div className="bento-card bento-lift rounded-2xl p-4 shadow-sm hover:border-primary/40">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
               <Vote className="w-4 h-4 text-primary" />
@@ -47,7 +47,7 @@ export default function RightSidebar() {
                   key={opt.id}
                   disabled={showResults}
                   onClick={() => votePoll(activePoll.id, opt.id)}
-                  className={`w-full text-left p-2.5 rounded-xl border text-xs font-medium relative overflow-hidden transition cursor-pointer ${
+                  className={`tactile-btn w-full text-left p-2.5 rounded-xl border text-xs font-medium relative overflow-hidden transition cursor-pointer ${
                     isSelected
                       ? 'border-primary bg-primary/15 text-white font-semibold'
                       : 'border-border hover:border-primary/50 text-main bg-surface/40'
@@ -85,7 +85,7 @@ export default function RightSidebar() {
       )}
 
       {/* Trending Topics Widget */}
-      <div className="bento-card rounded-2xl p-4 shadow-sm hover:border-primary/40">
+      <div className="bento-card bento-lift rounded-2xl p-4 shadow-sm hover:border-primary/40">
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary mb-3">
           <TrendingUp className="w-4 h-4 text-primary" />
           <span>Trending on Campus</span>

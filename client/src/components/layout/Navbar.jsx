@@ -19,14 +19,17 @@ export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-card/85 backdrop-blur-xl border-b border-border px-3 sm:px-4 py-2.5 transition-colors shadow-xs">
+    <header className="sticky top-0 z-40 bg-card/85 backdrop-blur-2xl border-b border-border/80 px-3 sm:px-4 py-2.5 transition-colors shadow-xs relative">
+      {/* BonkersUI Specular Top Light Beam */}
+      <span aria-hidden="true" className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
         {/* Brand / Logo + Mobile Menu Trigger */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={onToggleMobileMenu}
-            className="md:hidden p-1.5 sm:p-2 rounded-xl bg-surface/70 hover:bg-surface text-muted hover:text-deep border border-border/60 transition cursor-pointer"
+            className="tactile-btn md:hidden p-1.5 sm:p-2 rounded-xl bg-surface/70 hover:bg-surface text-muted hover:text-white border border-border/60 transition cursor-pointer"
             aria-label="Toggle navigation drawer"
             title="Open Menu"
           >
@@ -48,7 +51,7 @@ export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
             to="/"
             end
             className={({ isActive }) =>
-              `px-3 py-1.5 rounded-xl transition ${
+              `tactile-btn px-3 py-1.5 rounded-xl transition ${
                 isActive
                   ? 'text-white bg-primary shadow-xs shadow-primary/25 font-bold'
                   : 'text-muted hover:text-deep hover:bg-surface/60'
@@ -60,7 +63,7 @@ export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
           <NavLink
             to="/explore"
             className={({ isActive }) =>
-              `px-3 py-1.5 rounded-xl transition ${
+              `tactile-btn px-3 py-1.5 rounded-xl transition ${
                 isActive
                   ? 'text-white bg-primary shadow-xs shadow-primary/25 font-bold'
                   : 'text-muted hover:text-deep hover:bg-surface/60'
@@ -72,7 +75,7 @@ export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
           <NavLink
             to="/polls"
             className={({ isActive }) =>
-              `px-3 py-1.5 rounded-xl transition ${
+              `tactile-btn px-3 py-1.5 rounded-xl transition ${
                 isActive
                   ? 'text-white bg-primary shadow-xs shadow-primary/25 font-bold'
                   : 'text-muted hover:text-deep hover:bg-surface/60'
@@ -104,7 +107,7 @@ export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
           <button
             onClick={toggleTheme}
             type="button"
-            className="p-2 rounded-xl bg-surface/70 hover:bg-surface border border-border/60 text-muted hover:text-deep transition cursor-pointer"
+            className="tactile-btn p-2 rounded-xl bg-surface/70 hover:bg-surface border border-border/60 text-muted hover:text-deep transition cursor-pointer"
             title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
           >
             {theme === 'dark' ? (
@@ -116,7 +119,7 @@ export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
 
           <button
             onClick={onOpenCreateModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs font-semibold rounded-xl shadow-md shadow-rose-600/25 hover:shadow-rose-600/40 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer shrink-0"
+            className="tactile-btn shimmer-sheen flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 text-white text-xs font-semibold rounded-xl shadow-md shadow-rose-600/30 hover:shadow-rose-600/50 hover:brightness-110 transition cursor-pointer shrink-0"
           >
             <PlusCircle className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Drop Secret</span>
@@ -127,14 +130,14 @@ export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
             <div className="flex items-center gap-1.5">
               <Link
                 to="/profile"
-                className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border ${avatarObj.color} hover:ring-2 hover:ring-primary/40 transition`}
+                className={`tactile-btn w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border ${avatarObj.color} hover:ring-2 hover:ring-primary/40 transition`}
                 title={`Logged in as ${user?.pseudonym || 'Anonymous'}`}
               >
                 {avatarObj.name.substring(0, 2).toUpperCase()}
               </Link>
               <button
                 onClick={logout}
-                className="p-2 rounded-xl hover:bg-surface hover:text-danger text-muted transition cursor-pointer"
+                className="tactile-btn p-2 rounded-xl hover:bg-surface hover:text-danger text-muted transition cursor-pointer"
                 title="Log Out"
               >
                 <LogOut className="w-3.5 h-3.5" />
@@ -143,7 +146,7 @@ export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
           ) : (
             <Link
               to="/login"
-              className="px-4 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 shadow-md shadow-rose-600/20 hover:opacity-95 transition cursor-pointer"
+              className="tactile-btn shimmer-sheen px-4 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 shadow-md shadow-rose-600/20 hover:brightness-110 transition cursor-pointer"
             >
               Login
             </Link>

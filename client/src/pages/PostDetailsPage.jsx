@@ -85,7 +85,7 @@ export default function PostDetailsPage() {
       <div className="flex items-center justify-between">
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-deep transition cursor-pointer"
+          className="tactile-btn inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-deep transition cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back</span>
@@ -95,7 +95,7 @@ export default function PostDetailsPage() {
 
       <PostCard post={post} isDetailView={true} onDelete={() => navigate('/')} />
 
-      <div className="bento-card rounded-2xl p-4 shadow-sm">
+      <div className="bento-card bento-lift rounded-2xl p-4 shadow-sm">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <span
@@ -139,7 +139,7 @@ export default function PostDetailsPage() {
                       post.commentCount = Math.max(0, (post.commentCount || post.comments.length) - 1);
                     }
                   }}
-                  className="px-2.5 py-1 text-xs text-muted hover:text-danger cursor-pointer"
+                  className="tactile-btn px-2.5 py-1 text-xs text-muted hover:text-danger cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -147,7 +147,7 @@ export default function PostDetailsPage() {
               <button
                 type="submit"
                 disabled={!commentText.trim()}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
+                className={`tactile-btn shimmer-sheen inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
                   commentText.trim()
                     ? 'bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 text-white shadow-md shadow-rose-600/20'
                     : 'bg-surface text-muted/60 cursor-not-allowed'
@@ -178,7 +178,7 @@ export default function PostDetailsPage() {
               return (
                 <div
                   key={comment.id}
-                  className="bento-card rounded-2xl p-4 shadow-sm space-y-3"
+                  className="bento-card bento-lift rounded-2xl p-4 shadow-sm space-y-3"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -203,7 +203,7 @@ export default function PostDetailsPage() {
 
                   <div className="flex items-center gap-4 pl-3 sm:pl-9 text-[11px] text-muted pt-1">
                     <button
-                      className="flex items-center gap-1 transition text-muted hover:text-deep cursor-pointer"
+                      className="tactile-btn flex items-center gap-1 transition text-muted hover:text-deep cursor-pointer"
                       title="Upvote comment"
                     >
                       <ThumbsUp className="w-3.5 h-3.5" />
@@ -216,7 +216,7 @@ export default function PostDetailsPage() {
                           activeReplyId === comment.id ? null : comment.id
                         )
                       }
-                      className="text-primary font-semibold hover:text-deep hover:underline cursor-pointer"
+                      className="tactile-btn text-primary font-semibold hover:text-deep hover:underline cursor-pointer"
                     >
                       Reply
                     </button>
@@ -236,14 +236,14 @@ export default function PostDetailsPage() {
                         <button
                           type="button"
                           onClick={() => setActiveReplyId(null)}
-                          className="px-2.5 py-1 text-xs text-muted hover:text-main cursor-pointer"
+                          className="tactile-btn px-2.5 py-1 text-xs text-muted hover:text-main cursor-pointer"
                         >
                           Cancel
                         </button>
                         <button
                           type="button"
                           onClick={() => handleReplySubmit(comment.id)}
-                          className="px-3 py-1 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg cursor-pointer"
+                          className="tactile-btn shimmer-sheen px-3 py-1 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg cursor-pointer"
                         >
                           Send
                         </button>
