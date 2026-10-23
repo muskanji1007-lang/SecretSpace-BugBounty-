@@ -55,25 +55,28 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-card border border-border rounded-3xl p-6 shadow-2xs relative overflow-hidden">
-        <div className="h-24 -mx-6 -mt-6 bg-gradient-to-r from-[#211116] via-[#501E30] to-[#B83259]" />
+      <div className="bento-card rounded-3xl p-6 shadow-sm relative overflow-hidden">
+        <div className="h-28 -mx-6 -mt-6 bg-gradient-to-r from-rose-950 via-rose-900 to-rose-600 relative overflow-hidden">
+          <div className="absolute inset-0 bg-tech-grid opacity-30" />
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-rose-500/30 rounded-full blur-2xl" />
+        </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-10 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-10 mb-4 relative z-10">
           <div className="flex items-end gap-3.5">
             <div
-              className={`w-20 h-20 rounded-2xl flex items-center justify-center font-black text-2xl border-4 border-card shadow-lg ${activeAvatarObj?.color || 'bg-surface text-primary border-border'} bg-card shrink-0`}
+              className={`w-20 h-20 rounded-2xl flex items-center justify-center font-black text-2xl border-4 border-card shadow-xl ${activeAvatarObj?.color || 'bg-surface text-primary border-border'} bg-card shrink-0 ring-2 ring-primary/30`}
             >
               {(activeAvatarObj?.name || 'PS').substring(0, 2).toUpperCase()}
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-black text-main">{user?.pseudonym || 'Anonymous Student'}</h2>
-                <span className="p-1 rounded-full bg-surface text-deep" title="Verified Campus Student">
+                <span className="p-1 rounded-full bg-primary/10 text-primary border border-primary/20" title="Verified Campus Student">
                   <Shield className="w-3.5 h-3.5 text-primary" />
                 </span>
               </div>
               <div className="flex items-center gap-3 text-xs text-muted mt-0.5">
-                <span className="flex items-center gap-1 text-deep font-medium">
+                <span className="flex items-center gap-1 text-main font-medium">
                   <MapPin className="w-3.5 h-3.5 text-primary" />
                   {user?.college || user?.collegeTag || 'Campus North'}
                 </span>
@@ -96,9 +99,9 @@ export default function ProfilePage() {
                 setIsEditing(true);
               }
             }}
-            className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-border bg-surface hover:bg-surface/80 text-deep text-xs font-semibold transition cursor-pointer"
+            className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-border bg-surface/70 hover:bg-surface text-main hover:text-white text-xs font-semibold transition cursor-pointer hover:border-primary/40"
           >
-            <Edit2 className="w-3.5 h-3.5" />
+            <Edit2 className="w-3.5 h-3.5 text-primary" />
             <span>{isEditing ? 'Cancel Edit' : 'Edit Alias'}</span>
           </button>
         </div>
@@ -187,26 +190,26 @@ export default function ProfilePage() {
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-border">
-          <div className="p-3 rounded-2xl bg-canvas border border-border text-center">
-            <span className="block text-xl font-black text-deep">
+          <div className="p-3.5 rounded-2xl bg-surface/50 border border-border text-center hover:border-primary/40 transition">
+            <span className="block text-xl font-black text-main">
               {userStats.confessionsCount}
             </span>
             <span className="text-[11px] font-medium text-muted">Secrets Shared</span>
           </div>
-          <div className="p-3 rounded-2xl bg-canvas border border-border text-center">
-            <span className="block text-xl font-black text-deep">
+          <div className="p-3.5 rounded-2xl bg-surface/50 border border-border text-center hover:border-primary/40 transition">
+            <span className="block text-xl font-black text-main">
               {userStats.commentsCount}
             </span>
             <span className="text-[11px] font-medium text-muted">Comments</span>
           </div>
-          <div className="p-3 rounded-2xl bg-canvas border border-border text-center">
-            <span className="block text-xl font-black text-deep">
+          <div className="p-3.5 rounded-2xl bg-surface/50 border border-border text-center hover:border-primary/40 transition">
+            <span className="block text-xl font-black text-main">
               {userStats.upvotesReceived}
             </span>
             <span className="text-[11px] font-medium text-muted">Upvotes Earned</span>
           </div>
-          <div className="p-3 rounded-2xl bg-canvas border border-border text-center">
-            <span className="block text-xl font-black text-deep">
+          <div className="p-3.5 rounded-2xl bg-surface/50 border border-border text-center hover:border-primary/40 transition">
+            <span className="block text-xl font-black text-main">
               {userStats.savedPostsCount}
             </span>
             <span className="text-[11px] font-medium text-muted">Bookmarks</span>
@@ -214,10 +217,10 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="bg-card border border-border rounded-3xl p-6 shadow-2xs space-y-3">
+      <div className="bento-card rounded-3xl p-6 shadow-sm space-y-3">
         <div className="flex items-center gap-2">
           <Award className="w-4 h-4 text-primary" />
-          <h3 className="font-bold text-xs uppercase tracking-wider text-deep">
+          <h3 className="font-bold text-xs uppercase tracking-wider text-main">
             Campus Recognition & Badges
           </h3>
         </div>
@@ -226,7 +229,7 @@ export default function ProfilePage() {
           {badges.map((badge, idx) => (
             <div
               key={idx}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface border border-border text-deep text-xs font-semibold shadow-2xs"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface/70 border border-border text-main text-xs font-semibold hover:border-primary/30 transition shadow-xs"
             >
               <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>{badge}</span>
@@ -235,11 +238,11 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="bg-card border border-border rounded-3xl p-6 shadow-2xs space-y-3">
+      <div className="bento-card rounded-3xl p-6 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Bell className="w-4 h-4 text-primary" />
-            <h3 className="font-bold text-xs uppercase tracking-wider text-deep">
+            <h3 className="font-bold text-xs uppercase tracking-wider text-main">
               Recent Campus Alerts & Mentions
             </h3>
           </div>

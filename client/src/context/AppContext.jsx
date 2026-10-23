@@ -59,18 +59,27 @@ export const normalizeUser = (rawUser) => {
 };
 
 export const AppProvider = ({ children }) => {
-  // Theme State (Supports Light & Dark Modes)
-  const [theme, setTheme] = useState('light');
+  // Theme State (Defaults to Dark Mode with Tech Noir aesthetic, persists across refreshes)
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('secretspace_theme') || 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {
       const nextTheme = prev === 'light' ? 'dark' : 'light';
+      try {
+        localStorage.setItem('secretspace_theme', nextTheme);
+      } catch {}
       document.documentElement.classList.toggle('dark', nextTheme === 'dark');
       return nextTheme;
     });
   }, []);
 
-  // Sync theme with DOM
+  // Sync theme with DOM on mount and changes
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);

@@ -11,20 +11,20 @@ export default function BookmarksPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-card border border-border rounded-2xl p-5 shadow-2xs flex items-center justify-between">
+      <div className="bento-card rounded-2xl p-5 shadow-sm flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface text-primary flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
             <Bookmark className="w-5 h-5 fill-current" />
           </div>
           <div>
-            <h2 className="font-bold text-deep text-base">Saved Secrets</h2>
+            <h2 className="font-bold text-main text-base">Saved Secrets</h2>
             <p className="text-xs text-muted">
               Only visible to you during this anonymous session
             </p>
           </div>
         </div>
 
-        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-surface text-deep border border-border">
+        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
           {bookmarkedPosts.length} saved
         </span>
       </div>

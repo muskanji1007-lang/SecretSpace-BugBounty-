@@ -66,13 +66,13 @@ export default function ExplorePage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs">
+      <div className="bento-card rounded-2xl p-4 sm:p-5 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-8 h-8 rounded-xl bg-surface text-deep flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
             <Compass className="w-4 h-4 text-primary" />
           </div>
           <div>
-            <h2 className="font-bold text-deep text-base">Explore Campus</h2>
+            <h2 className="font-bold text-main text-base">Explore Campus</h2>
             <p className="text-xs text-muted">Discover secrets, trends, and specific topics</p>
           </div>
         </div>
@@ -87,12 +87,12 @@ export default function ExplorePage() {
               setSearchParams(e.target.value ? { q: e.target.value } : {});
             }}
             placeholder="Search keywords, confessions, or specific tags..."
-            className="w-full text-sm pl-10 pr-10 py-2.5 rounded-xl bg-canvas border border-border text-main placeholder:text-muted focus:bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"
+            className="w-full text-sm pl-10 pr-10 py-2.5 rounded-xl bg-surface/60 border border-border text-main placeholder:text-muted focus:bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"
           />
           {searchQuery && (
             <button
               onClick={handleClear}
-              className="absolute right-3 top-3 text-muted hover:text-main cursor-pointer"
+              className="absolute right-3 top-3 text-muted hover:text-white cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -108,7 +108,7 @@ export default function ExplorePage() {
             <button
               key={tag}
               onClick={() => handleTagClick(tag)}
-              className="text-xs font-medium px-2.5 py-1 rounded-lg bg-surface/50 hover:bg-surface text-deep border border-border whitespace-nowrap transition cursor-pointer"
+              className="text-xs font-medium px-2.5 py-1 rounded-lg bg-surface/60 hover:bg-surface text-main border border-border hover:border-primary/40 whitespace-nowrap transition cursor-pointer"
             >
               {tag}
             </button>
@@ -120,7 +120,7 @@ export default function ExplorePage() {
         <h3 className="text-xs font-bold text-muted uppercase tracking-wider mb-3 px-1">
           Browse by Category
         </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
           {CATEGORIES.map((cat) => {
             const Icon = ICON_MAP[cat.icon] || Sparkles;
             const isSelected = activeCategory === cat.id;
@@ -129,17 +129,17 @@ export default function ExplorePage() {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`p-2.5 sm:p-3.5 rounded-2xl border text-left flex items-start gap-2 sm:gap-3 transition cursor-pointer ${
+                className={`p-3 sm:p-4 rounded-2xl border text-left flex items-start gap-2.5 sm:gap-3 transition-all duration-200 cursor-pointer ${
                   isSelected
-                    ? 'border-primary bg-primary text-white shadow-sm shadow-primary/20'
-                    : 'border-border bg-card hover:border-primary/40 text-main'
+                    ? 'border-primary bg-primary text-white shadow-md shadow-primary/25 scale-[1.02]'
+                    : 'border-border/80 bg-card hover:border-primary/40 hover:bg-surface/70 text-main'
                 }`}
               >
                 <div
                   className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
                     isSelected
                       ? 'bg-white/20 text-white'
-                      : 'bg-surface text-deep border border-border'
+                      : 'bg-surface text-primary border border-border'
                   }`}
                 >
                   <Icon className="w-4 h-4" />

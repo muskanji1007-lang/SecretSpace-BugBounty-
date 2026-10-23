@@ -95,7 +95,7 @@ export default function PostDetailsPage() {
 
       <PostCard post={post} isDetailView={true} onDelete={() => navigate('/')} />
 
-      <div className="bg-card border border-border rounded-2xl p-4 shadow-2xs">
+      <div className="bento-card rounded-2xl p-4 shadow-sm">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <span
@@ -119,7 +119,7 @@ export default function PostDetailsPage() {
             maxLength={MAX_COMMENT_LENGTH}
             placeholder="Write an anonymous reply..."
             rows={2}
-            className="w-full text-xs p-3 rounded-xl border border-border bg-canvas focus:bg-card focus:outline-none focus:ring-1 focus:ring-primary text-main placeholder:text-muted resize-none"
+            className="w-full text-xs p-3 rounded-xl border border-border bg-surface/50 focus:bg-card focus:outline-none focus:ring-1 focus:ring-primary text-main placeholder:text-muted resize-none transition"
           />
 
           <div className="flex items-center justify-between">
@@ -149,7 +149,7 @@ export default function PostDetailsPage() {
                 disabled={!commentText.trim()}
                 className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition cursor-pointer ${
                   commentText.trim()
-                    ? 'bg-primary hover:bg-primary-hover text-white'
+                    ? 'bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 text-white shadow-md shadow-rose-600/20'
                     : 'bg-surface text-muted/60 cursor-not-allowed'
                 }`}
               >
@@ -164,7 +164,7 @@ export default function PostDetailsPage() {
       <div className="space-y-3">
         <div className="flex items-center gap-2 px-1">
           <MessageSquare className="w-4 h-4 text-primary" />
-          <h3 className="font-bold text-xs uppercase tracking-wider text-deep">
+          <h3 className="font-bold text-xs uppercase tracking-wider text-main">
             Discussion ({Math.max(0, (post.commentCount || (post.comments ? post.comments.length : 0)) + commentCountDelta)})
           </h3>
         </div>
@@ -178,7 +178,7 @@ export default function PostDetailsPage() {
               return (
                 <div
                   key={comment.id}
-                  className="bg-card border border-border rounded-2xl p-4 shadow-2xs space-y-3"
+                  className="bento-card rounded-2xl p-4 shadow-sm space-y-3"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

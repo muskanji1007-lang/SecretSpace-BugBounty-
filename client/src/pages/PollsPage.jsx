@@ -67,13 +67,13 @@ export default function PollsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="bento-card rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface text-deep flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
             <Vote className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="font-bold text-deep text-base">Campus Polls</h2>
+            <h2 className="font-bold text-main text-base">Campus Polls</h2>
             <p className="text-xs text-muted">
               Cast your vote anonymously on campus decisions & hot topics
             </p>
@@ -82,20 +82,20 @@ export default function PollsPage() {
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-xl shadow-sm shadow-primary/20 transition cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs font-semibold rounded-xl shadow-md shadow-rose-600/25 hover:shadow-rose-600/40 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
         >
           <PlusCircle className="w-4 h-4" />
           <span>Create Poll</span>
         </button>
       </div>
 
-      <div className="flex border-b border-border">
+      <div className="flex border-b border-border/80">
         <button
           onClick={() => setActiveTab('active')}
           className={`pb-3 px-4 text-xs font-semibold border-b-2 transition cursor-pointer ${
             activeTab === 'active'
-              ? 'border-primary text-deep'
-              : 'border-transparent text-muted hover:text-deep'
+              ? 'border-primary text-primary font-bold'
+              : 'border-transparent text-muted hover:text-white'
           }`}
         >
           Active Polls ({polls.filter((p) => p.status === 'active').length})
@@ -104,8 +104,8 @@ export default function PollsPage() {
           onClick={() => setActiveTab('closed')}
           className={`pb-3 px-4 text-xs font-semibold border-b-2 transition cursor-pointer ${
             activeTab === 'closed'
-              ? 'border-primary text-deep'
-              : 'border-transparent text-muted hover:text-deep'
+              ? 'border-primary text-primary font-bold'
+              : 'border-transparent text-muted hover:text-white'
           }`}
         >
           Closed & Results ({polls.filter((p) => p.status === 'closed').length})
@@ -117,7 +117,7 @@ export default function PollsPage() {
           {filteredPolls.map((poll) => (
             <div
               key={poll.id}
-              className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs"
+              className="bento-card rounded-2xl p-4 sm:p-5 shadow-sm hover:border-primary/40 transition-all duration-300"
             >
               <div className="flex items-center justify-between text-xs text-muted mb-2">
                 <div className="flex items-center gap-2">
@@ -125,12 +125,12 @@ export default function PollsPage() {
                     {poll.authorPseudonym}
                   </span>
                   <span>•</span>
-                  <span className="text-deep font-medium bg-surface px-2 py-0.5 rounded-full border border-border">
+                  <span className="text-muted font-medium bg-surface/80 px-2.5 py-0.5 rounded-full border border-border">
                     {poll.collegeTag}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" />
+                  <Clock className="w-3.5 h-3.5 text-primary" />
                   <span>{poll.expiresIn}</span>
                 </div>
               </div>
@@ -153,14 +153,14 @@ export default function PollsPage() {
                       onClick={() => votePoll(poll.id, option.id)}
                       className={`w-full text-left p-3 rounded-xl border text-xs font-medium relative overflow-hidden transition cursor-pointer ${
                         isSelected
-                          ? 'border-primary bg-surface/60 text-deep font-semibold ring-1 ring-primary'
-                          : 'border-border hover:border-primary/50 text-main bg-card'
+                          ? 'border-primary bg-primary/15 text-white font-semibold ring-1 ring-primary/40'
+                          : 'border-border/80 hover:border-primary/50 text-main bg-surface/50'
                       }`}
                     >
                       {poll.hasVoted && (
                         <div
-                          className={`absolute inset-y-0 left-0 transition-all duration-500 ${
-                            isSelected ? 'bg-primary/20' : 'bg-surface'
+                          className={`absolute inset-y-0 left-0 transition-all duration-500 z-0 ${
+                            isSelected ? 'bg-gradient-to-r from-primary/30 to-primary/15' : 'bg-surface/80'
                           }`}
                           style={{ width: `${percentage}%` }}
                         />

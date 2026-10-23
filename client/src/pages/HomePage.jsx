@@ -36,10 +36,10 @@ export default function HomePage() {
           <button
             key={cat.id}
             onClick={() => handleCategoryChange(cat.id)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition cursor-pointer border ${
               activeCategory === cat.id
-                ? 'bg-primary text-white shadow-xs'
-                : 'bg-card hover:bg-surface text-muted hover:text-deep border border-border'
+                ? 'bg-primary text-white shadow-md shadow-primary/25 border-primary scale-[1.02]'
+                : 'bg-surface/70 hover:bg-surface text-muted hover:text-main border-border/80'
             }`}
           >
             {cat.label}
@@ -54,10 +54,10 @@ export default function HomePage() {
           <span className="text-muted font-medium">Sort by:</span>
           <button
             onClick={() => setSortBy('hot')}
-            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg font-semibold transition cursor-pointer border ${
               sortBy === 'hot'
-                ? 'bg-surface text-deep'
-                : 'text-muted hover:text-deep'
+                ? 'bg-primary/15 text-primary border-primary/30 shadow-xs'
+                : 'border-transparent text-muted hover:text-main hover:bg-surface/50'
             }`}
           >
             <Flame className="w-3.5 h-3.5" />
@@ -65,10 +65,10 @@ export default function HomePage() {
           </button>
           <button
             onClick={() => setSortBy('new')}
-            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg font-semibold transition cursor-pointer border ${
               sortBy === 'new'
-                ? 'bg-surface text-deep'
-                : 'text-muted hover:text-deep'
+                ? 'bg-primary/15 text-primary border-primary/30 shadow-xs'
+                : 'border-transparent text-muted hover:text-main hover:bg-surface/50'
             }`}
           >
             <Clock className="w-3.5 h-3.5" />
@@ -76,10 +76,10 @@ export default function HomePage() {
           </button>
           <button
             onClick={() => setSortBy('top')}
-            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg font-semibold transition cursor-pointer border ${
               sortBy === 'top'
-                ? 'bg-surface text-deep'
-                : 'text-muted hover:text-deep'
+                ? 'bg-primary/15 text-primary border-primary/30 shadow-xs'
+                : 'border-transparent text-muted hover:text-main hover:bg-surface/50'
             }`}
           >
             <Trophy className="w-3.5 h-3.5" />

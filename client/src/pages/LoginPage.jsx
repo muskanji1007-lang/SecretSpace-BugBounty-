@@ -45,17 +45,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-10 px-4 transition-colors">
-      <div className="max-w-md w-full bg-card border border-border rounded-3xl p-5 sm:p-8 shadow-2xl relative transition-all">
+    <div className="min-h-screen flex items-center justify-center py-10 px-4 transition-colors relative selection:bg-primary/20 selection:text-primary">
+      <div className="fixed inset-0 bg-tech-grid pointer-events-none opacity-40" />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-md w-full bento-card rounded-3xl p-5 sm:p-8 shadow-2xl relative z-10 transition-all border border-border/80 backdrop-blur-xl">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-surface text-deep border border-border">
+          <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/25">
             Campus Verification Gate
           </span>
 
           <button
             onClick={toggleTheme}
             type="button"
-            className="p-2 rounded-xl bg-surface/70 hover:bg-surface text-muted hover:text-deep transition cursor-pointer"
+            className="p-2 rounded-xl bg-surface/70 hover:bg-surface border border-border/60 text-muted hover:text-white transition cursor-pointer"
             title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
           >
             {isDark ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-primary" />}
@@ -66,26 +69,26 @@ export default function LoginPage() {
           <div className="relative w-20 h-20 mx-auto select-none">
             <div
               className={`absolute inset-0 rounded-full blur-md ${
-                isDark ? 'bg-primary/20' : 'bg-[#F9E5EB]'
+                isDark ? 'bg-primary/25' : 'bg-primary/10'
               }`}
             />
-            <svg viewBox="0 0 160 180" className="w-20 h-20 relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 160 180" className="w-20 h-20 relative z-10 drop-shadow-[0_4px_12px_rgba(244,63,94,0.3)]" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M30 80C30 45 52 20 80 20C108 20 130 45 130 80V140C130 145 125 148 120 145C114 141 108 141 102 145C97 149 91 149 86 145C80 141 74 141 68 145C63 149 57 149 52 145C46 141 40 141 34 145C31 147 28 145 28 140V80Z"
-                fill={isDark ? '#2D1720' : '#FFFDFD'}
-                stroke={isDark ? '#501E30' : '#EADDE1'}
+                fill={isDark ? '#1F1A2A' : '#FFFFFF'}
+                stroke={isDark ? '#F43F5E' : '#E4E4E7'}
                 strokeWidth="2"
               />
-              <circle cx="68" cy="72" r="5" fill={isDark ? '#FFFDFD' : '#291B20'} />
-              <circle cx="92" cy="72" r="5" fill={isDark ? '#FFFDFD' : '#291B20'} />
-              <ellipse cx="60" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
-              <ellipse cx="100" cy="80" rx="4" ry="2" fill="#B83259" opacity="0.45" />
+              <circle cx="68" cy="72" r="5" fill={isDark ? '#FFFFFF' : '#18181B'} />
+              <circle cx="92" cy="72" r="5" fill={isDark ? '#FFFFFF' : '#18181B'} />
+              <ellipse cx="60" cy="80" rx="4" ry="2" fill="#F43F5E" opacity="0.6" />
+              <ellipse cx="100" cy="80" rx="4" ry="2" fill="#F43F5E" opacity="0.6" />
             </svg>
-            <span className="absolute -top-1 -right-1 text-xs text-primary">♡</span>
+            <span className="absolute -top-1 -right-1 text-xs text-primary">✧</span>
           </div>
 
-          <h2 className="text-2xl font-black text-deep tracking-tight">
-            Secret<span className="text-primary">Space</span>
+          <h2 className="text-2xl font-black text-main tracking-tight">
+            Secret<span className="text-primary bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">Space</span>
           </h2>
           <p className="text-xs text-muted max-w-xs mx-auto">
             Sign in to unlock your campus confessions, reactions & polls
@@ -147,7 +150,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white font-bold text-sm shadow-md shadow-[#B83259]/25 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold text-sm shadow-lg shadow-rose-600/30 hover:shadow-rose-600/50 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
           >
             <span>{isLoading ? 'Unlocking...' : 'Unlock Campus Feed'}</span>
             <ArrowRight className="w-4 h-4" />
@@ -165,7 +168,7 @@ export default function LoginPage() {
                 setEmailOrCode('student@campus.edu');
                 setPassword('studentpassword123');
               }}
-              className="px-2.5 py-1.5 rounded-xl border border-border bg-surface/50 hover:bg-surface text-deep text-xs font-medium transition cursor-pointer text-center"
+              className="px-2.5 py-1.5 rounded-xl border border-border bg-surface/70 hover:bg-surface text-main hover:text-white text-xs font-medium transition cursor-pointer text-center hover:border-primary/40"
             >
               Student Demo
             </button>
@@ -175,7 +178,7 @@ export default function LoginPage() {
                 setEmailOrCode('admin@campus.edu');
                 setPassword('adminpassword123');
               }}
-              className="px-2.5 py-1.5 rounded-xl border border-border bg-surface/50 hover:bg-surface text-deep text-xs font-medium transition cursor-pointer text-center"
+              className="px-2.5 py-1.5 rounded-xl border border-border bg-surface/70 hover:bg-surface text-main hover:text-white text-xs font-medium transition cursor-pointer text-center hover:border-primary/40"
             >
               Admin Demo
             </button>

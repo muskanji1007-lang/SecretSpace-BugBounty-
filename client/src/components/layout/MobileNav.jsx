@@ -12,7 +12,7 @@ const MOBILE_NAV_ITEMS = [
 
 export default function MobileNav() {
   return (
-    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#211116]/95 backdrop-blur-md border-t border-[#38202A] flex items-center justify-around py-2 px-1 safe-area-pb">
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-sidebar-bg/95 backdrop-blur-xl border-t border-sidebar-border flex items-center justify-around py-2 px-1 safe-area-pb">
       {MOBILE_NAV_ITEMS.map((item) => {
         const Icon = item.icon;
         return (
@@ -22,16 +22,16 @@ export default function MobileNav() {
             end={item.to === '/'}
             className={({ isActive }) =>
               `flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
-                isActive ? 'text-white font-semibold' : 'text-[#D4B8C1] hover:text-white'
+                isActive ? 'text-white font-semibold' : 'text-sidebar-muted hover:text-white'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <div className={`p-1 rounded-lg transition ${isActive ? 'bg-[#501E30]' : ''}`}>
+                <div className={`p-1.5 rounded-xl transition ${isActive ? 'bg-primary/20 text-primary border border-primary/30' : ''}`}>
                   <Icon
                     className={`w-5 h-5 ${
-                      isActive ? 'text-white stroke-[2.5]' : 'text-[#D4B8C1]'
+                      isActive ? 'text-primary stroke-[2.5]' : 'text-sidebar-muted'
                     }`}
                   />
                 </div>

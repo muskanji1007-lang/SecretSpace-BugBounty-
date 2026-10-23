@@ -63,13 +63,16 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-6 px-4">
-      <div className="max-w-md w-full bg-card border border-border rounded-3xl p-5 sm:p-8 shadow-xl shadow-deep/5 space-y-6">
+    <div className="min-h-[85vh] flex items-center justify-center py-6 px-4 relative selection:bg-primary/20 selection:text-primary">
+      <div className="fixed inset-0 bg-tech-grid pointer-events-none opacity-40" />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-md w-full bento-card rounded-3xl p-5 sm:p-8 shadow-2xl relative z-10 space-y-6 border border-border/80 backdrop-blur-xl">
         <div className="text-center space-y-1.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#B83259] to-[#982748] text-white mx-auto flex items-center justify-center font-black shadow-lg shadow-[#B83259]/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-600 via-rose-500 to-pink-500 text-white mx-auto flex items-center justify-center font-black shadow-lg shadow-rose-600/25 ring-1 ring-white/20">
             <Sparkles className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-black text-deep tracking-tight">
+          <h2 className="text-2xl font-black text-main tracking-tight">
             Claim Your Alias
           </h2>
           <p className="text-xs text-muted">
@@ -206,7 +209,7 @@ export default function SignupPage() {
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white font-bold text-sm shadow-md shadow-[#B83259]/25 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-bold text-sm shadow-lg shadow-rose-600/30 hover:shadow-rose-600/50 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
           >
             <span>Create Anonymous Profile</span>
             <ArrowRight className="w-4 h-4" />
@@ -216,7 +219,7 @@ export default function SignupPage() {
         <div className="text-center pt-2 border-t border-border">
           <p className="text-xs text-muted">
             Already have an alias?{' '}
-            <Link to="/login" className="font-semibold text-primary hover:text-deep">
+            <Link to="/login" className="font-semibold text-primary hover:text-white">
               Sign In
             </Link>
           </p>

@@ -64,8 +64,8 @@ export default function Sidebar({
       <aside
         className={`${
           isMobileDrawer
-            ? 'md:hidden fixed top-0 bottom-0 left-0 z-50 w-72 max-w-[85vw] shadow-2xl animate-in slide-in-from-left duration-200 flex flex-col justify-between p-4 border-r border-[#38202A] bg-[#211116] text-[#D4B8C1] select-none overflow-y-auto'
-            : 'w-64 shrink-0 hidden md:flex flex-col justify-between sticky top-0 h-screen p-4 border-r border-[#38202A] bg-[#211116] text-[#D4B8C1] select-none'
+            ? 'md:hidden fixed top-0 bottom-0 left-0 z-50 w-72 max-w-[85vw] shadow-2xl animate-in slide-in-from-left duration-200 flex flex-col justify-between p-4 border-r border-sidebar-border bg-sidebar-bg/95 backdrop-blur-xl text-sidebar-muted select-none overflow-y-auto'
+            : 'w-64 shrink-0 hidden md:flex flex-col justify-between sticky top-0 h-screen p-4 border-r border-sidebar-border bg-sidebar-bg/95 backdrop-blur-xl text-sidebar-muted select-none'
         }`}
       >
         <div>
@@ -75,14 +75,14 @@ export default function Sidebar({
               onClick={handleLinkClick}
               className="flex items-center gap-2.5 group"
             >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#B83259] to-[#982748] text-white flex items-center justify-center font-black shadow-md shadow-[#B83259]/20 group-hover:opacity-95 transition">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-rose-500 to-pink-500 text-white flex items-center justify-center font-black shadow-md shadow-rose-600/25 ring-1 ring-white/20 group-hover:scale-105 transition">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h1 className="font-extrabold text-lg text-white tracking-tight leading-none group-hover:text-white/90 transition">
-                  Secret<span className="text-[#B83259]">Space</span>
+                  Secret<span className="text-primary bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">Space</span>
                 </h1>
-                <span className="text-[10px] font-semibold tracking-wider uppercase text-[#D4B8C1]">
+                <span className="text-[10px] font-semibold tracking-wider uppercase text-sidebar-muted">
                   Anonymous Campus
                 </span>
               </div>
@@ -92,7 +92,7 @@ export default function Sidebar({
               <button
                 type="button"
                 onClick={onCloseMobileDrawer}
-                className="p-1.5 rounded-xl bg-[#2A151D] hover:bg-[#38202A] text-[#D4B8C1] hover:text-white transition cursor-pointer"
+                className="p-1.5 rounded-xl bg-sidebar-hover hover:bg-sidebar-active text-sidebar-muted hover:text-white transition cursor-pointer"
                 aria-label="Close menu"
               >
                 <X className="w-5 h-5" />
@@ -112,8 +112,8 @@ export default function Sidebar({
                 className={({ isActive }) =>
                   `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition cursor-pointer group ${
                     isActive
-                      ? 'bg-[#501E30] text-white shadow-sm font-semibold'
-                      : 'text-[#D4B8C1] hover:bg-[#38202A] hover:text-white'
+                      ? 'bg-primary/20 text-white border border-primary/35 shadow-xs font-semibold'
+                      : 'text-sidebar-muted hover:bg-sidebar-hover hover:text-white'
                   }`
                 }
               >
@@ -122,7 +122,7 @@ export default function Sidebar({
                     <div className="flex items-center gap-3">
                       <Icon
                         className={`w-4 h-4 transition ${
-                          isActive ? 'text-white' : 'text-[#D4B8C1] group-hover:text-white'
+                          isActive ? 'text-primary' : 'text-sidebar-muted group-hover:text-white'
                         }`}
                       />
                       <span>{item.label}</span>
@@ -132,8 +132,8 @@ export default function Sidebar({
                       <span
                         className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
                           isActive
-                            ? 'bg-white/20 text-white'
-                            : 'bg-[#38202A] text-[#F9E5EB]'
+                            ? 'bg-primary text-white'
+                            : 'bg-sidebar-hover text-sidebar-muted'
                         }`}
                       >
                         {bookmarkedPosts.length}
@@ -141,7 +141,7 @@ export default function Sidebar({
                     )}
 
                     {item.badge === 'Mod' && pendingReportsCount > 0 && (
-                      <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full bg-[#B42338] text-white">
+                      <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full bg-danger text-white">
                         {pendingReportsCount}
                       </span>
                     )}
@@ -155,7 +155,7 @@ export default function Sidebar({
         <div className="mt-6 px-1">
           <button
             onClick={handleCreateClick}
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B83259] to-[#982748] hover:from-[#982748] hover:to-[#B83259] text-white font-semibold text-sm shadow-md shadow-[#B83259]/25 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-semibold text-sm shadow-md shadow-rose-600/30 hover:shadow-rose-600/50 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Drop a Secret</span>
@@ -166,10 +166,10 @@ export default function Sidebar({
       <Link
         to="/profile"
         onClick={handleLinkClick}
-        className="flex items-center gap-3 p-3 rounded-xl border border-[#38202A] bg-[#2A151D] hover:bg-[#38202A] transition mt-4"
+        className="flex items-center gap-3 p-3 rounded-xl border border-sidebar-border bg-sidebar-hover/40 hover:bg-sidebar-hover hover:border-primary/40 transition mt-4"
       >
         <div
-          className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs border border-[#501E30] bg-[#501E30] text-white shrink-0"
+          className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs border border-primary/40 bg-primary/20 text-white shrink-0"
         >
           {avatarObj.name.substring(0, 2).toUpperCase()}
         </div>
@@ -177,7 +177,7 @@ export default function Sidebar({
           <div className="font-semibold text-xs text-white truncate">
             {user.pseudonym}
           </div>
-          <div className="text-[11px] text-[#D4B8C1] truncate">{user.college}</div>
+          <div className="text-[11px] text-sidebar-muted truncate">{user.college}</div>
         </div>
       </Link>
     </aside>

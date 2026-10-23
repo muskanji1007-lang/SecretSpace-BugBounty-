@@ -135,12 +135,12 @@ export default function CreatePostBox({ onPostCreated }) {
     AVATAR_OPTIONS.find((a) => a.id === selectedAvatar) || AVATAR_OPTIONS[0];
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-3.5 sm:p-5 shadow-2xs mb-6 transition-all">
+    <div className="bento-card rounded-2xl p-4 sm:p-5 mb-6 transition-all shadow-sm">
       <form onSubmit={handleSubmit}>
         {/* Saved Draft Notification Banner */}
         {hasSavedDraft && !content && (
-          <div className="mb-3 px-3.5 py-2.5 bg-surface rounded-xl border border-primary/25 flex items-center justify-between gap-2 text-xs animate-in fade-in">
-            <div className="flex items-center gap-2 text-deep truncate">
+          <div className="mb-3 px-3.5 py-2.5 bg-primary/10 rounded-xl border border-primary/30 flex items-center justify-between gap-2 text-xs animate-in fade-in">
+            <div className="flex items-center gap-2 text-primary truncate">
               <Edit2 className="w-3.5 h-3.5 text-primary shrink-0" />
               <span className="truncate">
                 Saved draft found {draftTime ? `(${draftTime})` : ''}
@@ -150,7 +150,7 @@ export default function CreatePostBox({ onPostCreated }) {
               <button
                 type="button"
                 onClick={handleRestoreDraft}
-                className="font-semibold text-primary hover:text-deep transition cursor-pointer"
+                className="font-semibold text-primary hover:text-white transition cursor-pointer"
               >
                 Resume Draft
               </button>
@@ -188,7 +188,7 @@ export default function CreatePostBox({ onPostCreated }) {
               onFocus={() => setIsExpanded(true)}
               placeholder="What's on your mind? Share a secret, confession, or question..."
               rows={isExpanded ? 3 : 2}
-              className="w-full text-sm text-main placeholder:text-muted bg-canvas rounded-xl p-3 border border-border focus:bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none transition"
+              className="w-full text-sm text-main placeholder:text-muted bg-surface/60 rounded-xl p-3 border border-border focus:bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none transition"
             />
           </div>
         </div>

@@ -63,13 +63,13 @@ export default function MyActivityPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-card border border-border rounded-2xl p-5 shadow-2xs">
+      <div className="bento-card rounded-2xl p-5 shadow-sm">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-surface text-deep flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
             <Activity className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="font-bold text-deep text-base">My Campus Activity</h2>
+            <h2 className="font-bold text-main text-base">My Campus Activity</h2>
             <p className="text-xs text-muted">
               Your anonymous footprint & contributions this semester
             </p>
@@ -77,29 +77,29 @@ export default function MyActivityPage() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-border">
-          <div className="p-3 rounded-xl bg-surface/40 border border-border text-center">
-            <div className="text-lg font-black text-deep">
+          <div className="p-3 rounded-xl bg-surface/50 border border-border text-center hover:border-primary/40 transition">
+            <div className="text-lg font-black text-main">
               {displayedPosts.length}
             </div>
             <div className="text-[11px] font-medium text-muted">Secrets Shared</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-surface/40 border border-border text-center">
-            <div className="text-lg font-black text-deep">
+          <div className="p-3 rounded-xl bg-surface/50 border border-border text-center hover:border-primary/40 transition">
+            <div className="text-lg font-black text-main">
               {stats.commentsCount || 0}
             </div>
             <div className="text-[11px] font-medium text-muted">Comments</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-surface/40 border border-border text-center">
-            <div className="text-lg font-black text-deep">
+          <div className="p-3 rounded-xl bg-surface/50 border border-border text-center hover:border-primary/40 transition">
+            <div className="text-lg font-black text-main">
               {displayedUpvoted.length}
             </div>
             <div className="text-[11px] font-medium text-muted">Upvoted</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-surface/40 border border-border text-center">
-            <div className="text-lg font-black text-deep">
+          <div className="p-3 rounded-xl bg-surface/50 border border-border text-center hover:border-primary/40 transition">
+            <div className="text-lg font-black text-main">
               {stats.upvotesReceived || 0}
             </div>
             <div className="text-[11px] font-medium text-muted">Karma Earned</div>
@@ -107,13 +107,13 @@ export default function MyActivityPage() {
         </div>
       </div>
 
-      <div className="flex border-b border-border">
+      <div className="flex border-b border-border/80">
         <button
           onClick={() => setActiveTab('posts')}
           className={`pb-3 px-4 text-xs font-semibold border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
             activeTab === 'posts'
-              ? 'border-primary text-deep'
-              : 'border-transparent text-muted hover:text-deep'
+              ? 'border-primary text-primary font-bold'
+              : 'border-transparent text-muted hover:text-white'
           }`}
         >
           <Flame className="w-3.5 h-3.5" />
@@ -124,8 +124,8 @@ export default function MyActivityPage() {
           onClick={() => setActiveTab('upvoted')}
           className={`pb-3 px-4 text-xs font-semibold border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
             activeTab === 'upvoted'
-              ? 'border-primary text-deep'
-              : 'border-transparent text-muted hover:text-deep'
+              ? 'border-primary text-primary font-bold'
+              : 'border-transparent text-muted hover:text-white'
           }`}
         >
           <ThumbsUp className="w-3.5 h-3.5" />

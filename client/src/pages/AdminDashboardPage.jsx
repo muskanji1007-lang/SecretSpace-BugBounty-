@@ -30,30 +30,30 @@ export default function AdminDashboardPage() {
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-bold text-deep text-base">Campus Moderation Desk</h2>
+            <h2 className="font-bold text-main text-base">Campus Moderation Desk</h2>
             <p className="text-xs text-muted">
               Review confidential student flags to uphold safety and anonymity
             </p>
           </div>
         </div>
 
-        <span className="self-start sm:self-center text-[11px] font-bold px-3 py-1 rounded-full bg-surface text-deep border border-border shrink-0">
+        <span className="self-start sm:self-center text-[11px] font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/25 shrink-0">
           Admin Preview Mode
         </span>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-2xs">
+        <div className="bento-card p-4 rounded-2xl shadow-sm hover:border-primary/40 transition">
           <span className="text-[11px] font-semibold text-muted uppercase tracking-wider block">
             Pending Flags
           </span>
-          <span className="text-2xl font-black text-deep mt-1 block">
+          <span className="text-2xl font-black text-main mt-1 block">
             {pendingReports.length}
           </span>
           <span className="text-[10px] text-warning font-medium">Needs Attention</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-2xs">
+        <div className="bento-card p-4 rounded-2xl shadow-sm hover:border-primary/40 transition">
           <span className="text-[11px] font-semibold text-muted uppercase tracking-wider block">
             Resolved Flags
           </span>
@@ -63,21 +63,21 @@ export default function AdminDashboardPage() {
           <span className="text-[10px] text-success font-medium">Addressed</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-2xs">
+        <div className="bento-card p-4 rounded-2xl shadow-sm hover:border-primary/40 transition">
           <span className="text-[11px] font-semibold text-muted uppercase tracking-wider block">
             Campus Safety Score
           </span>
-          <span className="text-2xl font-black text-deep mt-1 block">
+          <span className="text-2xl font-black text-main mt-1 block">
             99.2%
           </span>
           <span className="text-[10px] text-primary font-medium">Healthy Community</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-2xs">
+        <div className="bento-card p-4 rounded-2xl shadow-sm hover:border-primary/40 transition">
           <span className="text-[11px] font-semibold text-muted uppercase tracking-wider block">
             Active Guidelines
           </span>
-          <span className="text-2xl font-black text-deep mt-1 block">
+          <span className="text-2xl font-black text-main mt-1 block">
             6 Rules
           </span>
           <span className="text-[10px] text-muted font-medium">Enforced automatically</span>
@@ -127,13 +127,13 @@ export default function AdminDashboardPage() {
             return (
               <div
                 key={report.id}
-                className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3"
+                className="bento-card rounded-2xl p-4 sm:p-5 shadow-sm space-y-3 hover:border-primary/40 transition"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-xs text-danger bg-surface px-2.5 py-0.5 rounded-full border border-border">
-                        {report.reason}
+                      <span className="font-bold text-xs text-danger bg-danger/10 px-2.5 py-0.5 rounded-full border border-danger/25">
+                        {report.reason || 'Unspecified'}
                       </span>
                       <span className="text-[11px] text-muted">
                         Target: {report.reportedItemType.toUpperCase()}

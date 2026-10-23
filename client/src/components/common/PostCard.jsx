@@ -56,11 +56,11 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
 
   return (
     <>
-      <article className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-2xs hover:shadow-xs hover:border-primary/40 transition duration-200">
+      <article className="bento-card rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_25px_rgba(244,63,94,0.12)]">
         <div className="flex items-start justify-between gap-3 mb-3.5">
           <div className="flex items-center gap-3">
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border ${avatarInfo.color} shrink-0`}
+              className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border ${avatarInfo.color} shrink-0 ring-1 ring-white/10`}
             >
               {avatarInfo.name.substring(0, 2).toUpperCase()}
             </div>
@@ -69,7 +69,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
                 <span className="font-semibold text-main text-sm">
                   {post.authorPseudonym}
                 </span>
-                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-deep bg-surface px-2 py-0.5 rounded-full border border-border">
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted bg-surface/80 px-2.5 py-0.5 rounded-full border border-border">
                   <MapPin className="w-3 h-3 text-primary" />
                   {post.collegeTag}
                 </span>
@@ -81,7 +81,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
             </div>
           </div>
 
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-surface text-deep capitalize border border-border shrink-0">
+          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary capitalize border border-primary/25 shrink-0">
             {post.category}
           </span>
         </div>
@@ -104,7 +104,7 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
               {post.tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="text-xs font-medium text-primary cursor-default"
+                  className="text-xs font-medium text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-lg cursor-default transition"
                 >
                   {tag}
                 </span>
@@ -113,8 +113,8 @@ export default function PostCard({ post, isDetailView = false, onDelete }) {
           )}
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-border text-muted text-xs">
-          <div className="flex items-center bg-canvas border border-border rounded-xl p-0.5 shrink-0">
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-border/70 text-muted text-xs">
+          <div className="flex items-center bg-surface/70 border border-border rounded-xl p-0.5 shrink-0">
             <button
               onClick={() => votePost(post.id, 'up')}
               className={`p-1.5 rounded-lg transition flex items-center gap-1 cursor-pointer ${
