@@ -46,44 +46,37 @@ export default function Navbar({ onOpenCreateModal, onToggleMobileMenu }) {
           </Link>
         </div>
 
-        <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              `tactile-btn px-3 py-1.5 rounded-xl transition ${
-                isActive
-                  ? 'text-white bg-primary shadow-xs shadow-primary/25 font-bold'
-                  : 'text-muted hover:text-deep hover:bg-surface/60'
-              }`
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/explore"
-            className={({ isActive }) =>
-              `tactile-btn px-3 py-1.5 rounded-xl transition ${
-                isActive
-                  ? 'text-white bg-primary shadow-xs shadow-primary/25 font-bold'
-                  : 'text-muted hover:text-deep hover:bg-surface/60'
-              }`
-            }
-          >
-            Explore
-          </NavLink>
-          <NavLink
-            to="/polls"
-            className={({ isActive }) =>
-              `tactile-btn px-3 py-1.5 rounded-xl transition ${
-                isActive
-                  ? 'text-white bg-primary shadow-xs shadow-primary/25 font-bold'
-                  : 'text-muted hover:text-deep hover:bg-surface/60'
-              }`
-            }
-          >
-            Polls
-          </NavLink>
+        <nav className="hidden lg:flex items-center gap-1.5 text-xs font-semibold">
+          {[
+            { to: '/', label: 'Home', end: true },
+            { to: '/explore', label: 'Explore' },
+            { to: '/polls', label: 'Polls' },
+          ].map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                `tactile-btn relative flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? 'bg-white/[0.08] text-white border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] font-semibold'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <span
+                    aria-hidden="true"
+                    className={`size-1.5 rounded-full bg-primary shadow-[0_0_8px_#F43F5E] transition-all duration-300 ${
+                      isActive ? 'scale-100 opacity-100' : 'scale-0 opacity-0 -ml-2'
+                    }`}
+                  />
+                  <span>{item.label}</span>
+                </>
+              )}
+            </NavLink>
+          ))}
         </nav>
 
         {/* Search Bar */}

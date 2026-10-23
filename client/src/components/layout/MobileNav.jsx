@@ -12,7 +12,10 @@ const MOBILE_NAV_ITEMS = [
 
 export default function MobileNav() {
   return (
-    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-sidebar-bg/95 backdrop-blur-xl border-t border-sidebar-border flex items-center justify-around py-2 px-1 safe-area-pb">
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-sidebar-bg/95 backdrop-blur-xl border-t border-sidebar-border flex items-center justify-around py-2 px-1 safe-area-pb relative">
+      {/* Specular Top Light Beam */}
+      <span aria-hidden="true" className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+
       {MOBILE_NAV_ITEMS.map((item) => {
         const Icon = item.icon;
         return (
@@ -21,7 +24,7 @@ export default function MobileNav() {
             to={item.to}
             end={item.to === '/'}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
+              `tactile-btn flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
                 isActive ? 'text-white font-semibold' : 'text-sidebar-muted hover:text-white'
               }`
             }

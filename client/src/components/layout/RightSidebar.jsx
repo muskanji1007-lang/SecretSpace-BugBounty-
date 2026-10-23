@@ -16,7 +16,7 @@ export default function RightSidebar() {
   const activePoll = polls.find((p) => p.status === 'closed') || polls[0];
 
   return (
-    <aside className="w-80 shrink-0 hidden xl:block space-y-5 p-4 sticky top-0 h-screen overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    <aside className="w-80 shrink-0 hidden xl:block space-y-4 px-2 my-2 sticky top-3 h-[calc(100vh-1.5rem)] overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden z-10">
       {/* Active Campus Poll Widget */}
       {activePoll && (
         <div className="bento-card bento-lift rounded-2xl p-4 shadow-sm hover:border-primary/40">
